@@ -1,1055 +1,1098 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shared Tasks & Hub</title>
-<style>
-:root {
---primary-color: #4f46e5;
---success-color: #10b981;
---danger-color: #ef4444;
---bg-color: #f3f4f6;
---card-bg: #ffffff;
---text-color: #1f2937;
-}
-body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background-color: var(--bg-color);
-color: var(--text-color);
-margin: 0;
-padding: 20px;
-}
-.container {
-max-width: 600px;
-margin: 0 auto;
-background: var(--card-bg);
-padding: 20px;
-border-radius: 16px;
-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-}
-h2, h3 { text-align: center; color: var(--primary-color); }
-.hidden { display: none !important; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Tasks & Hub</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+        h2, h3 { text-align: center; color: var(--primary-color); }
+        .hidden { display: none !important; }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #e0e7ff;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        .lang-select {
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #c7d2fe;
+            background: white;
+            font-weight: bold;
+            color: #3730a3;
+            width: auto;
+            margin: 0;
+        }
 
-.top-bar {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 15px;
-background: #e0e7ff;
-padding: 8px 12px;
-border-radius: 8px;
-}
-.lang-select {
-padding: 6px;
-border-radius: 6px;
-border: 1px solid #c7d2fe;
-background: white;
-font-weight: bold;
-color: #3730a3;
-width: auto;
-margin: 0;
-}
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .nav-tab {
+            flex: 1;
+            padding: 10px;
+            background: #e5e7eb;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #4b5563;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
 
-.nav-tabs {
-display: flex;
-gap: 8px;
-margin-bottom: 20px;
-}
-.nav-tab {
-flex: 1;
-padding: 10px;
-background: #e5e7eb;
-border: none;
-border-radius: 8px;
-font-weight: bold;
-color: #4b5563;
-cursor: pointer;
-text-align: center;
-transition: all 0.2s;
-}
-.nav-tab.active {
-background: var(--primary-color);
-color: white;
-}
+        #login-screen {
+            text-align: center;
+            padding: 30px 0;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-#login-screen {
-text-align: center;
-padding: 30px 0;
-}
-select, input, button {
-width: 100%;
-padding: 12px;
-margin: 10px 0;
-border: 1px solid #d1d5db;
-border-radius: 8px;
-font-size: 16px;
-box-sizing: border-box;
-}
-button {
-background-color: var(--primary-color);
-color: white;
-border: none;
-cursor: pointer;
-font-weight: bold;
-transition: all 0.2s;
-}
-button:hover { opacity: 0.9; transform: translateY(-1px); }
-button:disabled {
-background-color: #9ca3af;
-cursor: not-allowed;
-transform: none;
-}
+        .task-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .task-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-title {
+            font-size: 17px;
+            font-weight: bold;
+        }
+        .prayer-time {
+            font-size: 13px;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .users-status {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+        .user-box {
+            flex: 1;
+            font-size: 13px;
+            padding: 8px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .status-not-done { background-color: #ef4444; }
+        .status-done { background-color: #10b981; }
 
-.task-card {
-background: #f9fafb;
-border: 1px solid #e5e7eb;
-padding: 15px;
-border-radius: 12px;
-margin-bottom: 15px;
-display: flex;
-flex-direction: column;
-gap: 12px;
-}
-.task-top {
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-.task-title {
-font-size: 17px;
-font-weight: bold;
-}
-.prayer-time {
-font-size: 13px;
-background: #e0e7ff;
-color: #3730a3;
-padding: 2px 8px;
-border-radius: 6px;
-font-weight: 600;
-}
+        .badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-weight: 600;
+        }
+        
+        .sub-page { background: #fff; padding: 10px; }
+        .zekr-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        .error-msg { color: var(--danger-color); font-size: 14px; margin: 5px 0; }
 
-.users-status {
-display: flex;
-gap: 10px;
-justify-content: space-between;
-}
-.user-box {
-flex: 1;
-font-size: 13px;
-padding: 8px;
-border-radius: 8px;
-color: white;
-font-weight: bold;
-text-align: center;
-}
-.status-not-done { background-color: #ef4444; }
-.status-done { background-color: #10b981; }
+        .competition-banner {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .status-badge-card {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #e5e7eb;
+            background: #fdfdfd;
+        }
+        .is-winner { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-color: #10b981; color: #065f46; }
+        .is-loser { background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-color: #ef4444; color: #991b1b; }
 
-.badge {
-font-size: 12px;
-padding: 4px 10px;
-border-radius: 20px;
-background: #e0e7ff;
-color: #3730a3;
-font-weight: 600;
-}
+        .wheel-box {
+            font-size: 22px; font-weight: bold; padding: 25px; margin: 20px 0;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #3730a3; border-radius: 16px; border: 2px dashed #4f46e5; text-align: center;
+        }
+        .store-coins-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b; padding: 20px; border-radius: 12px;
+            text-align: center; font-size: 18px; font-weight: bold; color: #b45309; margin-bottom: 20px;
+        }
+        .alert-banner {
+            background: #fee2e2; border: 2px solid #ef4444; color: #b91c1c;
+            padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; text-align: center;
+        }
+        .poke-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            color: white; padding: 12px; border-radius: 10px; font-weight: bold;
+            margin-bottom: 15px; font-size: 15px; width: 100%; border: none; cursor: pointer;
+        }
 
-.sub-page { background: #fff; padding: 10px; }
-.zekr-box {
-background: #fef3c7;
-border-left: 4px solid #f59e0b;
-padding: 12px;
-margin-bottom: 10px;
-border-radius: 8px;
-font-weight: 500;
-line-height: 1.6;
-}
-.error-msg { color: var(--danger-color); font-size: 14px; margin: 5px 0; }
-
-.competition-banner {
-display: flex;
-gap: 15px;
-margin-bottom: 20px;
-}
-.status-badge-card {
-flex: 1;
-padding: 12px;
-border-radius: 12px;
-text-align: center;
-font-weight: bold;
-font-size: 14px;
-box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-border: 1px solid #e5e7eb;
-background: #fdfdfd;
-}
-.is-winner { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-color: #10b981; color: #065f46; }
-.is-loser { background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-color: #ef4444; color: #991b1b; }
-
-.wheel-box {
-font-size: 22px; font-weight: bold; padding: 25px; margin: 20px 0;
-background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-color: #3730a3; border-radius: 16px; border: 2px dashed #4f46e5; text-align: center;
-}
-.store-coins-box {
-background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-border: 2px solid #f59e0b; padding: 20px; border-radius: 12px;
-text-align: center; font-size: 18px; font-weight: bold; color: #b45309; margin-bottom: 20px;
-}
-.alert-banner {
-background: #fee2e2; border: 2px solid #ef4444; color: #b91c1c;
-padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; text-align: center;
-}
-.poke-btn {
-background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-color: white; padding: 12px; border-radius: 10px; font-weight: bold;
-margin-bottom: 15px; font-size: 15px; width: 100%; border: none; cursor: pointer;
-}
-
-.quran-sheet {
-background: #fffdf9;
-border: 1px solid #e7dcc8;
-border-top: 4px solid #d97706;
-padding: 22px;
-border-radius: 12px;
-margin-bottom: 20px;
-box-shadow: 0 4px 15px rgba(217, 119, 6, 0.05);
-}
-.quran-sheet-header {
-display: flex;
-justify-content: space-between;
-font-size: 14px;
-font-weight: bold;
-color: #b45309;
-margin-bottom: 12px;
-border-bottom: 1px solid #f3e8ff;
-padding-bottom: 8px;
-}
-.quran-arabic-text {
-font-size: 20px;
-font-family: 'Traditional Arabic', 'Amiri', serif;
-color: #1f2937;
-line-height: 2.5;
-text-align: justify;
-margin-bottom: 15px;
-}
-.quran-translation-text {
-font-size: 14px;
-color: #4b5563;
-background: #f9fafb;
-border: 1px solid #e5e7eb;
-padding: 12px;
-border-radius: 8px;
-line-height: 1.7;
-direction: ltr;
-text-align: left;
-margin-bottom: 8px;
-}
-.translit-box {
-font-size: 13px;
-color: #065f46;
-background: #ecfdf5;
-border: 1px solid #d1fae5;
-padding: 10px;
-border-radius: 8px;
-direction: ltr;
-text-align: left;
-}
-</style>
+        .quran-sheet {
+            background: #fffdf9;
+            border: 1px solid #e7dcc8;
+            border-top: 4px solid #d97706;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.05);
+        }
+        .quran-sheet-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: bold;
+            color: #b45309;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f3e8ff;
+            padding-bottom: 8px;
+        }
+        .quran-arabic-text {
+            font-size: 20px;
+            font-family: 'Traditional Arabic', 'Amiri', serif;
+            color: #1f2937;
+            line-height: 2.5;
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+        .quran-translation-text {
+            font-size: 14px;
+            color: #4b5563;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            border-radius: 8px;
+            line-height: 1.7;
+            direction: ltr;
+            text-align: left;
+            margin-bottom: 8px;
+        }
+        .translit-box {
+            font-size: 13px;
+            color: #065f46;
+            background: #ecfdf5;
+            border: 1px solid #d1fae5;
+            padding: 10px;
+            border-radius: 8px;
+            direction: ltr;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-<div class="top-bar">
-<span style="font-weight: bold; font-size: 14px;" id="lang-label">🌐 Language:</span>
-<select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
-<option value="ar">العربية (Arabic)</option>
-<option value="en">English</option>
-<option value="de">Deutsch (German)</option>
-<option value="tr-de" selected>Transliteration + German (Best for Dima 🤍👸🏻)</option>
-</select>
+    <div class="top-bar">
+        <span style="font-weight: bold; font-size: 14px;" id="lang-label">🌐 Language:</span>
+        <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="ar">العربية (Arabic)</option>
+            <option value="en">English</option>
+            <option value="de">Deutsch (German)</option>
+            <option value="tr-de" selected>Transliteration + German (Best for Dima 🤍👸🏻)</option>
+        </select>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <h2 id="txt-login-title">System Login</h2>
+        <p id="txt-login-desc">Please select your name and enter your passcode</p>
+        
+        <select id="username-select">
+            <option value="Mohamad">Mohamad</option>
+            <option value="Dima">Dima 🤍👸🏻</option>
+        </select>
+        
+        <input type="password" id="passcode-input" placeholder="Enter Passcode">
+        <div id="login-error" class="error-msg"></div>
+        
+        <button type="button" id="login-submit-btn">Log In</button>
+    </div>
+
+    <!-- Main Hub Screen -->
+    <div id="main-screen" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 id="welcome-user">Welcome</h2>
+            <button type="button" id="logout-btn" style="width: auto; padding: 6px 12px; background: #ef4444;">Log Out</button>
+        </div>
+        <hr>
+        
+        <div id="challenge-alert" class="alert-banner hidden"></div>
+
+        <div class="competition-banner">
+            <div id="banner-mohamad" class="status-badge-card">Mohamad<br>Racing... ⏳</div>
+            <div id="banner-dima" class="status-badge-card">Dima 🤍👸🏻<br>Racing... ⏳</div>
+        </div>
+
+        <button class="poke-btn" onclick="sendPoke()">👉 Nudge / Poke Partner (نكز الطرف الآخر) ⚡</button>
+
+        <button id="open-wheel-btn" onclick="openWheelPage()" disabled style="background-color: #9ca3af; margin-bottom: 20px; padding: 14px; border-radius: 10px; font-size: 16px;">🔒 Finish All Tasks First to Unlock Wheel 🔓</button>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" id="tab-btn-1" onclick="switchTab(1)">Daily Tasks</button>
+            <button class="nav-tab" id="tab-btn-2" onclick="switchTab(2)">Optional & Sunnah</button>
+            <button class="nav-tab" id="tab-btn-3" onclick="switchTab(3)">Store & Points</button>
+        </div>
+        
+        <!-- TAB 1: Daily Essential Tasks (10) -->
+        <div id="tab-content-1" class="tab-content">
+            <h3 id="txt-tasks-header">Daily Essential Tasks (10)</h3>
+            <div id="tasks-container">
+                <script>
+                    const actualTasks = [
+                        "Morning Azkar", "Fajr Prayer", "Dhuhr Prayer", 
+                        "Asr Prayer", "Maghrib Prayer", "Isha Prayer", 
+                        "Evening Azkar", "Supplication (Duaa)", "Quran Daily (2 Pages)", "Studying"
+                    ];
+
+                    for(let i=1; i<=10; i++) {
+                        let isPrayer = (i >= 2 && i <= 6);
+                        let isAzkar = (i === 1 || i === 7);
+                        let isQuran = (i === 9);
+                        let isDuaa = (i === 8);
+                        
+                        document.write(`
+                            <div class="task-card">
+                                <div class="task-top">
+                                    <span class="task-title" id="task-name-${i}">${i}. ${actualTasks[i-1]}</span>
+                                    <div>
+                                        ${isPrayer ? `<span id="time-p-${i}" class="prayer-time">Loading...</span>` : ''}
+                                        <span class="badge" id="badge-${i}">${isPrayer ? 'Prayer 🕌' : (isQuran ? 'Quran 📖' : 'Task')}</span>
+                                    </div>
+                                </div>
+                                <div class="users-status">
+                                    <div id="status-${i}-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
+                                    <div id="status-${i}-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
+                                </div>
+                                ${isPrayer ? 
+                                    `<button type="button" style="background-color: #3b82f6; padding: 10px; border-radius: 8px;" onclick="openPrayerPage(${i}, '${actualTasks[i-1]}')">Open Prayer Azkar & Points (3 pts) ➡️</button>` :
+                                    (isQuran ? 
+                                        `<button type="button" style="background-color: #d97706; padding: 10px; border-radius: 8px;" onclick="openQuranPage()">Open Today's Quran (5 pts) 📖➡️️</button>` :
+                                        (isAzkar ?
+                                            `<button type="button" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeTaskWithPoints(${i}, 2)">Mark as Done (+2 pts) ✅</button>` :
+                                            (isDuaa ?
+                                                `<button type="button" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeTaskWithPoints(${i}, 3)">Mark as Done (+3 pts) ✅</button>` :
+                                                `<button type="button" class="action-btn" style="padding: 10px; border-radius: 8px;" onclick="completeTask(${i})">Mark My Part as Done ✅</button>`
+                                            )
+                                        )
+                                    )
+                                }
+                            </div>
+                        `);
+                    }
+                </script>
+            </div>
+        </div>
+
+        <!-- TAB 2: Optional Tasks & Sunnah (4 Specific Tasks - 5 pts each) -->
+        <div id="tab-content-2" class="tab-content hidden">
+            <h3 id="txt-side-header">Sunnah Rawatib & Optional Tasks</h3>
+            
+            <div class="task-card">
+                <div class="task-top"><span class="task-title">1. Sunnah Dhuhr (4 Before & 2 After)</span><span class="badge">Sunnah (+5 pts) ✨</span></div>
+                <div class="users-status">
+                    <div id="status-side-1-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
+                    <div id="status-side-1-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
+                </div>
+                <button type="button" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(1, 5)">Mark Sunnah Dhuhr Done (+5 pts) ✅</button>
+            </div>
+
+            <div class="task-card">
+                <div class="task-top"><span class="task-title">2. Sunnah Maghrib (2 Rakaat After)</span><span class="badge">Sunnah (+5 pts) ✨</span></div>
+                <div class="users-status">
+                    <div id="status-side-2-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
+                    <div id="status-side-2-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
+                </div>
+                <button type="button" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(2, 5)">Mark Sunnah Maghrib Done (+5 pts) ✅</button>
+            </div>
+
+            <div class="task-card">
+                <div class="task-top"><span class="task-title">3. Sunnah Isha (2 Rakaat After)</span><span class="badge">Sunnah (+5 pts) ✨</span></div>
+                <div class="users-status">
+                    <div id="status-side-3-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
+                    <div id="status-side-3-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
+                </div>
+                <button type="button" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(3, 5)">Mark Sunnah Isha Done (+5 pts) ✅</button>
+            </div>
+
+            <div class="task-card">
+                <div class="task-top"><span class="task-title">4. Witr Prayer (1 Rakaat)</span><span class="badge">Sunnah Muakkadah (+5 pts) 🌟</span></div>
+                <div class="users-status">
+                    <div id="status-side-4-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
+                    <div id="status-side-4-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
+                </div>
+                <button type="button" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(4, 5)">Mark Witr Done (+5 pts) ✅</button>
+            </div>
+        </div>
+
+        <!-- TAB 3: Store & Points Balance -->
+        <div id="tab-content-3" class="tab-content hidden">
+            <h3 id="txt-store-title">Store & Points Balance</h3>
+            <div class="store-coins-box" id="store-balance-box">
+                🪙 Your Points Balance: <span id="user-coins">0</span> Points
+            </div>
+            
+            <div style="text-align: center; padding: 15px; color: #6b7280; font-style: italic;">
+                🛒 Rewards store coming soon... ✨
+            </div>
+        </div>
+
+        <!-- Detailed Admin Control Panel (Mohamad Only) -->
+        <div id="admin-panel" class="hidden" style="background: #fef2f2; border: 2px dashed #ef4444; padding: 15px; border-radius: 12px; margin-top: 25px;">
+            <h4 style="color: #991b1b; margin-top: 0; text-align: center;">👑 لوحة التحكم التفصيلية (Mohamad Admin)</h4>
+            
+            <button type="button" onclick="adminResetQuran()" style="background-color: #d97706; padding: 10px; border-radius: 8px; margin: 6px 0;">📖 ترسيت القرآن وحده (إعادة لليوم الأول)</button>
+            <button type="button" onclick="adminResetPoints()" style="background-color: #f59e0b; padding: 10px; border-radius: 8px; margin: 6px 0;">🪙 ترسيت النقاط وحدها (تصفير الأرصدة)</button>
+            <button type="button" onclick="devNextQuranDay()" style="background-color: #8b5cf6; padding: 10px; border-radius: 8px; margin: 6px 0;">⏭️ تخطي لليوم التالي في القرآن (تطوير)</button>
+            <button type="button" onclick="adminResetTasksOnly()" style="background-color: #ef4444; padding: 12px; border-radius: 8px; margin-top: 8px; font-weight: bold;">🔄 ترسيت المهام اليومية والسنن فقط (الحفاظ على النقاط والقرآن)</button>
+        </div>
+    </div>
+
+    <!-- Prayer Azkar & Smart Points Sub-Page -->
+    <div id="prayer-page" class="hidden sub-page">
+        <h2 id="prayer-page-title">Post-Prayer Azkar</h2>
+        <div class="zekr-box">1. Subhanallah (سبحان الله) - 10 times</div>
+        <div class="zekr-box">2. Alhamdulillah (الحمد لله) - 10 times</div>
+        <div class="zekr-box">3. Allahu Akbar (الله أكبر) - 10 times</div>
+        <div class="zekr-box" style="cursor: pointer; background: #e0e7ff; border-left-color: #4f46e5;" onclick="openAyatKursiPage()">📖 Read Ayat al-Kursi (Click here)</div>
+        
+        <div style="background: #ecfdf5; border: 1px solid #10b981; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
+            <p style="font-weight: bold; color: #065f46; margin-bottom: 8px;">🎯 Smart Prayer Points System:</p>
+            <p style="font-size: 13px; color: #047857; margin-bottom: 12px;">Within 15 mins = 3 pts | Within 1 hour = 2 pts | After = 1 pt</p>
+            <button type="button" onclick="finishPrayerWithPoints()" style="background-color: var(--success-color); padding: 14px; border-radius: 8px; font-size: 16px;">Finish & Claim Points ✅</button>
+        </div>
+
+        <button type="button" onclick="closePrayerPage()" style="background-color: #6b7280; margin-top: 10px; padding: 12px; border-radius: 8px;">Back to Tasks 🔙</button>
+    </div>
+
+    <!-- Ayat al-Kursi Sub-Page -->
+    <div id="ayat-kursi-page" class="hidden sub-page">
+        <h2 id="txt-ayat-title">Ayat al-Kursi 🌟</h2>
+        <div class="zekr-box" id="ayat-content"></div>
+        <button type="button" onclick="closeAyatKursiPage()" style="background-color: #4f46e5; padding: 12px; border-radius: 8px;">Back to Prayer Azkar 🔙</button>
+    </div>
+
+    <!-- Quran Sub-Page -->
+    <div id="quran-page" class="hidden sub-page">
+        <h2 style="color: #b45309;">📖 Quran Daily Reading</h2>
+        <div style="font-weight: bold; color: #b45309; margin-bottom: 15px; text-align: center; font-size: 16px;" id="quran-day-banner">Day 1</div>
+        
+        <!-- Sheet 1 -->
+        <div class="quran-sheet">
+            <div class="quran-sheet-header">
+                <span id="p1-num-label">Page 1</span>
+                <span>القرآن الكريم - الصفحة الأولى</span>
+            </div>
+            <div class="quran-arabic-text" id="quran-p1-ar">جاري تحميل الآيات... 🔄</div>
+            <div class="quran-translation-text" id="quran-p1-en"><strong>English:</strong> Loading...</div>
+            <div class="quran-translation-text" id="quran-p1-de"><strong>Deutsch:</strong> Lade...</div>
+            <div class="translit-box" id="quran-p1-tr"><strong>Transliteration:</strong> Loading...</div>
+        </div>
+
+        <!-- Sheet 2 -->
+        <div class="quran-sheet">
+            <div class="quran-sheet-header">
+                <span id="p2-num-label">Page 2</span>
+                <span>القرآن الكريم - الصفحة الثانية</span>
+            </div>
+            <div class="quran-arabic-text" id="quran-p2-ar">جاري تحميل الآيات... 🔄</div>
+            <div class="quran-translation-text" id="quran-p2-en"><strong>English:</strong> Loading...</div>
+            <div class="quran-translation-text" id="quran-p2-de"><strong>Deutsch:</strong> Lade...</div>
+            <div class="translit-box" id="quran-p2-tr"><strong>Transliteration:</strong> Loading...</div>
+        </div>
+
+        <button type="button" onclick="finishQuranReading()" style="margin-top: 5px; background-color: var(--success-color); padding: 14px; border-radius: 8px; font-size: 16px;">Finish & Mark Quran Task as Done (+5 pts) ✅</button>
+        
+        <button type="button" onclick="closeQuranPage()" style="background-color: #6b7280; margin-top: 10px; padding: 12px; border-radius: 8px;">Back to Tasks 🔙</button>
+    </div>
+
+    <!-- Wheel Page -->
+    <div id="wheel-page" class="hidden sub-page">
+        <h2 id="txt-wheel-title">Lucky Wheel of Rewards 🎡</h2>
+        <p id="txt-wheel-desc">Outstanding achievement! You won the race. Spin the wheel to claim your prize:</p>
+        
+        <div id="wheel-display" class="wheel-box">Click Spin to try your luck! 🎁</div>
+        
+        <button type="button" id="spin-btn" onclick="spinWheel()" style="background-color: #f59e0b; font-size: 18px; padding: 14px; border-radius: 10px;">SPIN THE WHEEL 🎰</button>
+        <button type="button" onclick="closeWheelPage()" style="background-color: #6b7280; margin-top: 10px; padding: 12px; border-radius: 8px;">Back to Tasks 🔙</button>
+    </div>
 </div>
 
-<!-- Login Screen -->
-<div id="login-screen">
-<h2 id="txt-login-title">System Login</h2>
-<p id="txt-login-desc">Please select your name and enter your passcode</p>
-
-<select id="username-select">
-<option value="Mohamad">Mohamad</option>
-<option value="Dima">Dima 🤍👸🏻</option>
-</select>
-
-<input type="password" id="passcode-input" placeholder="Enter Passcode">
-<div id="login-error" class="error-msg"></div>
-
-<button onclick="login()" id="txt-login-btn">Log In</button>
-</div>
-
-<!-- Main Hub Screen -->
-<div id="main-screen" class="hidden">
-<div style="display: flex; justify-content: space-between; align-items: center;">
-<h2 id="welcome-user">Welcome</h2>
-<button onclick="logout()" id="txt-logout-btn" style="width: auto; padding: 6px 12px; background: #ef4444;">Log Out</button>
-</div>
-<hr>
-
-<div id="challenge-alert" class="alert-banner hidden"></div>
-
-<div class="competition-banner">
-<div id="banner-mohamad" class="status-badge-card">Mohamad<br>Racing... ⏳</div>
-<div id="banner-dima" class="status-badge-card">Dima 🤍👸🏻<br>Racing... ⏳</div>
-</div>
-
-<button class="poke-btn" onclick="sendPoke()">👉 Nudge / Poke Partner (نكز الطرف الآخر) ⚡</button>
-
-<button id="open-wheel-btn" onclick="openWheelPage()" disabled style="background-color: #9ca3af; margin-bottom: 20px; padding: 14px; border-radius: 10px; font-size: 16px;">🔒 Finish All Tasks First to Unlock Wheel 🔓</button>
-
-<div class="nav-tabs">
-<button class="nav-tab active" id="tab-btn-1" onclick="switchTab(1)">Daily Tasks</button>
-<button class="nav-tab" id="tab-btn-2" onclick="switchTab(2)">Optional & Sunnah</button>
-<button class="nav-tab" id="tab-btn-3" onclick="switchTab(3)">Store & Points</button>
-</div>
-
-<!-- TAB 1: Daily Essential Tasks (10) -->
-<div id="tab-content-1" class="tab-content">
-<h3 id="txt-tasks-header">Daily Essential Tasks (10)</h3>
-<div id="tasks-container">
 <script>
-const actualTasks = [
-"Morning Azkar", "Fajr Prayer", "Dhuhr Prayer",
-"Asr Prayer", "Maghrib Prayer", "Isha Prayer",
-"Evening Azkar", "Supplication (Duaa)", "Quran Daily (2 Pages)", "Studying"
- ];
-
-for(let i=1; i<=10; i++) {
-let isPrayer = (i >= 2 && i <= 6);
-let isAzkar = (i === 1 || i === 7);
-let isQuran = (i === 9);
-let isDuaa = (i === 8);
-
-document.write(&lt;div class="task-card"&gt; &lt;div class="task-top"&gt; &lt;span class="task-title" id="task-name-${i}">${i}. ${actualTasks[i-1]}</span>
-<div>
-${isPrayer ?<span id="time-p-latex
-{i}" class="prayer-time"&gt;Loading...&lt;/span>` : ''} &lt;span class="badge" id="badge-
-
-{i}">{i}-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
-<div id="status-{isPrayer ?
-<button id="btn-task-${i}" style="background-color: #3b82f6; padding: 10px; border-radius: 8px;" onclick="openPrayerPage(${i}, '${actualTasks[i-1]}')">Open Prayer Azkar & Points (3 pts) ➡️</button>: (isQuran ?<button id="btn-task-${i}" style="background-color: #d97706; padding: 10px; border-radius: 8px;" onclick="openQuranPage()"&gt;Open Today's Quran (5 pts) 📖➡️&lt;/button> :
-(isAzkar ?
-<button id="btn-task-${i}" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeTaskWithPoints(${i}, 2)"&gt;Mark as Done (+2 pts) ✅&lt;/button> :
-(isDuaa ?
-<button id="btn-task-${i}" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeTaskWithPoints(${i}, 3)"&gt;Mark as Done (+3 pts) ✅&lt;/button> :
-<button id="btn-task-${i}" class="action-btn" style="padding: 10px; border-radius: 8px;" onclick="completeTask(${i})"&gt;Mark My Part as Done ✅&lt;/button>
-)
-)
-)
-}
-</div>
-`);
-}
-</script>
-</div>
-</div>
-
-<!-- TAB 2: Optional Tasks & Sunnah (4 Specific Tasks - 5 pts each) -->
-<div id="tab-content-2" class="tab-content hidden">
-<h3 id="txt-side-header">Sunnah Rawatib & Optional Tasks</h3>
-
-<div class="task-card">
-<div class="task-top"><span class="task-title">1. Sunnah Dhuhr (4 Before & 2 After)</span><span class="badge">Sunnah (+5 pts) ✨</span></div>
-<div class="users-status">
-<div id="status-side-1-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
-<div id="status-side-1-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
-</div>
-<button id="btn-side-1" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(1, 5)">Mark Sunnah Dhuhr Done (+5 pts) ✅</button>
-</div>
-
-<div class="task-card">
-<div class="task-top"><span class="task-title">2. Sunnah Maghrib (2 Rakaat After)</span><span class="badge">Sunnah (+5 pts) ✨</span></div>
-<div class="users-status">
-<div id="status-side-2-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
-<div id="status-side-2-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
-</div>
-<button id="btn-side-2" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(2, 5)">Mark Sunnah Maghrib Done (+5 pts) ✅</button>
-</div>
-
-<div class="task-card">
-<div class="task-top"><span class="task-title">3. Sunnah Isha (2 Rakaat After)</span><span class="badge">Sunnah (+5 pts) ✨</span></div>
-<div class="users-status">
-<div id="status-side-3-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
-<div id="status-side-3-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
-</div>
-<button id="btn-side-3" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(3, 5)">Mark Sunnah Isha Done (+5 pts) ✅</button>
-</div>
-
-<div class="task-card">
-<div class="task-top"><span class="task-title">4. Witr Prayer (1 Rakaat)</span><span class="badge">Sunnah Muakkadah (+5 pts) 🌟</span></div>
-<div class="users-status">
-<div id="status-side-4-Mohamad" class="user-box status-not-done">Mohamad: Not Done ❌</div>
-<div id="status-side-4-Dima" class="user-box status-not-done">Dima 🤍👸🏻: Not Done ❌</div>
-</div>
-<button id="btn-side-4" class="action-btn" style="padding: 10px; border-radius: 8px; background-color: #10b981;" onclick="completeSideTaskWithPoints(4, 5)">Mark Witr Done (+5 pts) ✅</button>
-</div>
-</div>
-
-<!-- TAB 3: Store & Points Balance -->
-<div id="tab-content-3" class="tab-content hidden">
-<h3 id="txt-store-title">Store & Points Balance</h3>
-<div class="store-coins-box" id="store-balance-box">
-🪙 Your Points Balance: <span id="user-coins">0</span> Points
-</div>
-
-<div style="text-align: center; padding: 15px; color: #6b7280; font-style: italic;">
-🛒 Rewards store coming soon... ✨
-</div>
-</div>
-
-<!-- Detailed Admin Control Panel (Mohamad Only) -->
-<div id="admin-panel" class="hidden" style="background: #fef2f2; border: 2px dashed #ef4444; padding: 15px; border-radius: 12px; margin-top: 25px;">
-<h4 style="color: #991b1b; margin-top: 0; text-align: center;">👑 لوحة التحكم التفصيلية (Mohamad Admin)</h4>
-
-<button onclick="adminResetQuran()" style="background-color: #d97706; padding: 10px; border-radius: 8px; margin: 6px 0;">📖 ترسيت القرآن وحده (إعادة لليوم الأول)</button>
-<button onclick="adminResetPoints()" style="background-color: #f59e0b; padding: 10px; border-radius: 8px; margin: 6px 0;">🪙 ترسيت النقاط وحدها (تصفير الأرصدة)</button>
-<button onclick="devNextQuranDay()" style="background-color: #8b5cf6; padding: 10px; border-radius: 8px; margin: 6px 0;">⏭️ تخطي لليوم التالي في القرآن (تطوير)</button>
-<button onclick="adminResetTasksOnly()" style="background-color: #ef4444; padding: 12px; border-radius: 8px; margin-top: 8px; font-weight: bold;">🔄 ترسيت المهام اليومية والسنن فقط (الحفاظ على النقاط والقرآن)</button>
-</div>
-</div>
-
-<!-- Prayer Azkar & Smart Points Sub-Page -->
-<div id="prayer-page" class="hidden sub-page">
-<h2 id="prayer-page-title">Post-Prayer Azkar</h2>
-<div class="zekr-box">1. Subhanallah (سبحان الله) - 10 times</div>
-<div class="zekr-box">2. Alhamdulillah (الحمد لله) - 10 times</div>
-<div class="zekr-box">3. Allahu Akbar (الله أكبر) - 10 times</div>
-<div class="zekr-box" style="cursor: pointer; background: #e0e7ff; border-left-color: #4f46e5;" onclick="openAyatKursiPage()">📖 Read Ayat al-Kursi (Click here)</div>
-
-<div style="background: #ecfdf5; border: 1px solid #10b981; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
-<p style="font-weight: bold; color: #065f46; margin-bottom: 8px;">🎯 Smart Prayer Points System:</p>
-<p style="font-size: 13px; color: #047857; margin-bottom: 12px;">Within 15 mins = 3 pts | Within 1 hour = 2 pts | After = 1 pt</p>
-<button onclick="finishPrayerWithPoints()" style="background-color: var(--success-color); padding: 14px; border-radius: 8px; font-size: 16px;">Finish & Claim Points ✅</button>
-</div>
-
-<button onclick="closePrayerPage()" style="background-color: #6b7280; margin-top: 10px; padding: 12px; border-radius: 8px;">Back to Tasks 🔙</button>
-</div>
-
-<!-- Ayat al-Kursi Sub-Page -->
-<div id="ayat-kursi-page" class="hidden sub-page">
-<h2 id="txt-ayat-title">Ayat al-Kursi 🌟</h2>
-<div class="zekr-box" id="ayat-content"></div>
-<button onclick="closeAyatKursiPage()" style="background-color: #4f46e5; padding: 12px; border-radius: 8px;">Back to Prayer Azkar 🔙</button>
-</div>
-
-<!-- Quran Sub-Page -->
-<div id="quran-page" class="hidden sub-page">
-<h2 style="color: #b45309;">📖 Quran Daily Reading</h2>
-<div style="font-weight: bold; color: #b45309; margin-bottom: 15px; text-align: center; font-size: 16px;" id="quran-day-banner">Day 1</div>
-
-<!-- Sheet 1 -->
-<div class="quran-sheet">
-<div class="quran-sheet-header">
-<span id="p1-num-label">Page 1</span>
-<span>القرآن الكريم - الصفحة الأولى</span>
-</div>
-<div class="quran-arabic-text" id="quran-p1-ar">جاري تحميل الآيات... 🔄</div>
-<div class="quran-translation-text" id="quran-p1-en"><strong>English:</strong> Loading...</div>
-<div class="quran-translation-text" id="quran-p1-de"><strong>Deutsch:</strong> Lade...</div>
-<div class="translit-box" id="quran-p1-tr"><strong>Transliteration:</strong> Loading...</div>
-</div>
-
-<!-- Sheet 2 -->
-<div class="quran-sheet">
-<div class="quran-sheet-header">
-<span id="p2-num-label">Page 2</span>
-<span>القرآن الكريم - الصفحة الثانية</span>
-</div>
-<div class="quran-arabic-text" id="quran-p2-ar">جاري تحميل الآيات... 🔄</div>
-<div class="quran-translation-text" id="quran-p2-en"><strong>English:</strong> Loading...</div>
-<div class="quran-translation-text" id="quran-p2-de"><strong>Deutsch:</strong> Lade...</div>
-<div class="translit-box" id="quran-p2-tr"><strong>Transliteration:</strong> Loading...</div>
-</div>
-
-<button onclick="finishQuranReading()" style="margin-top: 5px; background-color: var(--success-color); padding: 14px; border-radius: 8px; font-size: 16px;">Finish & Mark Quran Task as Done (+5 pts) ✅</button>
-
-<button onclick="closeQuranPage()" style="background-color: #6b7280; margin-top: 10px; padding: 12px; border-radius: 8px;">Back to Tasks 🔙</button>
-</div>
-
-<!-- Wheel Page -->
-<div id="wheel-page" class="hidden sub-page">
-<h2 id="txt-wheel-title">Lucky Wheel of Rewards 🎡</h2>
-<p id="txt-wheel-desc">Outstanding achievement! You won the race. Spin the wheel to claim your prize:</p>
-
-<div id="wheel-display" class="wheel-box">Click Spin to try your luck! 🎁</div>
-
-<button id="spin-btn" onclick="spinWheel()" style="background-color: #f59e0b; font-size: 18px; padding: 14px; border-radius: 10px;">SPIN THE WHEEL 🎰</button>
-<button onclick="closeWheelPage()" style="background-color: #6b7280; margin-top: 10px; padding: 12px; border-radius: 8px;">Back to Tasks 🔙</button>
-</div>
-</div>
-
-<script>
-let currentUser = "";
-let activePrayerTaskId = null;
-let activePrayerName = "";
-let currentLang = "tr-de";
-let prayerTimesCache = {};
-
-const passcodes = {
-"Mohamad": "0723",
-"Dima": "0915"
-};
-
-const rewards = [
-"📦 Buy a Product",
-"🍔 Buy a Meal",
-"💵 Give $`5",
-"👑 Mandatory Order (Cannot be refused)"
- ];
-
-const translations = {
-ar: { loginTitle: "تسجيل الدخول للنظام", loginDesc: "الرجاء اختيار اسمك وإدخال كلمة المرور", loginBtn: "تسجيل الدخول", logoutBtn: "خروج", tab1: "المهام اليومية", tab2: "السنن والرواتب", tab3: "المتجر والنقاط" },
-en: { loginTitle: "System Login", loginDesc: "Please select your name and enter your passcode", loginBtn: "Log In", logoutBtn: "Log Out", tab1: "Daily Tasks", tab2: "Optional & Sunnah", tab3: "Store & Points" },
-de: { loginTitle: "System-Anmeldung", loginDesc: "Bitte wählen Sie Ihren Namen und geben Sie den Passcode ein", loginBtn: "Anmelden", logoutBtn: "Abmelden", tab1: "Tägliche Aufgaben", tab2: "Sunnah", tab3: "Guthaben & Punkte" },
-"tr-de": { loginTitle: "System Login (Anmeldung)", loginDesc: "Bitte Name wählen und Passcode eingeben", loginBtn: "Log In", logoutBtn: "Log Out", tab1: "Daily Tasks", tab2: "Optional & Sunnah", tab3: "Store & Points" }
-};
-
-const ayatKursiContent = {
-ar: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...",
-en: "Allah! There is no deity except Him, the Ever-Living, the Sustainer...",
-de: "Allah! Es gibt keinen Gott außer Ihm, dem Lebendigen...",
-"tr-de": "Allahu la ilaha illa huwal-hayyul-qayyum..."
-};
-
-// Check active session immediately on load
-(function checkInitialSession() {
-let savedUser = localStorage.getItem("active_session_user");
-if (savedUser && passcodes[savedUser]) {
-currentUser = savedUser;
-}
-})();
-
-window.onload = function() {
-if (currentUser) {
-let selectedDisplayName = currentUser === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
-let welcomeElem = document.getElementById("welcome-user");
-if(welcomeElem) welcomeElem.innerText = "Welcome, " + selectedDisplayName;
-
-let adminPanel = document.getElementById("admin-panel");
-if(adminPanel) {
-if(currentUser === "Mohamad") {
-adminPanel.classList.remove("hidden");
-} else {
-adminPanel.classList.add("hidden");
-}
-}
-
-let loginScreen = document.getElementById("login-screen");
-let mainScreen = document.getElementById("main-screen");
-if(loginScreen) loginScreen.classList.add("hidden");
-if(mainScreen) mainScreen.classList.remove("hidden");
-
-loadPrayerTimes();
-loadState();
-}
-};
-
-function getQuranDay() {
-let saved = localStorage.getItem("quran_current_day");
-return saved ? parseInt(saved) : 1;
-}
-
-function devNextQuranDay() {
-let currentDay = getQuranDay();
-let nextDay = currentDay + 1;
-localStorage.setItem("quran_current_day", nextDay.toString());
-alert(تم الانتقال لليوم رقم${nextDay} للتجربة! 🚀`);
-if(!document.getElementById("quran-page").classList.contains("hidden")) {
-openQuranPage();
-}
-}
-
-function openQuranPage() {
-let day = getQuranDay();
-let page1Num = (day - 1) * 2 + 1;
-let page2Num = page1Num + 1;
-
-document.getElementById("quran-day-banner").innerText = Day ${day} (Pages ${page1Num} & ${page2Num}); document.getElementById("p1-num-label").innerText =Page ${page1Num};
-document.getElementById("p2-num-label").innerText = Page ${page2Num}`;
-
-["p1", "p2"].forEach(p => {
-document.getElementById(quran-${p}-ar).innerText = "جاري التحميل... ⏳"; document.getElementById(quran-{p}-de).innerHTML = "&lt;strong&gt;Deutsch:&lt;/strong&gt; Lade..."; document.getElementById(quran-${p}-tr).innerHTML = "<strong>Transliteration:</strong> Loading...";
-});
-
-document.getElementById("main-screen").classList.add("hidden");
-document.getElementById("quran-page").classList.remove("hidden");
-
-fetchFullPageDetails(page1Num, "p1");
-fetchFullPageDetails(page2Num, "p2");
-}
-
-function fetchFullPageDetails(pageNum, prefix) {
-fetch(https://api.alquran.cloud/v1/page/${pageNum}/ar.alafasy) .then(res =&gt; res.json()) .then(data =&gt; { if (data && data.data && data.data.ayahs) { let arText = data.data.ayahs.map(a =&gt;{a.numberInSurah}﴾).join(" "); document.getElementById(quran-${prefix}-ar).innerText = arText;
-}
-});
-
-fetch(https://api.alquran.cloud/v1/page/${pageNum}/en.sahih) .then(res =&gt; res.json()) .then(data =&gt; { if (data && data.data && data.data.ayahs) { let enText = data.data.ayahs.map(a =&gt;{a.text}).join(" "); document.getElementById(quran-{enText}`;
-}
-});
-
-fetch(https://api.alquran.cloud/v1/page/${pageNum}/de.aburida) .then(res =&gt; res.json()) .then(data =&gt; { if (data && data.data && data.data.ayahs) { let deText = data.data.ayahs.map(a =&gt; ``${a.numberInSurah}. ${a.text}).join(" "); document.getElementById(quran-${prefix}-de).innerHTML = <strong&gt;Deutsch:&lt;/strong&gt; ${deText}`;
-}
-});
-
-fetch(https://api.alquran.cloud/v1/page/${pageNum}/en.transliteration) .then(res =&gt; res.json()) .then(data =&gt; { if (data && data.data && data.data.ayahs) { let trText = data.data.ayahs.map(a =&gt;{a.text}).join(" "); document.getElementById(quran-{trText}; } }) .catch(() =&gt; { document.getElementById(quran-${prefix}-tr).innerHTML = <strong&gt;Transliteration:&lt;/strong&gt; Not available;
-});
-}
-
-function closeQuranPage() {
-document.getElementById("quran-page").classList.add("hidden");
-document.getElementById("main-screen").classList.remove("hidden");
-}
-
-function finishQuranReading() {
-let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-localStorage.setItem("coins_" + currentUser, (currentCoins + 5).toString());
-
-localStorage.setItem("task_9_" + currentUser, "true");
-closeQuranPage();
-loadState();
-alert("Awesome! Quran reading completed. You earned 5 points! ✨");
-}
-
-function sendPoke() {
-let sender = currentUser === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
-localStorage.setItem("poke_alert", ⚡${sender} poked you! Wake up and finish your tasks!`);
-alert("Poke sent successfully! ⚡");
-}
-
-function checkPoke() {
-let poke = localStorage.getItem("poke_alert");
-if(poke) {
-alert(poke);
-localStorage.removeItem("poke_alert");
-}
-}
-setInterval(checkPoke, 3000);
-
-function switchTab(tabIndex) {
-document.querySelectorAll('.nav-tab').forEach((btn, idx) => {
-if((idx + 1) === tabIndex) {
-btn.classList.add('active');
-} else {
-btn.classList.remove('active');
-}
-});
-
-document.querySelectorAll('.tab-content').forEach((content, idx) => {
-if((idx + 1) === tabIndex) {
-content.classList.remove('hidden');
-} else {
-content.classList.add('hidden');
-}
-});
-}
-
-function changeLanguage(lang) {
-currentLang = lang;
-const t = translations[lang];
-document.getElementById("txt-login-title").innerText = t.loginTitle;
-document.getElementById("txt-login-desc").innerText = t.loginDesc;
-document.getElementById("txt-login-btn").innerText = t.loginBtn;
-document.getElementById("txt-logout-btn").innerText = t.logoutBtn;
-document.getElementById("tab-btn-1").innerText = t.tab1;
-document.getElementById("tab-btn-2").innerText = t.tab2;
-document.getElementById("tab-btn-3").innerText = t.tab3;
-renderAyatKursi();
-}
-
-function renderAyatKursi() {
-const box = document.getElementById("ayat-content");
-box.innerText = ayatKursiContent[currentLang] || ayatKursiContent["tr-de"];
-}
-
-function login() {
-const select = document.getElementById("username-select");
-const passInput = document.getElementById("passcode-input");
-const errorDiv = document.getElementById("login-error");
-
-const selectedUser = select.value;
-const cleanUser = selectedUser.includes("Dima") ? "Dima" : selectedUser;
-const enteredPass = passInput.value;
-
-if (passcodes[cleanUser] === enteredPass) {
-currentUser = cleanUser;
-localStorage.setItem("active_session_user", currentUser);
-errorDiv.innerText = "";
-passInput.value = "";
-document.getElementById("welcome-user").innerText = "Welcome, " + selectedUser;
-
-if(currentUser === "Mohamad") {
-document.getElementById("admin-panel").classList.remove("hidden");
-} else {
-document.getElementById("admin-panel").classList.add("hidden");
-}
-
-document.getElementById("login-screen").classList.add("hidden");
-document.getElementById("main-screen").classList.remove("hidden");
-loadPrayerTimes();
-loadState();
-} else {
-errorDiv.innerText = "Incorrect passcode! Try again.";
-}
-}
-
-function logout() {
-localStorage.removeItem("active_session_user");
-currentUser = "";
-document.getElementById("main-screen").classList.add("hidden");
-document.getElementById("login-screen").classList.remove("hidden");
-}
-
-function completeTask(id) {
-localStorage.setItem("task_" + id + "_" + currentUser, "true");
-loadState();
-}
-
-function completeTaskWithPoints(id, pts) {
-let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-localStorage.setItem("coins_" + currentUser, (currentCoins + pts).toString());
-localStorage.setItem("task_" + id + "_" + currentUser, "true");
-loadState();
-alert(Task completed! You earned ${pts} points! ✨`);
-}
-
-function completeSideTaskWithPoints(sId, pts) {
-let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-localStorage.setItem("coins_" + currentUser, (currentCoins + pts).toString());
-localStorage.setItem("side_task_" + sId + "_" + currentUser, "true");
-loadState();
-alert(Sunnah completed! You earned${pts} points! ✨`);
-}
-
-function openPrayerPage(taskId, prayerName) {
-activePrayerTaskId = taskId;
-activePrayerName = prayerName;
-document.getElementById("prayer-page-title").innerText = prayerName + " - Post-Prayer Azkar & Smart Points";
-document.getElementById("main-screen").classList.add("hidden");
-document.getElementById("prayer-page").classList.remove("hidden");
-}
-
-function closePrayerPage() {
-document.getElementById("prayer-page").classList.add("hidden");
-document.getElementById("main-screen").classList.remove("hidden");
-}
-
-function finishPrayerWithPoints() {
-let timeStr = prayerTimesCache[activePrayerName];
-let earnedPoints = 1;
-
-if (timeStr) {
-let [hours, minutes] = timeStr.split(':').map(Number);
-let now = new Date();
-let azanDate = new Date();
-azanDate.setHours(hours, minutes, 0, 0);
-
-let diffMinutes = (now - azanDate) / (1000 * 60);
-
-if (diffMinutes >= 0 && diffMinutes <= 15) {
-earnedPoints = 3;
-alert("ممتاز! صليت خلال أول 15 دقيقة.. ربحت 3 نقاط! 🌟");
-} else if (diffMinutes > 15 && diffMinutes <= 60) {
-earnedPoints = 2;
-alert("جيد جداً! صليت خلال ساعة.. ربحت نقطتين! ⏳");
-} else {
-earnedPoints = 1;
-alert("تم إتمام الصلاة.. ربحت نقطة واحدة. 👍");
-}
-} else {
-alert("تم إتمام الصلاة.. ربحت نقطة واحدة. 👍");
-}
-
-let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-localStorage.setItem("coins_" + currentUser, (currentCoins + earnedPoints).toString());
-
-localStorage.setItem("task_" + activePrayerTaskId + "_" + currentUser, "true");
-closePrayerPage();
-loadState();
-}
-
-function openAyatKursiPage() {
-renderAyatKursi();
-document.getElementById("prayer-page").classList.add("hidden");
-document.getElementById("ayat-kursi-page").classList.remove("hidden");
-}
-
-function closeAyatKursiPage() {
-document.getElementById("ayat-kursi-page").classList.add("hidden");
-document.getElementById("prayer-page").classList.remove("hidden");
-}
-
-function openWheelPage() {
-document.getElementById("main-screen").classList.add("hidden");
-document.getElementById("wheel-page").classList.remove("hidden");
-let savedReward = localStorage.getItem("reward_" + currentUser);
-if(savedReward) {
-document.getElementById("wheel-display").innerText = "Your Reward: " + savedReward;
-document.getElementById("spin-btn").disabled = true;
-}
-}
-
-function closeWheelPage() {
-document.getElementById("wheel-page").classList.add("hidden");
-document.getElementById("main-screen").classList.remove("hidden");
-}
-
-function spinWheel() {
-const display = document.getElementById("wheel-display");
-display.innerText = "Spinning... 🎡";
-setTimeout(() => {
-const wonReward = rewards[Math.floor(Math.random() * rewards.length)];
-display.innerText = "🎉 You Won: " + wonReward;
-localStorage.setItem("reward_" + currentUser, wonReward);
-document.getElementById("spin-btn").disabled = true;
-}, 1200);
-}
-
-// --- Admin Control Functions ---
-function adminResetQuran() {
-if(currentUser !== "Mohamad") return;
-if(confirm("هل تريد إعادة ضبط وترسيت القرآن للبداية (اليوم الأول)؟")) {
-localStorage.setItem("quran_current_day", "1");
-localStorage.removeItem("task_9_Mohamad");
-localStorage.removeItem("task_9_Dima");
-loadState();
-alert("تم ترسيت القرآن بنجاح!");
-}
-}
-
-function adminResetPoints() {
-if(currentUser !== "Mohamad") return;
-if(confirm("هل تريد تصفير نقاط كل المستخدمين؟")) {
-localStorage.setItem("coins_Mohamad", "0");
-localStorage.setItem("coins_Dima", "0");
-loadState();
-alert("تم تصفير النقاط بنجاح!");
-}
-}
-
-function adminResetTasksOnly() {
-if(currentUser !== "Mohamad") return;
-if(confirm("⚠️ هل أنت متأكد من ترسيت المهام اليومية والسنن فقط (مع الحفاظ على النقاط والقرآن آمنين تماماً)؟")) {
-for(let i=1; i<=10; i++) {
-if(i === 9) continue;
-localStorage.removeItem("task_" + i + "Mohamad");
-localStorage.removeItem("task" + i + "Dima");
-}
-for(let s=1; s<=4; s++) {
-localStorage.removeItem("side_task" + s + "Mohamad");
-localStorage.removeItem("side_task" + s + "_Dima");
-}
-localStorage.removeItem("game_winner");
-localStorage.removeItem("reward_Mohamad");
-localStorage.removeItem("reward_Dima");
-localStorage.removeItem("latest_challenge");
-
-loadState();
-alert("تم ترسيت المهام اليومية والسنن بنجاح، وبقيت النقاط والقرآن آمنين تماماً! ✨");
-}
-}
-
-function loadPrayerTimes() {
-if (navigator.geolocation) {
-navigator.geolocation.getCurrentPosition(position => {
-const lat = position.coords.latitude;
-const lng = position.coords.longitude;
-const date = new Date();
-const timestamp = Math.floor(date.getTime() / 1000);
-
-fetch(https://api.aladhan.com/v1/timings/${timestamp}?latitude=${lat}&longitude=${lng}&method=3)
-.then(res => res.json())
-.then(data => {
-if(data && data.data && data.data.timings) {
-const t = data.data.timings;
-prayerTimesCache["Fajr Prayer"] = t.Fajr;
-prayerTimesCache["Dhuhr Prayer"] = t.Dhuhr;
-prayerTimesCache["Asr Prayer"] = t.Asr;
-prayerTimesCache["Maghrib Prayer"] = t.Maghrib;
-prayerTimesCache["Isha Prayer"] = t.Isha;
-
-document.getElementById("time-p-2").innerText = t.Fajr;
-document.getElementById("time-p-3").innerText = t.Dhuhr;
-document.getElementById("time-p-4").innerText = t.Asr;
-document.getElementById("time-p-5").innerText = t.Maghrib;
-document.getElementById("time-p-6").innerText = t.Isha;
-}
-}).catch(err => setFallbackPrayerTimes());
-}, () => { setFallbackPrayerTimes(); });
-} else {
-setFallbackPrayerTimes();
-}
-}
-
-function setFallbackPrayerTimes() {
-prayerTimesCache["Fajr Prayer"] = "05:00";
-prayerTimesCache["Dhuhr Prayer"] = "12:30";
-prayerTimesCache["Asr Prayer"] = "15:45";
-prayerTimesCache["Maghrib Prayer"] = "18:15";
-prayerTimesCache["Isha Prayer"] = "19:45";
-
-document.getElementById("time-p-2").innerText = "05:00 AM";
-document.getElementById("time-p-3").innerText = "12:30 PM";
-document.getElementById("time-p-4").innerText = "03:45 PM";
-document.getElementById("time-p-5").innerText = "06:15 PM";
-document.getElementById("time-p-6").innerText = "07:45 PM";
-}
-
-function loadState() {
-let mohamadDone = true;
-let dimaDone = true;
-let allMyTasksDone = true;
-
-for(let i = 1; i <= 10; i++) {
-["Mohamad", "Dima"].forEach(user => {
-let isDone = localStorage.getItem("task_" + i + "_" + user) === "true";
-const userBox = document.getElementById("status-" + i + "-" + user);
-let displayName = user === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
-
-if(userBox) {
-if(isDone) {
-userBox.className = "user-box status-done";
-userBox.innerText = displayName + ": Done ✨";
-} else {
-userBox.className = "user-box status-not-done";
-userBox.innerText = displayName + ": Not Done ❌";
-}
-}
-if(user === "Mohamad" && !isDone) mohamadDone = false;
-if(user === "Dima" && !isDone) dimaDone = false;
-});
-
-let myTaskStatus = localStorage.getItem("task_" + i + "_" + currentUser) === "true";
-if(!myTaskStatus) allMyTasksDone = false;
-
-const actionBtn = document.getElementById("btn-task-" + i);
-if(actionBtn && i !== 2 && i !== 3 && i !== 4 && i !== 5 && i !== 6 && i !== 9 && i !== 1 && i !== 7 && i !== 8) {
-if(myTaskStatus) {
-actionBtn.disabled = true;
-actionBtn.innerText = "Your Part is Completed ✅";
-} else {
-actionBtn.disabled = false;
-actionBtn.innerText = "Mark My Part as Done ✅";
-}
-} else if (actionBtn && (i === 1 || i === 7 || i === 8)) {
-if(myTaskStatus) {
-actionBtn.disabled = true;
-actionBtn.innerText = "Completed (+pts) ✅";
-actionBtn.style.backgroundColor = "#9ca3af";
-} else {
-actionBtn.disabled = false;
-actionBtn.style.backgroundColor = "#10b981";
-}
-}
-}
-
-let quranStatusBtn = document.getElementById("btn-task-9");
-let myQuranStatus = localStorage.getItem("task_9_" + currentUser) === "true";
-if(quranStatusBtn) {
-if(myQuranStatus) {
-quranStatusBtn.style.backgroundColor = "#10b981";
-quranStatusBtn.innerText = "Quran Completed Today ✅";
-} else {
-quranStatusBtn.style.backgroundColor = "#d97706";
-quranStatusBtn.innerText = "Open Today's Quran (5 pts) 📖➡️";
-}
-}
-
-for(let s = 1; s <= 4; s++) {
-["Mohamad", "Dima"].forEach(user => {
-let sideDone = localStorage.getItem("side_task_" + s + "" + user) === "true";
-const sideBox = document.getElementById("status-side-" + s + "-" + user);
-let displayName = user === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
-if(sideBox) {
-if(sideDone) {
-sideBox.className = "user-box status-done";
-sideBox.innerText = displayName + ": Done ✨";
-} else {
-sideBox.className = "user-box status-not-done";
-sideBox.innerText = displayName + ": Not Done ❌";
-}
-}
-});
-let mySideStatus = localStorage.getItem("side_task" + s + "_" + currentUser) === "true";
-const sideActionBtn = document.getElementById("btn-side-" + s);
-if(sideActionBtn) {
-if(mySideStatus) {
-sideActionBtn.disabled = true;
-sideActionBtn.innerText = "Sunnah Completed (+5 pts) ✅";
-sideActionBtn.style.backgroundColor = "#9ca3af";
-} else {
-sideActionBtn.disabled = false;
-sideActionBtn.style.backgroundColor = "#10b981";
-sideActionBtn.innerText = s === 1 ? "Mark Sunnah Dhuhr Done (+5 pts) ✅" : (s === 2 ? "Mark Sunnah Maghrib Done (+5 pts) ✅" : (s === 3 ? "Mark Sunnah Isha Done (+5 pts) ✅" : "Mark Witr Done (+5 pts) ✅"));
-}
-}
-}
-
-let userCoins = localStorage.getItem("coins_" + currentUser) || "0";
-document.getElementById("user-coins").innerText = userCoins;
-
-let currentGameWinner = localStorage.getItem("game_winner");
-if(!currentGameWinner) {
-if(mohamadDone && !dimaDone) {
-localStorage.setItem("game_winner", "Mohamad");
-currentGameWinner = "Mohamad";
-} else if(dimaDone && !mohamadDone) {
-localStorage.setItem("game_winner", "Dima");
-currentGameWinner = "Dima";
-} else if(mohamadDone && dimaDone) {
-localStorage.setItem("game_winner", "Mohamad");
-currentGameWinner = "Mohamad";
-}
-}
-
-const mohamadBanner = document.getElementById("banner-mohamad");
-const dimaBanner = document.getElementById("banner-dima");
-
-if(currentGameWinner) {
-if(currentGameWinner === "Mohamad") {
-mohamadBanner.className = "status-badge-card is-winner";
-mohamadBanner.innerHTML = "Mohamad<br>🏆 WINNER";
-dimaBanner.className = "status-badge-card is-loser";
-dimaBanner.innerHTML = "Dima 🤍👸🏻<br>❌ LOSER";
-} else {
-dimaBanner.className = "status-badge-card is-winner";
-dimaBanner.innerHTML = "Dima 🤍👸🏻<br>🏆 WINNER";
-mohamadBanner.className = "status-badge-card is-loser";
-mohamadBanner.innerHTML = "Mohamad<br>❌ LOSER";
-}
-} else {
-mohamadBanner.className = "status-badge-card";
-mohamadBanner.innerHTML = "Mohamad<br>Racing... ⏳";
-dimaBanner.className = "status-badge-card";
-dimaBanner.innerHTML = "Dima 🤍👸🏻<br>Racing... ⏳";
-}
-
-const wheelBtn = document.getElementById("open-wheel-wheel") || document.getElementById("open-wheel-btn");
-if(wheelBtn) {
-if(allMyTasksDone) {
-if(!currentGameWinner || currentGameWinner === currentUser) {
-wheelBtn.disabled = false;
-wheelBtn.style.backgroundColor = "#10b981";
-wheelBtn.innerText = "🎉 You Won! Open Lucky Wheel 🎡";
-} else {
-wheelBtn.disabled = true;
-wheelBtn.style.backgroundColor = "#ef4444";
-wheelBtn.innerText = "❌ Too late! " + currentGameWinner + " won first.";
-}
-} else {
-wheelBtn.disabled = true;
-wheelBtn.style.backgroundColor = "#9ca3af";
-wheelBtn.innerText = "🔒 Finish All Tasks First to Unlock Wheel 🔓";
-}
-}
-}
+    let currentUser = "";
+    let activePrayerTaskId = null;
+    let activePrayerName = "";
+    let currentLang = "tr-de";
+    let prayerTimesCache = {};
+
+    const passcodes = {
+        "Mohamad": "0723",
+        "Dima": "0915"
+    };
+
+    const rewards = [
+        "📦 Buy a Product",
+        "🍔 Buy a Meal",
+        "💵 Give $5",
+        "👑 Mandatory Order (Cannot be refused)"
+    ];
+
+    const translations = {
+        ar: { loginTitle: "تسجيل الدخول للنظام", loginDesc: "الرجاء اختيار اسمك وإدخال كلمة المرور", loginBtn: "تسجيل الدخول", logoutBtn: "خروج", tab1: "المهام اليومية", tab2: "السنن والرواتب", tab3: "المتجر والنقاط" },
+        en: { loginTitle: "System Login", loginDesc: "Please select your name and enter your passcode", loginBtn: "Log In", logoutBtn: "Log Out", tab1: "Daily Tasks", tab2: "Optional & Sunnah", tab3: "Store & Points" },
+        de: { loginTitle: "System-Anmeldung", loginDesc: "Bitte wählen Sie Ihren Namen und geben Sie den Passcode ein", loginBtn: "Anmelden", logoutBtn: "Abmelden", tab1: "Tägliche Aufgaben", tab2: "Sunnah", tab3: "Guthaben & Punkte" },
+        "tr-de": { loginTitle: "System Login (Anmeldung)", loginDesc: "Bitte Name wählen und Passcode eingeben", loginBtn: "Log In", logoutBtn: "Log Out", tab1: "Daily Tasks", tab2: "Optional & Sunnah", tab3: "Store & Points" }
+    };
+
+    const ayatKursiContent = {
+        ar: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...",
+        en: "Allah! There is no deity except Him, the Ever-Living, the Sustainer...",
+        de: "Allah! Es gibt keinen Gott außer Ihm, dem Lebendigen...",
+        "tr-de": "Allahu la ilaha illa huwal-hayyul-qayyum..."
+    };
+
+    // Robust direct event binding when DOM loads
+    document.addEventListener("DOMContentLoaded", function() {
+        let savedUser = localStorage.getItem("active_session_user");
+        if (savedUser && passcodes[savedUser]) {
+            currentUser = savedUser;
+            initUserSession();
+        }
+
+        // Direct listener for login submit button
+        let loginBtn = document.getElementById("login-submit-btn");
+        if(loginBtn) {
+            loginBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                login();
+            });
+        }
+
+        // Direct listener for logout button
+        let logoutBtn = document.getElementById("logout-btn");
+        if(logoutBtn) {
+            logoutBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                logout();
+            });
+        }
+    });
+
+    function initUserSession() {
+        let selectedDisplayName = currentUser === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
+        let welcomeElem = document.getElementById("welcome-user");
+        if(welcomeElem) welcomeElem.innerText = "Welcome, " + selectedDisplayName;
+        
+        let adminPanel = document.getElementById("admin-panel");
+        if(adminPanel) {
+            if(currentUser === "Mohamad") {
+                adminPanel.classList.remove("hidden");
+            } else {
+                adminPanel.classList.add("hidden");
+            }
+        }
+
+        let loginScreen = document.getElementById("login-screen");
+        let mainScreen = document.getElementById("main-screen");
+        if(loginScreen) loginScreen.classList.add("hidden");
+        if(mainScreen) mainScreen.classList.remove("hidden");
+
+        loadPrayerTimes();
+        loadState();
+    }
+
+    function getQuranDay() {
+        let saved = localStorage.getItem("quran_current_day");
+        return saved ? parseInt(saved) : 1;
+    }
+
+    function devNextQuranDay() {
+        let currentDay = getQuranDay();
+        let nextDay = currentDay + 1;
+        localStorage.setItem("quran_current_day", nextDay.toString());
+        alert(`تم الانتقال لليوم رقم ${nextDay} للتجربة! 🚀`);
+        if(!document.getElementById("quran-page").classList.contains("hidden")) {
+            openQuranPage();
+        }
+    }
+
+    function openQuranPage() {
+        let day = getQuranDay();
+        let page1Num = (day - 1) * 2 + 1;
+        let page2Num = page1Num + 1;
+
+        document.getElementById("quran-day-banner").innerText = `Day ${day} (Pages ${page1Num} & ${page2Num})`;
+        document.getElementById("p1-num-label").innerText = `Page ${page1Num}`;
+        document.getElementById("p2-num-label").innerText = `Page ${page2Num}`;
+
+        ["p1", "p2"].forEach(p => {
+            document.getElementById(`quran-${p}-ar`).innerText = "جاري التحميل... ⏳";
+            document.getElementById(`quran-${p}-en`).innerHTML = "<strong>English:</strong> Loading...";
+            document.getElementById(`quran-${p}-de`).innerHTML = "<strong>Deutsch:</strong> Lade...";
+            document.getElementById(`quran-${p}-tr`).innerHTML = "<strong>Transliteration:</strong> Loading...";
+        });
+
+        document.getElementById("main-screen").classList.add("hidden");
+        document.getElementById("quran-page").classList.remove("hidden");
+
+        fetchFullPageDetails(page1Num, "p1");
+        fetchFullPageDetails(page2Num, "p2");
+    }
+
+    function fetchFullPageDetails(pageNum, prefix) {
+        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/ar.alafasy`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.data && data.data.ayahs) {
+                    let arText = data.data.ayahs.map(a => `${a.text} ﴿${a.numberInSurah}﴾`).join(" ");
+                    document.getElementById(`quran-${prefix}-ar`).innerText = arText;
+                }
+            });
+
+        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/en.sahih`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.data && data.data.ayahs) {
+                    let enText = data.data.ayahs.map(a => `${a.numberInSurah}. ${a.text}`).join(" ");
+                    document.getElementById(`quran-${prefix}-en`).innerHTML = `<strong>English:</strong> ${enText}`;
+                }
+            });
+
+        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/de.aburida`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.data && data.data.ayahs) {
+                    let deText = data.data.ayahs.map(a => `${a.numberInSurah}. ${a.text}`).join(" ");
+                    document.getElementById(`quran-${prefix}-de`).innerHTML = `<strong>Deutsch:</strong> ${deText}`;
+                }
+            });
+
+        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/en.transliteration`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.data && data.data.ayahs) {
+                    let trText = data.data.ayahs.map(a => `${a.numberInSurah}. ${a.text}`).join(" ");
+                    document.getElementById(`quran-${prefix}-tr`).innerHTML = `<strong>Transliteration:</strong> ${trText}`;
+                }
+            })
+            .catch(() => {
+                document.getElementById(`quran-${prefix}-tr`).innerHTML = `<strong>Transliteration:</strong> Not available`;
+            });
+    }
+
+    function closeQuranPage() {
+        document.getElementById("quran-page").classList.add("hidden");
+        document.getElementById("main-screen").classList.remove("hidden");
+    }
+
+    function finishQuranReading() {
+        let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+        localStorage.setItem("coins_" + currentUser, (currentCoins + 5).toString());
+
+        localStorage.setItem("task_9_" + currentUser, "true");
+        closeQuranPage();
+        loadState();
+        alert("Awesome! Quran reading completed. You earned 5 points! ✨");
+    }
+
+    function sendPoke() {
+        let sender = currentUser === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
+        localStorage.setItem("poke_alert", `⚡ ${sender} poked you! Wake up and finish your tasks!`);
+        alert("Poke sent successfully! ⚡");
+    }
+
+    function checkPoke() {
+        let poke = localStorage.getItem("poke_alert");
+        if(poke) {
+            alert(poke);
+            localStorage.removeItem("poke_alert");
+        }
+    }
+    setInterval(checkPoke, 3000);
+
+    function switchTab(tabIndex) {
+        document.querySelectorAll('.nav-tab').forEach((btn, idx) => {
+            if((idx + 1) === tabIndex) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('.tab-content').forEach((content, idx) => {
+            if((idx + 1) === tabIndex) {
+                content.classList.remove('hidden');
+            } else {
+                content.classList.add('hidden');
+            }
+        });
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        const t = translations[lang];
+        document.getElementById("txt-login-title").innerText = t.loginTitle;
+        document.getElementById("txt-login-desc").innerText = t.loginDesc;
+        document.getElementById("txt-login-btn").innerText = t.loginBtn;
+        document.getElementById("txt-logout-btn").innerText = t.logoutBtn;
+        document.getElementById("tab-btn-1").innerText = t.tab1;
+        document.getElementById("tab-btn-2").innerText = t.tab2;
+        document.getElementById("tab-btn-3").innerText = t.tab3;
+        renderAyatKursi();
+    }
+
+    function renderAyatKursi() {
+        const box = document.getElementById("ayat-content");
+        box.innerText = ayatKursiContent[currentLang] || ayatKursiContent["tr-de"];
+    }
+
+    function login() {
+        const select = document.getElementById("username-select");
+        const passInput = document.getElementById("passcode-input");
+        const errorDiv = document.getElementById("login-error");
+        
+        const selectedUser = select.value;
+        const cleanUser = selectedUser.includes("Dima") ? "Dima" : selectedUser;
+        const enteredPass = passInput.value;
+
+        if (passcodes[cleanUser] === enteredPass) {
+            currentUser = cleanUser;
+            localStorage.setItem("active_session_user", currentUser);
+            errorDiv.innerText = "";
+            passInput.value = "";
+            initUserSession();
+        } else {
+            errorDiv.innerText = "Incorrect passcode! Try again.";
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem("active_session_user");
+        currentUser = "";
+        document.getElementById("main-screen").classList.add("hidden");
+        document.getElementById("login-screen").classList.remove("hidden");
+    }
+
+    function completeTask(id) {
+        localStorage.setItem("task_" + id + "_" + currentUser, "true");
+        loadState();
+    }
+
+    function completeTaskWithPoints(id, pts) {
+        let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+        localStorage.setItem("coins_" + currentUser, (currentCoins + pts).toString());
+        localStorage.setItem("task_" + id + "_" + currentUser, "true");
+        loadState();
+        alert(`Task completed! You earned ${pts} points! ✨`);
+    }
+
+    function completeSideTaskWithPoints(sId, pts) {
+        let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+        localStorage.setItem("coins_" + currentUser, (currentCoins + pts).toString());
+        localStorage.setItem("side_task_" + sId + "_" + currentUser, "true");
+        loadState();
+        alert(`Sunnah completed! You earned ${pts} points! ✨`);
+    }
+
+    function openPrayerPage(taskId, prayerName) {
+        activePrayerTaskId = taskId;
+        activePrayerName = prayerName;
+        document.getElementById("prayer-page-title").innerText = prayerName + " - Post-Prayer Azkar & Smart Points";
+        document.getElementById("main-screen").classList.add("hidden");
+        document.getElementById("prayer-page").classList.remove("hidden");
+    }
+
+    function closePrayerPage() {
+        document.getElementById("prayer-page").classList.add("hidden");
+        document.getElementById("main-screen").classList.remove("hidden");
+    }
+
+    function finishPrayerWithPoints() {
+        let timeStr = prayerTimesCache[activePrayerName];
+        let earnedPoints = 1;
+
+        if (timeStr) {
+            let [hours, minutes] = timeStr.split(':').map(Number);
+            let now = new Date();
+            let azanDate = new Date();
+            azanDate.setHours(hours, minutes, 0, 0);
+
+            let diffMinutes = (now - azanDate) / (1000 * 60);
+
+            if (diffMinutes >= 0 && diffMinutes <= 15) {
+                earnedPoints = 3;
+                alert("ممتاز! صليت خلال أول 15 دقيقة.. ربحت 3 نقاط! 🌟");
+            } else if (diffMinutes > 15 && diffMinutes <= 60) {
+                earnedPoints = 2;
+                alert("جيد جداً! صليت خلال ساعة.. ربحت نقطتين! ⏳");
+            } else {
+                earnedPoints = 1;
+                alert("تم إتمام الصلاة.. ربحت نقطة واحدة. 👍");
+            }
+        } else {
+            alert("تم إتمام الصلاة.. ربحت نقطة واحدة. 👍");
+        }
+
+        let currentCoins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+        localStorage.setItem("coins_" + currentUser, (currentCoins + earnedPoints).toString());
+
+        localStorage.setItem("task_" + activePrayerTaskId + "_" + currentUser, "true");
+        closePrayerPage();
+        loadState();
+    }
+
+    function openAyatKursiPage() {
+        renderAyatKursi();
+        document.getElementById("prayer-page").classList.add("hidden");
+        document.getElementById("ayat-kursi-page").classList.remove("hidden");
+    }
+
+    function closeAyatKursiPage() {
+        document.getElementById("ayat-kursi-page").classList.add("hidden");
+        document.getElementById("prayer-page").classList.remove("hidden");
+    }
+
+    function openWheelPage() {
+        document.getElementById("main-screen").classList.add("hidden");
+        document.getElementById("wheel-page").classList.remove("hidden");
+        let savedReward = localStorage.getItem("reward_" + currentUser);
+        if(savedReward) {
+            document.getElementById("wheel-display").innerText = "Your Reward: " + savedReward;
+            document.getElementById("spin-btn").disabled = true;
+        }
+    }
+
+    function closeWheelPage() {
+        document.getElementById("wheel-page").classList.add("hidden");
+        document.getElementById("main-screen").classList.remove("hidden");
+    }
+
+    function spinWheel() {
+        const display = document.getElementById("wheel-display");
+        display.innerText = "Spinning... 🎡";
+        setTimeout(() => {
+            const wonReward = rewards[Math.floor(Math.random() * rewards.length)];
+            display.innerText = "🎉 You Won: " + wonReward;
+            localStorage.setItem("reward_" + currentUser, wonReward);
+            document.getElementById("spin-btn").disabled = true;
+        }, 1200);
+    }
+
+    // --- Admin Control Functions ---
+    function adminResetQuran() {
+        if(currentUser !== "Mohamad") return;
+        if(confirm("هل تريد إعادة ضبط وترسيت القرآن للبداية (اليوم الأول)؟")) {
+            localStorage.setItem("quran_current_day", "1");
+            localStorage.removeItem("task_9_Mohamad");
+            localStorage.removeItem("task_9_Dima");
+            loadState();
+            alert("تم ترسيت القرآن بنجاح!");
+        }
+    }
+
+    function adminResetPoints() {
+        if(currentUser !== "Mohamad") return;
+        if(confirm("هل تريد تصفير نقاط كل المستخدمين؟")) {
+            localStorage.setItem("coins_Mohamad", "0");
+            localStorage.setItem("coins_Dima", "0");
+            loadState();
+            alert("تم تصفير النقاط بنجاح!");
+        }
+    }
+
+    function adminResetTasksOnly() {
+        if(currentUser !== "Mohamad") return;
+        if(confirm("⚠️ هل أنت متأكد من ترسيت المهام اليومية والسنن فقط (مع الحفاظ على النقاط والقرآن آمنين تماماً)؟")) {
+            for(let i=1; i<=10; i++) {
+                if(i === 9) continue;
+                localStorage.removeItem("task_" + i + "_Mohamad");
+                localStorage.removeItem("task_" + i + "_Dima");
+            }
+            for(let s=1; s<=4; s++) {
+                localStorage.removeItem("side_task_" + s + "_Mohamad");
+                localStorage.removeItem("side_task_" + s + "_Dima");
+            }
+            localStorage.removeItem("game_winner");
+            localStorage.removeItem("reward_Mohamad");
+            localStorage.removeItem("reward_Dima");
+            localStorage.removeItem("latest_challenge");
+
+            loadState();
+            alert("تم ترسيت المهام اليومية والسنن بنجاح، وبقيت النقاط والقرآن آمنين تماماً! ✨");
+        }
+    }
+
+    function loadPrayerTimes() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const date = new Date();
+                const timestamp = Math.floor(date.getTime() / 1000);
+                
+                fetch(`https://api.aladhan.com/v1/timings/${timestamp}?latitude=${lat}&longitude=${lng}&method=3`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data && data.data && data.data.timings) {
+                            const t = data.data.timings;
+                            prayerTimesCache["Fajr Prayer"] = t.Fajr;
+                            prayerTimesCache["Dhuhr Prayer"] = t.Dhuhr;
+                            prayerTimesCache["Asr Prayer"] = t.Asr;
+                            prayerTimesCache["Maghrib Prayer"] = t.Maghrib;
+                            prayerTimesCache["Isha Prayer"] = t.Isha;
+
+                            document.getElementById("time-p-2").innerText = t.Fajr;
+                            document.getElementById("time-p-3").innerText = t.Dhuhr;
+                            document.getElementById("time-p-4").innerText = t.Asr;
+                            document.getElementById("time-p-5").innerText = t.Maghrib;
+                            document.getElementById("time-p-6").innerText = t.Isha;
+                        }
+                    }).catch(err => setFallbackPrayerTimes());
+            }, () => { setFallbackPrayerTimes(); });
+        } else {
+            setFallbackPrayerTimes();
+        }
+    }
+
+    function setFallbackPrayerTimes() {
+        prayerTimesCache["Fajr Prayer"] = "05:00";
+        prayerTimesCache["Dhuhr Prayer"] = "12:30";
+        prayerTimesCache["Asr Prayer"] = "15:45";
+        prayerTimesCache["Maghrib Prayer"] = "18:15";
+        prayerTimesCache["Isha Prayer"] = "19:45";
+
+        document.getElementById("time-p-2").innerText = "05:00 AM";
+        document.getElementById("time-p-3").innerText = "12:30 PM";
+        document.getElementById("time-p-4").innerText = "03:45 PM";
+        document.getElementById("time-p-5").innerText = "06:15 PM";
+        document.getElementById("time-p-6").innerText = "07:45 PM";
+    }
+
+    function loadState() {
+        let mohamadDone = true;
+        let dimaDone = true;
+        let allMyTasksDone = true;
+
+        for(let i = 1; i <= 10; i++) {
+            ["Mohamad", "Dima"].forEach(user => {
+                let isDone = localStorage.getItem("task_" + i + "_" + user) === "true";
+                const userBox = document.getElementById("status-" + i + "-" + user);
+                let displayName = user === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
+                
+                if(userBox) {
+                    if(isDone) {
+                        userBox.className = "user-box status-done";
+                        userBox.innerText = displayName + ": Done ✨";
+                    } else {
+                        userBox.className = "user-box status-not-done";
+                        userBox.innerText = displayName + ": Not Done ❌";
+                    }
+                }
+                if(user === "Mohamad" && !isDone) mohamadDone = false;
+                if(user === "Dima" && !isDone) dimaDone = false;
+            });
+
+            let myTaskStatus = localStorage.getItem("task_" + i + "_" + currentUser) === "true";
+            if(!myTaskStatus) allMyTasksDone = false;
+
+            const actionBtn = document.getElementById("btn-task-" + i);
+            if(actionBtn && i !== 2 && i !== 3 && i !== 4 && i !== 5 && i !== 6 && i !== 9 && i !== 1 && i !== 7 && i !== 8) {
+                if(myTaskStatus) {
+                    actionBtn.disabled = true;
+                    actionBtn.innerText = "Your Part is Completed ✅";
+                } else {
+                    actionBtn.disabled = false;
+                    actionBtn.innerText = "Mark My Part as Done ✅";
+                }
+            } else if (actionBtn && (i === 1 || i === 7 || i === 8)) {
+                if(myTaskStatus) {
+                    actionBtn.disabled = true;
+                    actionBtn.innerText = "Completed (+pts) ✅";
+                    actionBtn.style.backgroundColor = "#9ca3af";
+                } else {
+                    actionBtn.disabled = false;
+                    actionBtn.style.backgroundColor = "#10b981";
+                }
+            }
+        }
+
+        let quranStatusBtn = document.getElementById("btn-task-9");
+        let myQuranStatus = localStorage.getItem("task_9_" + currentUser) === "true";
+        if(quranStatusBtn) {
+            if(myQuranStatus) {
+                quranStatusBtn.style.backgroundColor = "#10b981";
+                quranStatusBtn.innerText = "Quran Completed Today ✅";
+            } else {
+                quranStatusBtn.style.backgroundColor = "#d97706";
+                quranStatusBtn.innerText = "Open Today's Quran (5 pts) 📖➡️";
+            }
+        }
+
+        for(let s = 1; s <= 4; s++) {
+            ["Mohamad", "Dima"].forEach(user => {
+                let sideDone = localStorage.getItem("side_task_" + s + "_" + user) === "true";
+                const sideBox = document.getElementById("status-side-" + s + "-" + user);
+                let displayName = user === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
+                if(sideBox) {
+                    if(sideDone) {
+                        sideBox.className = "user-box status-done";
+                        sideBox.innerText = displayName + ": Done ✨";
+                    } else {
+                        sideBox.className = "user-box status-not-done";
+                        sideBox.innerText = displayName + ": Not Done ❌";
+                    }
+                }
+            });
+            let mySideStatus = localStorage.getItem("side_task_" + s + "_" + currentUser) === "true";
+            const sideActionBtn = document.getElementById("btn-side-" + s);
+            if(sideActionBtn) {
+                if(mySideStatus) {
+                    sideActionBtn.disabled = true;
+                    sideActionBtn.innerText = "Sunnah Completed (+5 pts) ✅";
+                    sideActionBtn.style.backgroundColor = "#9ca3af";
+                } else {
+                    sideActionBtn.disabled = false;
+                    sideActionBtn.style.backgroundColor = "#10b981";
+                    sideActionBtn.innerText = s === 1 ? "Mark Sunnah Dhuhr Done (+5 pts) ✅" : (s === 2 ? "Mark Sunnah Maghrib Done (+5 pts) ✅" : (s === 3 ? "Mark Sunnah Isha Done (+5 pts) ✅" : "Mark Witr Done (+5 pts) ✅"));
+                }
+            }
+        }
+
+        let userCoins = localStorage.getItem("coins_" + currentUser) || "0";
+        document.getElementById("user-coins").innerText = userCoins;
+
+        let currentGameWinner = localStorage.getItem("game_winner");
+        if(!currentGameWinner) {
+            if(mohamadDone && !dimaDone) {
+                localStorage.setItem("game_winner", "Mohamad");
+                currentGameWinner = "Mohamad";
+            } else if(dimaDone && !mohamadDone) {
+                localStorage.setItem("game_winner", "Dima");
+                currentGameWinner = "Dima";
+            } else if(mohamadDone && dimaDone) {
+                localStorage.setItem("game_winner", "Mohamad");
+                currentGameWinner = "Mohamad";
+            }
+        }
+
+        const mohamadBanner = document.getElementById("banner-mohamad");
+        const dimaBanner = document.getElementById("banner-dima");
+
+        if(currentGameWinner) {
+            if(currentGameWinner === "Mohamad") {
+                mohamadBanner.className = "status-badge-card is-winner";
+                mohamadBanner.innerHTML = "Mohamad<br>🏆 WINNER";
+                dimaBanner.className = "status-badge-card is-loser";
+                dimaBanner.innerHTML = "Dima 🤍👸🏻<br>❌ LOSER";
+            } else {
+                dimaBanner.className = "status-badge-card is-winner";
+                dimaBanner.innerHTML = "Dima 🤍👸🏻<br>🏆 WINNER";
+                mohamadBanner.className = "status-badge-card is-loser";
+                mohamadBanner.innerHTML = "Mohamad<br>❌ LOSER";
+            }
+        } else {
+            mohamadBanner.className = "status-badge-card";
+            mohamadBanner.innerHTML = "Mohamad<br>Racing... ⏳";
+            dimaBanner.className = "status-badge-card";
+            dimaBanner.innerHTML = "Dima 🤍👸🏻<br>Racing... ⏳";
+        }
+
+        const wheelBtn = document.getElementById("open-wheel-wheel") || document.getElementById("open-wheel-btn");
+        if(wheelBtn) {
+            if(allMyTasksDone) {
+                if(!currentGameWinner || currentGameWinner === currentUser) {
+                    wheelBtn.disabled = false;
+                    wheelBtn.style.backgroundColor = "#10b981";
+                    wheelBtn.innerText = "🎉 You Won! Open Lucky Wheel 🎡";
+                } else {
+                    wheelBtn.disabled = true;
+                    wheelBtn.style.backgroundColor = "#ef4444";
+                    wheelBtn.innerText = "❌ Too late! " + currentGameWinner + " won first.";
+                }
+            } else {
+                wheelBtn.disabled = true;
+                wheelBtn.style.backgroundColor = "#9ca3af";
+                wheelBtn.innerText = "🔒 Finish All Tasks First to Unlock Wheel 🔓";
+            }
+        }
+    }
 </script>
 
 </body>
