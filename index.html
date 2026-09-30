@@ -416,7 +416,7 @@ ${isPrayer ?<span id="time-p-latex
 </div>
 </div>
 
-<!-- Prayer Azkar (Subhanallah 10, Alhamdulillah 10, Allahu Akbar 10) & Smart Points Sub-Page -->
+<!-- Prayer Azkar & Smart Points Sub-Page -->
 <div id="prayer-page" class="hidden sub-page">
 <h2 id="prayer-page-title">Post-Prayer Azkar</h2>
 <div class="zekr-box">1. Subhanallah (سبحان الله) - 10 times</div>
@@ -519,23 +519,38 @@ de: "Allah! Es gibt keinen Gott außer Ihm, dem Lebendigen...",
 "tr-de": "Allahu la ilaha illa huwal-hayyul-qayyum..."
 };
 
-// Auto-login check on page load if session exists
-window.addEventListener('DOMContentLoaded', () => {
+// Check active session immediately on load
+(function checkInitialSession() {
 let savedUser = localStorage.getItem("active_session_user");
 if (savedUser && passcodes[savedUser]) {
 currentUser = savedUser;
-document.getElementById("welcome-user").innerText = "Welcome, " + (currentUser === "Dima" ? "Dima 🤍👸🏻" : currentUser);
-if(currentUser === "Mohamad") {
-document.getElementById("admin-panel").classList.remove("hidden");
-} else {
-document.getElementById("admin-panel").classList.add("hidden");
 }
-document.getElementById("login-screen").classList.add("hidden");
-document.getElementById("main-screen").classList.remove("hidden");
+})();
+
+window.onload = function() {
+if (currentUser) {
+let selectedDisplayName = currentUser === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
+let welcomeElem = document.getElementById("welcome-user");
+if(welcomeElem) welcomeElem.innerText = "Welcome, " + selectedDisplayName;
+
+let adminPanel = document.getElementById("admin-panel");
+if(adminPanel) {
+if(currentUser === "Mohamad") {
+adminPanel.classList.remove("hidden");
+} else {
+adminPanel.classList.add("hidden");
+}
+}
+
+let loginScreen = document.getElementById("login-screen");
+let mainScreen = document.getElementById("main-screen");
+if(loginScreen) loginScreen.classList.add("hidden");
+if(mainScreen) mainScreen.classList.remove("hidden");
+
 loadPrayerTimes();
 loadState();
 }
-});
+};
 
 function getQuranDay() {
 let saved = localStorage.getItem("quran_current_day");
@@ -663,7 +678,7 @@ const selectedUser = select.value;
 const cleanUser = selectedUser.includes("Dima") ? "Dima" : selectedUser;
 const enteredPass = passInput.value;
 
-if(passcodes[cleanUser] === enteredPass) {
+if (passcodes[cleanUser] === enteredPass) {
 currentUser = cleanUser;
 localStorage.setItem("active_session_user", currentUser);
 errorDiv.innerText = "";
