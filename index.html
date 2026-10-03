@@ -5,1064 +5,627 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shared Tasks & Hub</title>
     <style>
-        :root {
-            --primary-color: #4f46e5;
-            --primary-dark: #4338ca;
-            --success-color: #059669;
-            --danger-color: #e11d48;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --border-color: #cbd5e1;
-        }
+        :root { --primary-color: #4f46e5; --primary-dark: #4338ca; --success-color: #059669; --danger-color: #e11d48; --bg-color: #f8fafc; --card-bg: #ffffff; --text-color: #1e293b; --border-color: #cbd5e1; }
+        body.dark-mode { --primary-color: #6366f1; --bg-color: #0b0f19; --card-bg: #1e293b; --text-color: #f8fafc; --border-color: #334155; }
+        body.pink-mode { --primary-color: #db2777; --success-color: #e11d48; --bg-color: #fff1f2; --card-bg: #ffffff; --text-color: #831843; --border-color: #fbcfe8; }
         
-        body.dark-mode {
-            --primary-color: #6366f1;
-            --bg-color: #0b0f19;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --border-color: #334155;
-        }
-
-        body.pink-mode {
-            --primary-color: #db2777;
-            --success-color: #e11d48;
-            --bg-color: #fff1f2;
-            --card-bg: #ffffff;
-            --text-color: #831843;
-            --border-color: #fbcfe8;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 10px;
-            transition: background 0.3s, color 0.3s;
-        }
-        .container {
-            max-width: 550px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 14px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            border: 1px solid var(--border-color);
-        }
-        h2, h3 { text-align: center; color: var(--primary-color); margin: 6px 0; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg-color); color: var(--text-color); margin: 0; padding: 10px; transition: background 0.3s, color 0.3s; }
+        .container { max-width: 550px; margin: 0 auto; background: var(--card-bg); padding: 14px; border-radius: 16px; border: 1px solid var(--border-color); }
         .hidden { display: none !important; }
-        
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            background: rgba(0,0,0,0.02);
-            padding: 6px 10px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-        }
-        .theme-btn, .lang-select {
-            padding: 5px 8px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-color);
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
-        .nav-tab {
-            flex: 1;
-            padding: 8px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 12px;
-            color: var(--text-color);
-            cursor: pointer;
-            text-align: center;
-            opacity: 0.7;
-        }
-        .nav-tab.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-            opacity: 1;
-        }
-
-        #login-screen { text-align: center; padding: 30px 10px; }
-        select, input, button {
-            width: 100%;
-            padding: 10px 14px;
-            margin: 8px 0;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 14px;
-            box-sizing: border-box;
-            background: var(--card-bg);
-            color: var(--text-color);
-            outline: none;
-        }
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: opacity 0.2s;
-        }
-        button:hover { opacity: 0.9; }
+        h2, h3 { text-align: center; color: var(--primary-color); margin: 6px 0; }
+        select, input, button { width: 100%; padding: 10px 14px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 10px; font-size: 14px; background: var(--card-bg); color: var(--text-color); outline: none; }
+        button { background-color: var(--primary-color); color: white; border: none; cursor: pointer; font-weight: bold; }
         button:disabled { background-color: #94a3b8 !important; cursor: not-allowed; }
 
-        /* Task Card Layout */
-        .task-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 10px 12px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .task-top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .task-title {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .task-bottom-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            gap: 10px;
-            background: rgba(0,0,0,0.02);
-            padding: 6px 8px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-        .names-status-box {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 4px;
-            width: 120px;
-        }
-        .mini-badge {
-            padding: 5px 6px;
-            border-radius: 6px;
-            text-align: center;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-        }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.02); padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .theme-btn, .lang-select { padding: 5px 8px; border-radius: 6px; font-size: 12px; cursor: pointer; width: auto; }
+        .nav-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+        .nav-tab { flex: 1; padding: 8px 4px; border-radius: 8px; text-align: center; opacity: 0.7; font-weight: bold; font-size: 12px; line-height: 1.4; }
+        .nav-tab.active { background: var(--primary-color); color: white; opacity: 1; }
+
+        .top-dashboard-grid { display: flex; gap: 10px; margin-bottom: 12px; align-items: stretch; }
+        .wheel-half-box { flex: 1; background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%); border: 2px dashed var(--primary-color); padding: 10px; border-radius: 12px; text-align: center; cursor: pointer; }
+        .wheel-circle-icon { width: 40px; height: 40px; background: var(--primary-color); border-radius: 50%; margin: 4px auto; display: flex; align-items: center; justify-content: center; font-size: 18px; color: white;}
+        .right-half-box { flex: 1; display: flex; flex-direction: column; gap: 6px; justify-content: space-between; }
+        .vertical-race-box { display: flex; flex-direction: column; gap: 4px; background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 10px; }
+        .small-poke-btn { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); color: white; border: none; padding: 8px; border-radius: 8px; font-size: 11px; margin: 0; }
+
+        .task-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 8px; }
+        .task-top-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; }
+        .task-bottom-row { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; background: rgba(0,0,0,0.02); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .names-status-box { display: flex; flex-direction: column; justify-content: space-between; gap: 4px; width: 120px; }
+        .mini-badge { padding: 5px 6px; border-radius: 6px; text-align: center; color: white; font-size: 10px; font-weight: bold; }
         .bg-done { background-color: var(--success-color); }
         .bg-not { background-color: var(--danger-color); }
         .bg-loser { background-color: #9f1239; }
+        .action-box { flex: 1; display: flex; }
+        .uniform-action-btn { background-color: var(--primary-color); color: white; border-radius: 8px; font-weight: bold; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 46px; font-size: 12px; text-align: center;}
 
-        .action-box {
-            flex: 1;
-            display: flex;
-            align-items: stretch;
-        }
-        .uniform-action-btn {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 0 16px;
-            font-size: 13px;
-            border-radius: 8px;
-            font-weight: bold;
-            width: 100%;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 46px;
-        }
-        .uniform-action-btn:disabled {
-            background-color: #94a3b8 !important;
-        }
+        .quran-sheet { background: var(--card-bg); border: 1px solid var(--border-color); border-top: 4px solid #d97706; padding: 14px; border-radius: 12px; margin-bottom: 12px; }
+        .arabic-block { font-size: 17px; font-weight: bold; color: var(--primary-color); margin-bottom: 12px; direction: rtl; text-align: right; line-height: 2.3; word-break: break-word; }
 
-        .top-dashboard-grid {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-            align-items: stretch;
-        }
-        .wheel-half-box {
-            flex: 1;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
-            border: 2px dashed var(--primary-color);
-            padding: 10px;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .wheel-circle-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            margin: 4px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
+        .translation-auto-box { font-size: 13px; padding: 12px 14px; margin-bottom: 12px; min-height: 80px; height: auto; line-height: 1.8; direction: ltr; text-align: left; border-radius: 8px; white-space: pre-wrap; word-break: break-word; }
+        .translation-auto-box.translit { background: rgba(79, 70, 229, 0.05); border-left: 3px solid var(--primary-color); color: var(--primary-dark); font-weight: 600; }
+        .translation-auto-box.en { background: rgba(0,0,0,0.02); border-left: 3px solid #64748b; color: var(--text-color); }
+        .translation-auto-box.de { background: rgba(0,0,0,0.02); border-left: 3px solid #f59e0b; color: var(--text-color); }
+
+        .accordion-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #d97706; font-weight: bold; font-size: 14px; padding: 10px; background: rgba(217, 119, 6, 0.05); border-radius: 8px; margin-bottom: 8px; }
+        .accordion-header:hover { background: rgba(217, 119, 6, 0.1); }
+        .accordion-content { display: none; margin-top: 15px; }
+        .accordion-content.open { display: block; }
         
-        .right-half-box {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            justify-content: space-between;
-        }
-        .vertical-race-box {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            background: rgba(0,0,0,0.02);
-            border: 1px solid var(--border-color);
-            padding: 6px 8px;
-            border-radius: 10px;
-            justify-content: center;
-        }
-        .small-poke-btn {
-            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-            color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin: 0;
-            text-align: center;
-        }
+        /* Inline Toast Notification */
+        .inapp-toast { background: #d1fae5; border: 2px solid #10b981; color: #065f46; padding: 10px; border-radius: 8px; margin-bottom: 12px; font-weight: bold; text-align: center; font-size: 13px; transition: opacity 0.3s ease-in-out; }
 
-        .inapp-toast {
-            background: #ecfdf5; border: 1px solid #10b981; color: #065f46;
-            padding: 8px; border-radius: 8px; margin-bottom: 10px; font-weight: bold; text-align: center; font-size: 12px;
-        }
-        .persistent-loser-banner {
-            background: #ffe4e6; border: 2px solid #e11d48; color: #9f1239;
-            padding: 12px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; text-align: center; font-size: 13px;
-        }
-        .prize-persistent-banner {
-            background: #fef3c7; border: 2px solid #f59e0b; color: #b45309;
-            padding: 12px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; text-align: center; font-size: 13px;
-        }
+        /* Banners */
+        .banner-success { background: #d1fae5; border: 2px solid #10b981; color: #065f46; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; text-align: center; font-size: 13px; }
+        .banner-error { background: #ffe4e6; border: 2px solid #e11d48; color: #9f1239; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; text-align: center; font-size: 13px; }
+        .banner-prize { background: #fef3c7; border: 2px solid #f59e0b; color: #b45309; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; text-align: center; font-size: 13px; }
         
-        /* Modal Popup for Admin Settings */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 999;
-        }
-        .modal-card {
-            background: var(--card-bg); border: 1px solid var(--border-color);
-            padding: 20px; border-radius: 16px; width: 90%; max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center;
-        }
-
-        .store-coins-box {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid #fcd34d; padding: 12px; border-radius: 10px;
-            text-align: center; font-size: 15px; font-weight: bold; margin-bottom: 12px;
-        }
-        .history-box {
-            background: rgba(0,0,0,0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 8px;
-            max-height: 110px;
-            overflow-y: auto;
-            font-size: 12px;
-        }
-        .history-item { padding: 4px 0; border-bottom: 1px dashed var(--border-color); }
-
-        .quran-sheet {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-top: 4px solid #d97706;
-            padding: 14px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-        .quran-sheet-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            font-weight: bold;
-            color: #d97706;
-            margin-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 6px;
-        }
-        .quran-arabic-text {
-            font-size: 18px;
-            font-family: 'Amiri', serif;
-            line-height: 2.2;
-            text-align: justify;
-            margin-bottom: 10px;
-        }
-        .quran-translation-text {
-            font-size: 12px;
-            background: rgba(0,0,0,0.02);
-            border: 1px solid var(--border-color);
-            padding: 8px;
-            border-radius: 6px;
-            line-height: 1.5;
-            direction: ltr;
-            text-align: left;
-            margin-bottom: 6px;
-        }
-        .translit-box {
-            font-size: 11px;
-            color: #059669;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 6px;
-            border-radius: 6px;
-            direction: ltr;
-            text-align: left;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 999; }
+        .modal-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="top-bar">
-        <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-            <option value="tr-de" selected>Translit + DE (Dima 🤍👸🏻)</option>
+        <select id="lang-select" class="lang-select" style="width: auto;">
+            <option value="ar" selected>English / العربية</option>
         </select>
-
         <div style="display: flex; gap: 4px;">
-            <button type="button" class="theme-btn" onclick="setTheme('light')">☀️</button>
-            <button type="button" class="theme-btn" onclick="setTheme('dark')">🌙</button>
-            <button type="button" class="theme-btn" onclick="setTheme('pink')">🌸</button>
+            <button class="theme-btn" onclick="setTheme('light')">☀️</button>
+            <button class="theme-btn" onclick="setTheme('dark')">🌙</button>
+            <button class="theme-btn" onclick="setTheme('pink')">🌸</button>
         </div>
     </div>
 
     <!-- Login Screen -->
     <div id="login-screen">
         <h2>System Login</h2>
-        <p style="font-size: 13px; opacity: 0.8;">Select your name and enter passcode</p>
-        
+        <p style="font-size: 13px; opacity: 0.8; text-align: center;">Select your name | اختر اسمك</p>
         <select id="username-select">
             <option value="Mohamad">Mohamad</option>
             <option value="Dima">Dima 🤍👸🏻</option>
         </select>
-        
-        <input type="password" id="passcode-input" placeholder="Passcode">
-        <div id="login-error" style="color: var(--danger-color); font-size: 13px; margin: 4px 0;"></div>
-        
-        <button type="button" id="login-submit-btn">Log In</button>
+        <input type="password" id="passcode-input" placeholder="Passcode | الرمز السري">
+        <div id="login-error" style="color: #e11d48; font-size: 13px; margin: 4px 0; text-align: center;"></div>
+        <button onclick="login()">Log In | دخول</button>
     </div>
 
-    <!-- Main Hub Screen -->
+    <!-- Main Hub -->
     <div id="main-screen" class="hidden">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <h3 id="welcome-user" style="margin: 0; font-size: 16px;">Welcome</h3>
+            <h3 id="welcome-user" style="margin: 0; font-size: 16px;">Welcome | أهلاً</h3>
             <div style="display: flex; gap: 6px;">
-                <button type="button" id="admin-gear-btn" onclick="openAdminModal()" class="hidden" style="width: auto; padding: 4px 8px; background: rgba(0,0,0,0.05); border-radius: 6px; font-size: 12px;">⚙️</button>
-                <button type="button" id="logout-btn" style="width: auto; padding: 4px 10px; background: #e11d48; color: white; border-radius: 6px; font-size: 12px;">Log Out</button>
+                <button id="admin-gear-btn" onclick="openAdminModal()" style="display: none; padding: 4px 8px; background: rgba(0,0,0,0.05); color: var(--text-color); border-radius: 6px; font-size: 12px; width: auto;">⚙️ Admin</button>
+                <button onclick="logout()" style="width: auto; padding: 4px 10px; background: #e11d48; color: white; border-radius: 6px; font-size: 12px;">Log Out | خروج</button>
             </div>
         </div>
         <hr style="border:0; border-top: 1px solid var(--border-color); margin-bottom: 10px;">
         
-        <div id="inapp-notification" class="inapp-toast hidden"></div>
-        <div id="persistent-banner" class="persistent-loser-banner hidden"></div>
-        <div id="persistent-prize-banner" class="prize-persistent-banner hidden"></div>
-
-        <!-- Top Grid: Wheel on Left, Perfectly Aligned Racing & Poke on Right -->
         <div class="top-dashboard-grid">
             <div class="wheel-half-box" onclick="openWheelPage()">
-                <div style="font-weight: bold; font-size: 11px; color: var(--primary-color);">عجلة الحظ 🎡</div>
+                <div style="font-weight: bold; font-size: 11px; color: var(--primary-color);">Wheel of Fortune | عجلة الحظ 🎡</div>
                 <div class="wheel-circle-icon">🎁</div>
-                <div id="wheel-status-text" style="font-size: 10px; opacity: 0.8;">أكمل المهام لفتحها</div>
+                <div id="wheel-status-text" style="font-size: 10px; opacity: 0.8;">Complete tasks | أكمل المهام</div>
             </div>
-
             <div class="right-half-box">
                 <div class="vertical-race-box">
-                    <div id="banner-mohamad" class="mini-badge bg-not" style="font-size: 10px; padding: 4px;">Mohamad: Racing</div>
-                    <div id="banner-dima" class="mini-badge bg-not" style="font-size: 10px; padding: 4px;">Dima 🤍: Racing</div>
+                    <div id="banner-mohamad" class="mini-badge bg-not" style="font-size: 10px; padding: 4px;">Mo: Racing ⏳</div>
+                    <div id="banner-dima" class="mini-badge bg-not" style="font-size: 10px; padding: 4px;">Di 🤍: Racing ⏳</div>
                 </div>
-                <button class="small-poke-btn" onclick="sendPoke()">👉 نكز Partner ⚡</button>
+                <button class="small-poke-btn" onclick="sendPoke()">👉 Poke Partner | نكز ⚡</button>
             </div>
         </div>
 
-        <button id="open-wheel-btn" onclick="openWheelPage()" disabled style="background-color: #cbd5e1; margin-bottom: 10px; padding: 8px; border-radius: 8px; font-size: 12px; display:none;">🔒 Finish All Tasks First 🔓</button>
+        <!-- In-page Toast Notification -->
+        <div id="inapp-notification" class="inapp-toast hidden"></div>
+        <div id="persistent-banner" class="hidden"></div>
+        <div id="persistent-prize-banner" class="hidden banner-prize"></div>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" id="tab-btn-1" onclick="switchTab(1)">Tasks (10)</button>
-            <button class="nav-tab" id="tab-btn-2" onclick="switchTab(2)">Sunnah</button>
-            <button class="nav-tab" id="tab-btn-3" onclick="switchTab(3)">Store</button>
+            <button id="tab-btn-1" class="nav-tab active" onclick="switchTab(1)">Tasks | المهام (10)</button>
+            <button id="tab-btn-2" class="nav-tab" onclick="switchTab(2)">Sunnah & Furas | السنن والفرص</button>
+            <button id="tab-btn-3" class="nav-tab" onclick="switchTab(3)">Store | المتجر</button>
         </div>
         
-        <!-- TAB 1: Daily Essential Tasks (10) -->
-        <div id="tab-content-1" class="tab-content">
-            <div id="tasks-container">
-                <script>
-                    const actualTasks = [
-                        "Morning Azkar", "Fajr Prayer", "Dhuhr Prayer", 
-                        "Asr Prayer", "Maghrib Prayer", "Isha Prayer", 
-                        "Evening Azkar", "Supplication (Duaa)", "Quran Daily (2 Pages)", "Studying"
-                    ];
+        <div id="tab-content-1" class="tab-content"><div id="tasks-container"></div></div>
 
-                    for(let i=1; i<=10; i++) {
-                        let isPrayer = (i >= 2 && i <= 6);
-                        let isAzkar = (i === 1 || i === 7);
-                        let isQuran = (i === 9);
-                        let isDuaa = (i === 8);
-                        
-                        document.write(`
-                            <div class="task-card">
-                                <div class="task-top-row">
-                                    <span class="task-title">${i}. ${actualTasks[i-1]}</span>
-                                    ${isPrayer ? `<span id="time-p-${i}" style="font-size: 13px; font-weight: bold; color: var(--primary-color);">--:--</span>` : ''}
-                                </div>
-                                <div class="task-bottom-row">
-                                    <div class="names-status-box">
-                                        <div id="status-${i}-Mohamad" class="mini-badge bg-not">Mohamad: ❌</div>
-                                        <div id="status-${i}-Dima" class="mini-badge bg-not">Dima 🤍: ❌</div>
-                                    </div>
-                                    <div class="action-box">
-                                        ${isPrayer ? 
-                                            `<button type="button" class="uniform-action-btn" style="background-color: #2563eb;" onclick="openPrayerPage(${i}, '${actualTasks[i-1]}')">Azkar & Points ➡️</button>` :
-                                            (isQuran ? 
-                                                `<button type="button" id="btn-task-${i}" class="uniform-action-btn" style="background-color: #d97706;" onclick="openQuranPage()">Open Quran 📖</button>` :
-                                                (isAzkar ?
-                                                    `<button type="button" id="btn-task-${i}" class="uniform-action-btn" onclick="completeTaskWithPoints(${i}, 2)">Mark Done (+2) ✅</button>` :
-                                                    (isDuaa ?
-                                                        `<button type="button" id="btn-task-${i}" class="uniform-action-btn" onclick="completeTaskWithPoints(${i}, 3)">Mark Done (+3) ✅</button>` :
-                                                        `<button type="button" id="btn-task-${i}" class="uniform-action-btn" onclick="completeTask(${i})">Mark Done ✅</button>`
-                                                    )
-                                                )
-                                            )
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    }
-                </script>
-            </div>
-        </div>
-
-        <!-- TAB 2: Optional Tasks & Sunnah (5 Specific Tasks) -->
         <div id="tab-content-2" class="tab-content hidden">
-            <script>
-                const sunnahTasks = [
-                    "1. Sunnah Fajr (2 Before)",
-                    "2. Sunnah Dhuhr (4 Before & 2 After)",
-                    "3. Sunnah Maghrib (2 After)",
-                    "4. Sunnah Isha (2 After)",
-                    "5. Witr Prayer (1 Rakaat)"
-                ];
-                for(let s=1; s<=5; s++) {
-                    document.write(`
-                        <div class="task-card">
-                            <div class="task-top-row">
-                                <span class="task-title">${sunnahTasks[s-1]}</span>
-                                <span style="font-size: 11px; color: var(--success-color); font-weight: bold;">+5 pts ✨</span>
-                            </div>
-                            <div class="task-bottom-row">
-                                <div class="names-status-box">
-                                    <div id="status-side-${s}-Mohamad" class="mini-badge bg-not">Mohamad: ❌</div>
-                                    <div id="status-side-${s}-Dima" class="mini-badge bg-not">Dima 🤍: ❌</div>
-                                </div>
-                                <div class="action-box">
-                                    <button type="button" id="btn-side-${s}" class="uniform-action-btn" onclick="completeSideTaskWithPoints(${s}, 5)">Mark Done (+5) ✅</button>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                }
-            </script>
-        </div>
-
-        <!-- TAB 3: Store & Points Balance -->
-        <div id="tab-content-3" class="tab-content hidden">
-            <div class="store-coins-box">
-                🪙 Balance: <span id="user-coins">0</span> Points
+            <!-- Hadith Accordion -->
+            <div class="quran-sheet" style="padding-bottom: 5px;">
+                <div class="accordion-header" onclick="toggleAccordion('hadith-content', 'hadith-arrow')">
+                    <span>📖 Sunnah Prayers Hadith | حديث السنن</span>
+                    <span id="hadith-arrow" style="font-size: 16px;">▼</span>
+                </div>
+                <div id="hadith-content" class="accordion-content">
+                    <div class="arabic-block">"مَنْ صَلَّى فِي يَوْمٍ وَلَيْلَةٍ اثْنَتَيْ عَشْرَةَ رَكْعَةً بُنِيَ لَهُ بَيْتٌ فِي الْجَنَّةِ: أَرْبَعًا قَبْلَ الظُّهْرِ وَرَكْعَتَيْنِ بَعْدَهَا، وَرَكْعَتَيْنِ بَعْدَ الْمَغْرِبِ، وَرَكْعَتَيْنِ بَعْدَ الْعِشَاءِ، وَرَكْعَتَيْنِ قَبْلَ صَلَاةِ الْفَجْرِ."</div>
+                    <div class="translation-auto-box translit"><b>Translit (for Dima 🤍):</b><br>Man salla fi yawmin wa laylatin ithnata 'ashrata rak'atan buniya lahu baytun fil-jannah: arba'an qabla adh-dhuhr wa rak'atayni ba'daha, wa rak'atayni ba'dal-maghrib, wa rak'atayni ba'dal-'isha', wa rak'atayni qabla salat-il-fajr.</div>
+                    <div class="translation-auto-box en"><b>EN:</b><br>Whoever prays twelve rak'ahs in a day and night, a house will be built for him in Paradise: four before Dhuhr and two after it, two after Maghrib, two after Isha, and two before Fajr.</div>
+                    <div class="translation-auto-box de" style="margin-bottom:0; border-left-color: #f59e0b;"><b>DE:</b><br>Wer Tag und Nacht zwölf Rak'a betet, dem wird dafür ein Haus im Paradies gebaut: vier vor dem Dhuhr-Gebet und zwei danach, zwei nach dem Maghrib-Gebet, zwei nach dem Isha-Gebet und zwei vor dem Fajr-Gebet.</div>
+                </div>
             </div>
             
+            <div id="sunnah-container"></div>
+
+            <div class="task-card" style="border-color: #f59e0b;">
+                <div class="task-top-row">
+                    <span class="task-title" style="color: #d97706;">🌟 Golden Opportunities | الفرص الذهبية</span>
+                    <span style="font-size: 11px; color: var(--success-color); font-weight: bold;">+5 pts ✨</span>
+                </div>
+                <div class="task-bottom-row">
+                    <div class="names-status-box">
+                        <div id="status-gold-Mohamad" class="mini-badge bg-not">Mo: ❌</div>
+                        <div id="status-gold-Dima" class="mini-badge bg-not">Di 🤍: ❌</div>
+                    </div>
+                    <div class="action-box">
+                        <button id="btn-gold" class="uniform-action-btn" style="background-color: #d97706;" onclick="openReader('🌟 Golden Opportunities | الفرص الذهبية', furasData, 'gold_opp', 5)">Open Furas 🌟</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card" style="border-color: #2563eb;">
+                <div class="task-top-row">
+                    <span class="task-title" style="color: #2563eb;">📿 Post-Prayer Adhkar | أذكار بعد الصلاة</span>
+                    <span style="font-size: 11px; color: var(--success-color); font-weight: bold;">+5 pts ✨</span>
+                </div>
+                <div class="task-bottom-row">
+                    <div class="names-status-box">
+                        <div id="status-postprayer-Mohamad" class="mini-badge bg-not">Mo: ❌</div>
+                        <div id="status-postprayer-Dima" class="mini-badge bg-not">Di 🤍: ❌</div>
+                    </div>
+                    <div class="action-box">
+                        <button id="btn-postprayer" class="uniform-action-btn" style="background-color: #2563eb;" onclick="openPostPrayer('post_prayer', '📿 Post-Prayer Adhkar | أذكار ما بعد الصلاة')">Open Adhkar 📿</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Store -->
+        <div id="tab-content-3" class="tab-content hidden">
+            <div class="store-coins-box" style="background: rgba(245, 158, 11, 0.1); border: 1px solid #fcd34d; padding: 12px; border-radius: 10px; text-align: center; font-size: 15px; font-weight: bold; margin-bottom: 12px;">🪙 Balance | الرصيد: <span id="user-coins">0</span></div>
             <div class="task-card" style="flex-direction: row; justify-content: space-between; align-items: center; padding: 10px;">
                 <div>
-                    <div style="font-weight: bold; font-size: 13px;">🍔 Delicious Meal</div>
-                    <div style="font-size: 11px; opacity: 0.7;">Cost: 100 Points</div>
+                    <strong style="font-size:13px;">🍔 وجبة طعام شهية | Delicious Meal</strong><br>
+                    <span style="font-size:11px; opacity:0.7;">Cost | التكلفة: 100 Points</span>
                 </div>
-                <button type="button" onclick="buyStoreItem(100, 'Delicious Meal 🍔')" style="width: auto; padding: 6px 10px; background: #d97706; color: white; border-radius: 6px; font-size: 11px; margin:0;">Redeem 🎟️</button>
+                <button onclick="buyStoreItem(100, 'Delicious Meal 🍔')" style="width: auto; background: #d97706; padding: 6px 12px; font-size: 12px; margin: 0; border-radius: 8px;">Redeem 🎟️</button>
             </div>
-
-            <h4 style="margin: 10px 0 4px 0; font-size: 12px;">🛒 Purchases History:</h4>
-            <div id="store-history-list" class="history-box">
-                <div style="color: #64748b; font-style: italic;">No purchases yet...</div>
-            </div>
-        </div>
-
-        <!-- Admin Control Modal Popup -->
-        <div id="admin-modal" class="modal-overlay hidden">
-            <div class="modal-card">
-                <h3 style="color: #e11d48; margin-top: 0;">👑 لوحة تحكم الأدمين</h3>
-                <p style="font-size: 12px; opacity: 0.8; margin-bottom: 15px;">خيارات إعادة الضبط السريع:</p>
-                <button type="button" onclick="adminResetQuran()" style="background-color: #d97706; font-size: 12px; padding: 8px; border-radius: 8px; margin: 4px 0;">📖 Reset Quran Day</button>
-                <button type="button" onclick="adminResetPoints()" style="background-color: #f59e0b; font-size: 12px; padding: 8px; border-radius: 8px; margin: 4px 0;">🪙 Reset All Points</button>
-                <button type="button" onclick="adminResetTasksOnly()" style="background-color: #e11d48; font-size: 12px; padding: 8px; border-radius: 8px; margin: 4px 0;">🔄 Reset Daily Tasks Only</button>
-                <button type="button" onclick="closeAdminModal()" style="background-color: #64748b; font-size: 12px; padding: 8px; border-radius: 8px; margin-top: 10px;">إغلاق ❌</button>
-            </div>
+            <h4 style="margin: 10px 0 4px 0; font-size: 12px;">🛒 Store History | سجل المشتريات:</h4>
+            <div id="store-history-list" style="background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; margin-top: 8px; max-height: 110px; overflow-y: auto; font-size: 12px;"></div>
         </div>
     </div>
 
-    <!-- Prayer Azkar Sub-Page -->
-    <div id="prayer-page" class="hidden sub-page">
-        <h2 id="prayer-page-title" style="font-size: 16px;">Post-Prayer Azkar</h2>
-        <div class="task-card" style="font-size: 13px; padding: 8px;">1. Subhanallah (سبحان الله) - 10 times</div>
-        <div class="task-card" style="font-size: 13px; padding: 8px;">2. Alhamdulillah (الحمد لله) - 10 times</div>
-        <div class="task-card" style="font-size: 13px; padding: 8px;">3. Allahu Akbar (الله أكبر) - 10 times</div>
-        <div class="task-card" style="cursor: pointer; background: rgba(79, 70, 229, 0.05); font-size: 13px; padding: 8px; color: var(--primary-color); font-weight: bold;" onclick="openAyatKursiPage()">📖 Read Ayat al-Kursi (Full Translations) ➡️</div>
-        
-        <div style="background: rgba(5, 150, 105, 0.08); border: 1px solid var(--success-color); padding: 10px; border-radius: 8px; margin: 10px 0; text-align: center;">
-            <p style="font-weight: bold; color: var(--success-color); margin-bottom: 2px; font-size: 12px;">🎯 Prayer Points:</p>
-            <p style="font-size: 10px; opacity: 0.8; margin-bottom: 6px;">15m = 3pts | 1h = 2pts | After = 1pt</p>
-            <button type="button" onclick="finishPrayerWithPoints()" style="background-color: var(--success-color); color: white; padding: 8px; border-radius: 6px; font-size: 12px;">Claim Points ✅</button>
-        </div>
-        <button type="button" onclick="closePrayerPage()" style="background-color: #64748b; color: white; padding: 8px; border-radius: 6px; font-size: 12px;">Back 🔙</button>
-    </div>
-
-    <!-- Ayat al-Kursi Sub-Page -->
-    <div id="ayat-kursi-page" class="hidden sub-page">
-        <h2 style="color: var(--primary-color); font-size: 16px;">🌟 Ayat al-Kursi (آية الكرسي)</h2>
-        <div class="quran-sheet">
-            <div class="quran-sheet-header">
-                <span>Surah Al-Baqarah - Ayah 255</span>
-                <span>سورة البقرة - الآية 255</span>
-            </div>
-            <div class="quran-arabic-text" id="ak-ar">جاري تحميل الآية... 🔄</div>
-            <div class="quran-translation-text" id="ak-en"><strong>English:</strong> Loading...</div>
-            <div class="quran-translation-text" id="ak-de"><strong>Deutsch:</strong> Lade...</div>
-            <div class="translit-box" id="ak-tr"><strong>Transliteration:</strong> Loading...</div>
-        </div>
-        <button type="button" onclick="closeAyatKursiPage()" style="background-color: var(--primary-color); color: white; padding: 8px; border-radius: 6px; font-size: 12px;">Back to Azkar 🔙</button>
-    </div>
-
-    <!-- Quran Sub-Page -->
-    <div id="quran-page" class="hidden sub-page">
-        <h2 style="color: #d97706; font-size: 16px;">📖 Quran Daily Reading</h2>
-        <div style="font-weight: bold; color: #d97706; margin-bottom: 8px; text-align: center; font-size: 12px;" id="quran-day-banner">Day 1</div>
-        
-        <div class="quran-sheet">
-            <div class="quran-sheet-header">
-                <span id="p1-num-label">Page 1</span>
-                <span>الصفحة الأولى</span>
-            </div>
-            <div class="quran-arabic-text" id="quran-p1-ar">جاري التحميل... 🔄</div>
-            <div class="quran-translation-text" id="quran-p1-en"><strong>English:</strong> Loading...</div>
-            <div class="quran-translation-text" id="quran-p1-de"><strong>Deutsch:</strong> Lade...</div>
-            <div class="translit-box" id="quran-p1-tr"><strong>Transliteration:</strong> Loading...</div>
-        </div>
-
-        <div class="quran-sheet">
-            <div class="quran-sheet-header">
-                <span id="p2-num-label">Page 2</span>
-                <span>الصفحة الثانية</span>
-            </div>
-            <div class="quran-arabic-text" id="quran-p2-ar">جاري التحميل... 🔄</div>
-            <div class="quran-translation-text" id="quran-p2-en"><strong>English:</strong> Loading...</div>
-            <div class="quran-translation-text" id="quran-p2-de"><strong>Deutsch:</strong> Lade...</div>
-            <div class="translit-box" id="quran-p2-tr"><strong>Transliteration:</strong> Loading...</div>
-        </div>
-
-        <button type="button" onclick="finishQuranReading()" style="background-color: var(--success-color); color: white; padding: 10px; border-radius: 8px; font-size: 13px;">Finish & Mark Quran Done (+5 pts) ✅</button>
-        <button type="button" onclick="closeQuranPage()" style="background-color: #64748b; color: white; padding: 8px; border-radius: 6px; font-size: 12px; margin-top: 6px;">Back 🔙</button>
+    <!-- Reader Page -->
+    <div id="reader-page" class="hidden sub-page">
+        <h2 id="reader-title" style="color: var(--primary-color);">Title</h2>
+        <div id="reader-content-container"></div>
+        <button id="reader-finish-btn" style="background: var(--success-color); color: white; padding: 12px; font-size: 14px; border-radius: 8px; margin-top: 10px; font-weight: bold; border: none; width: 100%; cursor: pointer;">Done ✅ | تم الإنجاز</button>
+        <button onclick="closeReader()" style="background: #64748b; color: white; padding: 10px; border-radius: 8px; margin-top: 8px; border: none; width: 100%; cursor: pointer; font-weight: bold;">Back 🔙 | رجوع</button>
     </div>
 
     <!-- Wheel Page -->
     <div id="wheel-page" class="hidden sub-page">
-        <h2 style="font-size: 16px;">Lucky Wheel 🎡</h2>
-        <div id="wheel-display" class="quran-sheet" style="text-align: center; font-size: 15px; font-weight: bold; padding: 20px;">Click Spin! 🎁</div>
-        <button type="button" id="spin-btn" onclick="spinWheel()" style="background-color: #f59e0b; color: white; font-size: 13px; padding: 10px; border-radius: 8px;">SPIN 🎰</button>
-        <button type="button" onclick="closeWheelPage()" style="background-color: #64748b; color: white; padding: 8px; border-radius: 6px; font-size: 12px; margin-top: 6px;">Back 🔙</button>
+        <h2 style="font-size: 16px; color: var(--primary-color); text-align: center;">Wheel of Fortune | عجلة الحظ 🎡</h2>
+        <div id="wheel-display" class="quran-sheet" style="text-align: center; font-size: 15px; font-weight: bold; padding: 20px;">Tap to spin! | اضغط للف العجلة 🎁</div>
+        <button id="spin-btn" onclick="spinWheel()" style="background-color: #f59e0b; color: white; font-size: 13px; padding: 10px; border-radius: 8px; border: none; width: 100%; cursor: pointer; font-weight: bold;">Spin 🎰 | دوران</button>
+        <button onclick="closeReader()" style="background-color: #64748b; color: white; padding: 10px; border-radius: 8px; margin-top: 8px; border: none; width: 100%; cursor: pointer; font-weight: bold;">Back 🔙 | رجوع</button>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 style="color: #e11d48; margin-top: 0;">👑 Admin Panel | لوحة التحكم</h3>
+            <p style="font-size: 12px; opacity: 0.8; margin-bottom: 15px;">Quick Reset Options | خيارات إعادة الضبط:</p>
+            <button onclick="adminResetQuran()" style="background-color: #d97706; font-size: 12px; padding: 8px; border-radius: 8px; margin: 4px 0;">📖 Reset Quran Day</button>
+            <button onclick="adminResetPoints()" style="background-color: #f59e0b; font-size: 12px; padding: 8px; border-radius: 8px; margin: 4px 0;">🪙 Reset All Points</button>
+            <button onclick="adminResetTasksOnly()" style="background-color: #e11d48; font-size: 12px; padding: 8px; border-radius: 8px; margin: 4px 0;">🔄 Reset Daily Tasks</button>
+            <button onclick="closeAdminModal()" style="background-color: #64748b; font-size: 12px; padding: 8px; border-radius: 8px; margin-top: 10px;">Close ❌ | إغلاق</button>
+        </div>
     </div>
 </div>
 
 <script>
     let currentUser = "";
-    let activePrayerTaskId = null;
-    let activePrayerName = "";
-    let prayerTimesCache = {};
-
     const passcodes = { "Mohamad": "0723", "Dima": "0915" };
     const rewards = ["📦 Buy Product", "🍔 Buy Meal", "💵 Give $5", "👑 Mandatory Order"];
 
-    document.addEventListener("DOMContentLoaded", function() {
-        let savedUser = localStorage.getItem("active_session_user");
-        if (savedUser && passcodes[savedUser]) {
-            currentUser = savedUser;
-            initUserSession();
-        }
-        setTheme(localStorage.getItem("site_theme") || "light", false);
+    const actualTasks = ["Morning Azkar", "Fajr Prayer", "Dhuhr Prayer", "Asr Prayer", "Maghrib Prayer", "Isha Prayer", "Evening Azkar", "Supplication (Duaa)", "Quran Daily (2 Pages)", "Studying"];
+    const sunnahTasks = ["1. Sunnah Fajr (2 Before)", "2. Sunnah Dhuhr (4 Before & 2 After)", "3. Sunnah Maghrib (2 After)", "4. Sunnah Isha (2 After)", "5. Witr Prayer (1 Rakaat)"];
 
-        document.getElementById("login-submit-btn").addEventListener("click", (e) => { e.preventDefault(); login(); });
-        document.getElementById("logout-btn").addEventListener("click", (e) => { e.preventDefault(); logout(); });
+    const morningAdhkarData = [
+        { t: "1. آية الكرسي (Ayat al-Kursi)", ar: "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.", tr: "Allahu la ilaha illa huwal hayyul qayyum, la ta'khuduhu sinatun wala nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfa'u 'indahu illa bi-idhnihi, ya'lamu ma baina aidihim wama khalfahum, wala yuhiytuna bishay'in min 'ilmihi illa bima sha'a, wasi'a kursiyyuhus-samawati wal-arda, wala ya'uduhu hifzuhuma wahuwal-aliyyul-'azim.", en: "Allah - there is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is presently before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.", de: "Allah - es gibt keinen Gott außer Ihm, dem Lebendigen, dem Beständigen. Ihn ergreift weder Schlummer noch Schlaf. Ihm gehört, was in den Himmeln und was auf der Erde ist. Wer ist es, der bei Ihm Fürsprache einlegen könnte außer mit Seiner Erlaubnis? Er weiß, was vor ihnen und was hinter ihnen liegt; sie aber begreifen nichts von Seinem Wissen, es sei denn das, was Er will. Sein Thronschemel umfasst die Himmel und die Erde, und ihre Bewahrung fällt Ihm nicht schwer. Und Er ist der Erhabene, der Allmächtige." },
+        { t: "2. سورة الإخلاص والمعوذتين (Surah Al-Ikhlas & Mu'awwidhatayn)", ar: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ. قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ. (مع الفلق والناس ثلاث مرات)", tr: "Bismillahir Rahmanir Rahim. Qul huwallahu ahad, Allahus-samad, lam yalid walam yulad, walam yakun lahu kufuwan ahad. (Recite Al-Ikhlas, Al-Falaq, An-Nas 3 times).", en: "Say, 'He is Allah, who is One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent.' (Recite Al-Ikhlas, Al-Falaq, An-Nas 3 times).", de: "Sprich: Er ist Allah, ein Einziger, Allah, der Überlegene. Er hat nicht gezeugt und ist nicht gezeugt worden, und niemand ist Ihm jemals gleich. (Rezitiere Al-Ikhlas, Al-Falaq, An-Nas 3 Mal)." },
+        { t: "3. أصبحنا وأصبح الملك لله (Morning Declaration)", ar: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", tr: "Asbahna wa asbahal-mulku lillah, walhamdu lillah, la ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa Huwa 'ala kulli shay'in qadir.", en: "We have reached the morning and at this very time unto Allah belongs all sovereignty, and all praise is for Allah. There is no deity except Allah alone, without partner. To Him belongs sovereignty and to Him belongs praise, and He is over all things competent.", de: "Wir haben den Morgen erreicht und zu dieser Stunde gehört alle Herrschaft Allah, und alles Lob gebührt Allah. Es gibt keinen Gott außer Allah allein, ohne Partner. Ihm gehört die Herrschaft und Ihm gebührt das Lob, und Er ist zu allem fähig." },
+        { t: "4. اللهم بك أصبحنا (Allahumma bika asbahna)", ar: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ.", tr: "Allahumma bika asbahna, wa bika amsayna, wa bika nahya, wa bika namutu, wa ilaykan-nushur.", en: "O Allah, by You we enter the morning and by You we enter the evening, by You we live and by You we die, and to You is the resurrection.", de: "O Allah, durch Dich gelangen wir in den Morgen und durch Dich in den Abend, durch Dich leben wir und durch Dich sterben wir, und zu Dir ist die Auferstehung." },
+        { t: "5. أصبحنا على فطرة الإسلام (Fitrat Al Islam)", ar: "أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا كَانَ مِنَ الْمُشْرِكِينَ.", tr: "Asbahna 'ala fitratil-islam, wa 'ala kalimatil-ikhlas, wa 'ala dini nabiyyina muhammadin salla Allahu 'alayhi wa sallam, wa 'ala millati abina ibrahima hanifan musliman wama kana minal-mushrikin.", en: "We have reached the morning upon the natural religion of Islam, and upon the word of sincere devotion, and upon the religion of our Prophet Muhammad (peace be upon him), and upon the creed of our father Ibrahim, who was a upright Muslim and was not of the polytheists.", de: "Wir haben den Morgen auf der Fitra des Islam erreicht, und auf dem Wort der Aufrichtigkeit, und auf der Religion unseres Propheten Muhammad (Frieden sei mit ihm), und auf dem Glaubensbekenntnis unseres Vaters Ibrahim, der ein aufrechter Muslim war und kein Polytheist." },
+        { t: "6. سبحان الله وبحمده 3 مرات (Subhanallahi wa bihamdihi)", ar: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ. (ثلاث مرات)", tr: "Subhanallahi wa bihamdihi, 'adada khalqihi, wa rida nafsihi, wa zinata 'arshihi, wa midaada kalimatihi. (3 times)", en: "Glory is to Allah and praise is to Him, by the number of His creation, by His pleasure, by the weight of His Throne, and by the ink of His words. (3 times)", de: "Preis sei Allah und Lob gebührt Ihm, entsprechend der Zahl Seiner Schöpfung, der Zufriedenheit Seiner Selbst, dem Gewicht Seines Thrones und der Tinte Seiner Worte. (3 Mal)" },
+        { t: "7. اللهم عافني في بدني 3 مرات (Allahumma 'afini fi badni)", ar: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)", tr: "Allahumma 'afini fi badni, Allahumma 'afini fi sam'i, Allahumma 'afini fi basari, la ilaha illa anta. (3 times)", en: "O Allah, grant me health in my body, O Allah, grant me health in my hearing, O Allah, grant me health in my sight. There is no deity except You. (3 times)", de: "O Allah, schenke meinem Körper Gesundheit, o Allah, schenke meinem Gehör Gesundheit, o Allah, schenke meinem Sehvermögen Gesundheit. Es gibt keinen Gott außer Dir. (3 Mal)" },
+        { t: "8. اللهم إني أعوذ بك من الكفر والفقر 3 مرات (Allahumma inni a'udhu bika)", ar: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)", tr: "Allahumma inni a'udhu bika minal-kufri wal-faqri, wa a'udhu bika min 'adhabil-qabr, la ilaha illa anta. (3 times)", en: "O Allah, I take refuge in You from disbelief and poverty, and I take refuge in You from the punishment of the grave. There is no deity except You. (3 times)", de: "O Allah, ich suche Zuflucht bei Dir vor Unglauben und Armut, und ich suche Zuflucht bei Dir vor der Grabesstrafe. Es gibt keinen Gott außer Dir. (3 Mal)" },
+        { t: "9. حسبي الله لا إله إلا هو 7 مرات (Hasbiyallahu la ilaha illa huwa)", ar: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ. (سبع مرات)", tr: "Hasbiyallahu la ilaha illa huwa, 'alayhi tawakkaltu, wa huwa rabbul 'arshil-'azim. (7 times)", en: "Sufficient for me is Allah; there is no deity except Him. Upon Him I have relied, and He is the Lord of the Great Throne. (7 times)", de: "Genug ist mir Allah; es gibt keinen Gott außer Ihm. Auf Ihn vertraue ich, und Er ist der Herr des gewaltigen Thrones. (7 Mal)" },
+        { t: "10. اللهم إني أسألك العفو والعافية (Allahumma inni as'alukal-'afwa)", ar: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي.", tr: "Allahumma inni as'alukal-'afwa wal-'afiyah fid-dunya wal-akhirah, Allahumma inni as'alukal-'afwa wal-'afiyah fi dini wa dunyaya wa ahli wa mali, Allahumma-stur 'awrati wa amin raw'ati, Allahumma-hfazni min bayni yadayya wa min khalfi wa 'an yamini wa 'an shimali wa min fawqi, wa a'udhu bi'azamatika an ughtala min tahti.", en: "O Allah, I ask You for pardon and well-being in this world and the Hereafter. O Allah, I ask You for pardon and well-being in my religion, my worldly affairs, my family, and my wealth. O Allah, conceal my faults and calm my fears. O Allah, guard me from in front of me and from behind me, from my right and from my left, and from above me, and I seek refuge in Your greatness from being taken unaware from beneath me.", de: "O Allah, ich bitte Dich um Vergebung und Wohlbefinden im Diesseits und Jenseits. O Allah, ich bitte Dich um Vergebung und Wohlbefinden in meiner Religion, meinem Diesseits, meiner Familie und meinem Vermögen. O Allah, bedecke meine Blößen und sicher meine Ängste. O Allah, bewahre mich von vorne, von hinten, von rechts, von links und von oben, und ich suche Zuflucht bei Deiner Erhabenheit, dass ich von unten her überfallen werde." },
+        { t: "11. سيد الاستغفار (Sayyid al-Istighfar)", ar: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ.", tr: "Allahumma anta rabbi la ilaha illa anta, khalaqtani wa ana 'abduka, wa ana 'ala 'ahdika wa wa'dika mastata't, a'udhu bika min sharri ma sana't, abu'u laka bini'matika 'alayya, wa abu'u bidanbi faghfir li, fa innahu la yaghfirud-dunuba illa anta.", en: "O Allah, You are my Lord, there is no deity except You. You created me and I am your servant, and I am upon your covenant and your promise as best I can. I seek refuge in You from the evil of what I have done. I acknowledge before You your blessing upon me, and I acknowledge my sin, so forgive me, for indeed none forgives sins except You.", de: "O Allah, Du bist mein Herr, es gibt keinen Gott außer Dir. Du hast mich erschaffen und ich bin Dein Diener, und ich halte mich an Deinen Bund und Dein Versprechen, so gut ich kann. Ich suche Zuflucht bei Dir vor dem Übel dessen, was ich getan habe. Ich erkenne Deine Gnade an mir an und ich erkenne meine Sünde an, so vergib mir, denn niemand vergibt die Sünden außer Dir." },
+        { t: "12. رضيت بالله رباً 3 مرات (Raditu billahi rabba)", ar: "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا. (ثلاث مرات)", tr: "Raditu billahi rabba, wa bil-islami dina, wa bi-muhammadin nabiyyan. (3 times)", en: "I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad (peace be upon him) as my Prophet. (3 times)", de: "Ich bin zufrieden mit Allah als Herrn, mit dem Islam als Religion und mit Muhammad als Propheten. (3 Mal)" },
+        { t: "13. يا حي يا قيوم (Ya hayyu ya qayyum)", ar: "يَا حَيُّ يَا قَيُّومُ، بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.", tr: "Ya hayyu ya qayyum, bi-rahmatika astaghith, aslih li sha'ni kullahu, wala takilni ila nafsi tarfata 'ayn.", en: "O Ever-Living, O Self-Sustaining, by Your mercy I seek help. Rectify for me all my affairs and do not leave me to myself even for the blink of an eye.", de: "O Lebendiger, o Beständiger, durch Deine Barmherzigkeit erflehe ich Hilfe. Bessere mir alle meine Angelegenheiten und überlasse mich nicht einmal für die Dauer eines Wimpernschlags mir selbst." },
+        { t: "14. لا إله إلا الله وحده 100 مرة (La ilaha illa wahdahu)", ar: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. (100 مرة)", tr: "La ilaha illa wahdahu la sharika lah, lahul-mulku walahul-hamd, wa huwa 'ala kulli shay'in qadir. (100 times)", en: "There is no deity except Allah alone, without partner. To Him belongs sovereignty and to Him belongs praise, and He is over all things competent. (100 times)", de: "Es gibt keinen Gott außer Allah allein, ohne Partner. Ihm gehört die Herrschaft und Ihm gebührt das Lob, und Er ist zu allem fähig. (100 Mal)" },
+        { t: "15. سبحان الله وبحمده 100 مرة (Subhanallahi wa bihamdihi)", ar: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ. (مائة مرة)", tr: "Subhanallahi wa bihamdihi. (100 times)", en: "Glory is to Allah and praise is to Him. (100 times daily)", de: "Preis sei Allah und Lob gebührt Ihm. (100 Mal)" },
+        { t: "16. أعوذ بكلمات الله التامات 3 مرات (A'udhu bikalimatillahi)", ar: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ. (ثلاث مرات)", tr: "A'udhu bikalimatillahi tammati min sharri ma khalaq. (3 times)", en: "I seek refuge in the perfect words of Allah from the evil of what He created. (3 times)", de: "Ich suche Zuflucht in den vollkommenen Worten Allahs vor dem Übel dessen, was Er erschaffen hat. (3 Mal)" }
+    ];
+
+    const eveningAdhkarData = [
+        { t: "1. آية الكرسي (Ayat al-Kursi)", ar: "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.", tr: "Allahu la ilaha illa huwal hayyul qayyum, la ta'khuduhu sinatun wala nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfa'u 'indahu illa bi-idhnihi, ya'lamu ma baina aidihim wama khalfahum, wala yuhiytuna bishay'in min 'ilmihi illa bima sha'a, wasi'a kursiyyuhus-samawati wal-arda, wala ya'uduhu hifzuhuma wahuwal-aliyyul-'azim.", en: "Allah - there is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is presently before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.", de: "Allah - es gibt keinen Gott außer Ihm, dem Lebendigen, dem Beständigen. Ihn ergreift weder Schlummer noch Schlaf. Ihm gehört, was in den Himmeln und was auf der Erde ist. Wer ist es, der bei Ihm Fürsprache einlegen könnte außer mit Seiner Erlaubnis? Er weiß, was vor ihnen und was hinter ihnen liegt; sie aber begreifen nichts von Seinem Wissen, es sei denn das, was Er will. Sein Thronschemel umfasst die Himmel und die Erde, und ihre Bewahrung fällt Ihm nicht schwer. Und Er ist der Erhabene, der Allmächtige." },
+        { t: "2. سورة الإخلاص والمعوذتين (Surah Al-Ikhlas & Mu'awwidhatayn)", ar: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ. قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ. (مع الفلق والناس ثلاث مرات)", tr: "Bismillahir Rahmanir Rahim. Qul huwallahu ahad, Allahus-samad, lam yalid walam yulad, walam yakun lahu kufuwan ahad. (Recite Al-Ikhlas, Al-Falaq, An-Nas 3 times).", en: "Say, 'He is Allah, who is One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent.' (Recite Al-Ikhlas, Al-Falaq, An-Nas 3 times).", de: "Sprich: Er ist Allah, ein Einziger, Allah, der Überlegene. Er hat nicht gezeugt und ist nicht gezeugt worden, und niemand ist Ihm jemals gleich. (Rezitiere Al-Ikhlas, Al-Falaq, An-Nas 3 Mal)." },
+        { t: "3. أمسينا وأمسى الملك لله (Evening Declaration)", ar: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", tr: "Amsayna wa amsahal-mulku lillah, walhamdu lillah, la ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa Huwa 'ala kulli shay'in qadir.", en: "We have reached the evening and at this very time unto Allah belongs all sovereignty, and all praise is for Allah. There is no deity except Allah alone, without partner. To Him belongs sovereignty and to Him belongs praise, and He is over all things competent.", de: "Wir haben den Abend erreicht und zu dieser Stunde gehört alle Herrschaft Allah, und alles Lob gebührt Allah. Es gibt keinen Gott außer Allah allein, ohne Partner. Ihm gehört die Herrschaft und Ihm gebührt das Lob, und Er ist zu allem fähig." },
+        { t: "4. اللهم بك أمسينا (Allahumma bika amsayna)", ar: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ.", tr: "Allahumma bika amsayna, wa bika asbahna, wa bika nahya, wa bika namutu, wa ilaykal-masir.", en: "O Allah, by You we enter the evening and by You we enter the morning, by You we live and by You we die, and to You is the final return.", de: "O Allah, durch Dich gelangen wir in den Abend und durch Dich in den Morgen, durch Dich leben wir und durch Dich sterben wir, und zu Dir ist die Heimkehr." },
+        { t: "5. أمسينا على فطرة الإسلام (Fitrat Al Islam)", ar: "أَمْسَيْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا كَانَ مِنَ الْمُشْرِكِينَ.", tr: "Amsayna 'ala fitratil-islam, wa 'ala kalimatil-ikhlas, wa 'ala dini nabiyyina muhammadin salla Allahu 'alayhi wa sallam, wa 'ala millati abina ibrahima hanifan musliman wama kana minal-mushrikin.", en: "We have reached the evening upon the natural religion of Islam, and upon the word of sincere devotion, and upon the religion of our Prophet Muhammad (peace be upon him), and upon the creed of our father Ibrahim, who was a upright Muslim and was not of the polytheists.", de: "Wir haben den Abend auf der Fitra des Islam erreicht, und auf dem Wort der Aufrichtigkeit, und auf der Religion unseres Propheten Muhammad (Frieden sei mit ihm), und auf dem Glaubensbekenntnis unseres Vaters Ibrahim, der ein aufrechter Muslim war und kein Polytheist." },
+        { t: "6. سبحان الله وبحمده 3 مرات (Subhanallahi wa bihamdihi)", ar: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ. (ثلاث مرات)", tr: "Subhanallahi wa bihamdihi, 'adada khalqihi, wa rida nafsihi, wa zinata 'arshihi, wa midaada kalimatihi. (3 times)", en: "Glory is to Allah and praise is to Him, by the number of His creation, by His pleasure, by the weight of His Throne, and by the ink of His words. (3 times)", de: "Preis sei Allah und Lob gebührt Ihm, entsprechend der Zahl Seiner Schöpfung, der Zufriedenheit Seiner Selbst, dem Gewicht Seines Thrones und der Tinte Seiner Worte. (3 Mal)" },
+        { t: "7. اللهم عافني في بدني 3 مرات (Allahumma 'afini fi badni)", ar: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)", tr: "Allahumma 'afini fi badni, Allahumma 'afini fi sam'i, Allahumma 'afini fi basari, la ilaha illa anta. (3 times)", en: "O Allah, grant me health in my body, O Allah, grant me health in my hearing, O Allah, grant me health in my sight. There is no deity except You. (3 times)", de: "O Allah, schenke meinem Körper Gesundheit, o Allah, schenke meinem Gehör Gesundheit, o Allah, schenke meinem Sehvermögen Gesundheit. Es gibt keinen Gott außer Dir. (3 Mal)" },
+        { t: "8. اللهم إني أعوذ بك من الكفر والفقر 3 مرات (Allahumma inni a'udhu bika)", ar: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ. (ثلاث مرات)", tr: "Allahumma inni a'udhu bika minal-kufri wal-faqri, wa a'udhu bika min 'adhabil-qabr, la ilaha illa anta. (3 times)", en: "O Allah, I take refuge in You from disbelief and poverty, and I take refuge in You from the punishment of the grave. There is no deity except You. (3 times)", de: "O Allah, ich suche Zuflucht bei Dir vor Unglauben und Armut, und ich suche Zuflucht bei Dir vor der Grabesstrafe. Es gibt keinen Gott außer Dir. (3 Mal)" },
+        { t: "9. حسبي الله لا إله إلا هو 7 مرات (Hasbiyallahu la ilaha illa huwa)", ar: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ. (سبع مرات)", tr: "Hasbiyallahu la ilaha illa huwa, 'alayhi tawakkaltu, wa huwa rabbul 'arshil-'azim. (7 times)", en: "Sufficient for me is Allah; there is no deity except Him. Upon Him I have relied, and He is the Lord of the Great Throne. (7 times)", de: "Genug ist mir Allah; es gibt keinen Gott außer Ihm. Auf Ihn vertraue ich, und Er ist der Herr des gewaltigen Thrones. (7 Mal)" },
+        { t: "10. اللهم إني أسألك العفو والعافية (Allahumma inni as'alukal-'afwa)", ar: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي.", tr: "Allahumma inni as'alukal-'afwa wal-'afiyah fid-dunya wal-akhirah, Allahumma inni as'alukal-'afwa wal-'afiyah fi dini wa dunyaya wa ahli wa mali, Allahumma-stur 'awrati wa amin raw'ati, Allahumma-hfazni min bayni yadayya wa min khalfi wa 'an yamini wa 'an shimali wa min fawqi, wa a'udhu bi'azamatika an ughtala min tahti.", en: "O Allah, I ask You for pardon and well-being in this world and the Hereafter. O Allah, I ask You for pardon and well-being in my religion, my worldly affairs, my family, and my wealth. O Allah, conceal my faults and calm my fears. O Allah, guard me from in front of me and from behind me, from my right and from my left, and from above me, and I seek refuge in Your greatness from being taken unaware from beneath me.", de: "O Allah, ich bitte Dich um Vergebung und Wohlbefinden im Diesseits und Jenseits. O Allah, ich bitte Dich um Vergebung und Wohlbefinden in meiner Religion, meinem Diesseits, meiner Familie und meinem Vermögen. O Allah, bedecke meine Blößen und sicher meine Ängste. O Allah, bewahre mich von vorne, von hinten, von rechts, von links und von oben, und ich suche Zuflucht bei Deiner Erhabenheit, dass ich von unten her überfallen werde." },
+        { t: "11. سيد الاستغفار (Sayyid al-Istighfar)", ar: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ.", tr: "Allahumma anta rabbi la ilaha illa anta, khalaqtani wa ana 'abduka, wa ana 'ala 'ahdika wa wa'dika mastata't, a'udhu bika min sharri ma sana't, abu'u laka bini'matika 'alayya, wa abu'u bidanbi faghfir li, fa innahu la yaghfirud-dunuba illa anta.", en: "O Allah, You are my Lord, there is no deity except You. You created me and I am your servant, and I am upon your covenant and your promise as best I can. I seek refuge in You from the evil of what I have done. I acknowledge before You your blessing upon me, and I acknowledge my sin, so forgive me, for indeed none forgives sins except You.", de: "O Allah, Du bist mein Herr, es gibt keinen Gott außer Dir. Du hast mich erschaffen und ich bin Dein Diener, und ich halte mich an Deinen Bund und Dein Versprechen, so gut ich kann. Ich suche Zuflucht bei Dir vor dem Übel dessen, was ich getan habe. Ich erkenne Deine Gnade an mir an und ich erkenne meine Sünde an, so vergib mir, denn niemand vergibt die Sünden außer Dir." },
+        { t: "12. رضيت بالله رباً 3 مرات (Raditu billahi rabba)", ar: "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا. (ثلاث مرات)", tr: "Raditu billahi rabba, wa bil-islami dina, wa bi-muhammadin nabiyyan. (3 times)", en: "I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad (peace be upon him) as my Prophet. (3 times)", de: "Ich bin zufrieden mit Allah als Herrn, mit dem Islam als Religion und mit Muhammad als Propheten. (3 Mal)" },
+        { t: "13. يا حي يا قيوم (Ya hayyu ya qayyum)", ar: "يَا حَيُّ يَا قَيُّومُ، بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.", tr: "Ya hayyu ya qayyum, bi-rahmatika astaghith, aslih li sha'ni kullahu, wala takilni ila nafsi tarfata 'ayn.", en: "O Ever-Living, O Self-Sustaining, by Your mercy I seek help. Rectify for me all my affairs and do not leave me to myself even for the blink of an eye.", de: "O Lebendiger, o Beständiger, durch Deine Barmherzigkeit erflehe ich Hilfe. Bessere mir alle meine Angelegenheiten und überlasse mich nicht einmal für die Dauer eines Wimpernschlags mir selbst." },
+        { t: "14. لا إله إلا الله وحده 100 مرة (La ilaha illa wahdahu)", ar: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. (100 مرة)", tr: "La ilaha illa wahdahu la sharika lah, lahul-mulku walahul-hamd, wa huwa 'ala kulli shay'in qadir. (100 times)", en: "There is no deity except Allah alone, without partner. To Him belongs sovereignty and to Him belongs praise, and He is over all things competent. (100 times)", de: "Es gibt keinen Gott außer Allah allein, ohne Partner. Ihm gehört die Herrschaft und Ihm gebührt das Lob, und Er ist zu allem fähig. (100 Mal)" },
+        { t: "15. سبحان الله وبحمده 100 مرة (Subhanallahi wa bihamdihi)", ar: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ. (مائة مرة)", tr: "Subhanallahi wa bihamdihi. (100 times)", en: "Glory is to Allah and praise is to Him. (100 times daily)", de: "Preis sei Allah und Lob gebührt Ihm. (100 Mal)" },
+        { t: "16. أعوذ بكلمات الله التامات 3 مرات (A'udhu bikalimatillahi)", ar: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ. (ثلاث مرات)", tr: "A'udhu bikalimatillahi tammati min sharri ma khalaq. (3 times)", en: "I seek refuge in the perfect words of Allah from the evil of what He created. (3 times)", de: "Ich suche Zuflucht in den vollkommenen Worten Allahs vor dem Übel dessen, was Er erschaffen hat. (3 Mal)" }
+    ];
+
+    const postPrayerData1 = [
+        { t: "1. الاستغفار 3 مرات (Astaghfirullah)", ar: "أَسْتَغْفِرُ اللَّهَ، أَسْتَغْفِرُ اللَّهَ، أَسْتَغْفِرُ اللَّهَ.", tr: "Astaghfirullah, astaghfirullah, astaghfirullah.", en: "I seek forgiveness from Allah (3 times).", de: "Ich suche Vergebung bei Allah (3 Mal)." },
+        { t: "2. اللهم أنت السلام (Allahumma anta as-salam)", ar: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ.", tr: "Allahumma antas-salam wa minkas-salam, tabarakta ya dhal-jalali wal-ikram.", en: "O Allah, You are Peace and from You is Peace, blessed are You, O Majesty and Honor.", de: "O Allah, Du bist der Friede und von Dir kommt der Friede, gepriesen bist Du, o Inhaber von Erhabenheit und Ehre." },
+        { t: "3. لا إله إلا الله وحده لا شريك له (La ilaha illa Allah)", ar: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", tr: "La ilaha illa Allah wahdahu la sharika lah, lahul-mulku walahul-hamd, wa huwa 'ala kulli shay'in qadir.", en: "There is no deity except Allah alone, without partner. To Him belongs sovereignty and to Him belongs praise, and He is over all things competent.", de: "Es gibt keinen Gott außer Allah allein, ohne Partner. Ihm gehört die Herrschaft und Ihm gebührt das Lob, und Er ist zu allem fähig." },
+        { t: "4. اللهم لا مانع لما أعطيت (Allahumma la mani'a)", ar: "اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ.", tr: "Allahumma la mani'a lima a'taita, wa la mu'tiya lima mana'ta, wa la yanfa'u dhal-jaddi minkal-jadd.", en: "O Allah, none can prevent what You have given, and none can give what You have prevented, and no wealth or majesty can benefit anyone against You.", de: "O Allah, niemand kann zurückhalten, was Du gegeben hast, und niemand kann geben, was Du zurückgehalten hast, und kein Reichtum nützt dem Reichen vor Dir." },
+        { t: "5. تسبيح فاطمة (Tasbih Fatimah)", ar: "سُبْحَانَ اللَّهِ (33)، وَالْحَمْدُ لِلَّهِ (33)، وَاللَّهُ أَكْبَرُ (33)، وَتَمَامُ الْمِائَةِ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", tr: "Subhanallah (33), Alhamdulillah (33), Allahu Akbar (33) + La ilaha illa Allah wahdahu la sharika lah...", en: "Glorifying Allah 33 times, praising Him 33 times, exalting Him 33 times, completing 100 with the declaration of faith.", de: "Preis sei Allah (33), Lob sei Allah (33), Allah ist am größten (33) + Abschluss auf 100 mit dem Glaubensbekenntnis." },
+        { t: "6. آية الكرسي (Ayat al-Kursi)", ar: "مَنْ قَرَأَ آيَةَ الْكُرْسِيِّ دُبُرَ كُلِّ صَلَاةٍ مَكْتُوبَةٍ لَمْ يَمْنَعْهُ مِنْ دُخُولِ الْجَنَّةِ إِلَّا أَنْ يَمُوتَ.", tr: "Man qara'a ayat al-kursi dubura kulli salatin maktubatin lam yamna'hu min dukhulil-jannah illa an yamut.", en: "Whoever reads Ayat al-Kursi after every obligatory prayer, nothing prevents him from entering Paradise except death.", de: "Wer Ayat al-Kursi nach jedem Pflichtgebet liest, den hindert nur der Tod am Eintritt ins Paradies." },
+        { t: "7. المعوذات (The Three Surahs)", ar: "قراءة سورة الإخلاص، وسورة الفلق، وسورة الناس مرة واحدة بعد كل صلاة (وثلاث مرات بعد الفجر والمغرب).", tr: "Recite Surah Al-Ikhlas, Al-Falaq, and An-Nas once after prayers (3 times after Fajr and Maghrib).", en: "Reciting Surah Al-Ikhlas, Al-Falaq, and An-Nas once after each prayer (and three times after Fajr and Maghrib).", de: "Rezitation von Sure Al-Ikhlas, Al-Falaq und An-Nas nach jedem Gebet." }
+    ];
+
+    const postPrayerData2 = [
+        { t: "1. سبحان الله 10 مرات (Subhanallah)", ar: "سُبْحَانَ اللَّهِ. (10 مرات)", tr: "Subhanallah. (10 times)", en: "Glory be to Allah. (10 times)", de: "Preis sei Allah. (10 Mal)" },
+        { t: "2. الحمد لله 10 مرات (Alhamdulillah)", ar: "الْحَمْدُ لِلَّهِ. (10 مرات)", tr: "Alhamdulillah. (10 times)", en: "Praise be to Allah. (10 times)", de: "Lob sei Allah. (10 Mal)" },
+        { t: "3. الله أكبر 10 مرات (Allahu Akbar)", ar: "اللَّهُ أَكْبَرُ. (10 مرات)", tr: "Allahu Akbar. (10 times)", en: "Allah is the Greatest. (10 times)", de: "Allah ist am größten. (10 Mal)" },
+        { t: "4. آية الكرسي (Ayat al-Kursi)", ar: "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.", tr: "Allahu la ilaha illa huwal hayyul qayyum, la ta'khuduhu sinatun wala nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfa'u 'indahu illa bi-idhnihi, ya'lamu ma baina aidihim wama khalfahum, wala yuhiytuna bishay'in min 'ilmihi illa bima sha'a, wasi'a kursiyyuhus-samawati wal-arda, wala ya'uduhu hifzuhuma wahuwal-aliyyul-'azim.", en: "Allah - there is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is presently before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.", de: "Allah - es gibt keinen Gott außer Ihm, dem Lebendigen, dem Beständigen. Ihn ergreift weder Schlummer noch Schlaf. Ihm gehört, was in den Himmeln und was auf der Erde ist. Wer ist es, der bei Ihm Fürsprache einlegen könnte außer mit Seiner Erlaubnis? Er weiß, was vor ihnen und was hinter ihnen liegt; sie aber begreifen nichts von Seinem Wissen, es sei denn das, was Er will. Sein Thronschemel umfasst die Himmel und die Erde, und ihre Bewahrung fällt Ihm nicht schwer. Und Er ist der Erhabene, der Allmächtige." }
+    ];
+
+    const furasData = [
+        { t: "1. من توضأ فأحسن الوضوء (Wudu & Shahadah)", ar: "«مَنْ تَوَضَّأَ فَأَحْسَنَ الْوُضُوءَ ثُمَّ قَالَ: أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ، اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ، فُتِحَتْ لَهُ أَبْوَابُ الْجَنَّةِ الثَّمَانِيَةُ يَدْخُلُ مِنْ أَيِّهَا شَاءَ.»", tr: "Man tawadda'a fa ahsana al-wudu thumma qala: Ashhadu an la ilaha illa Allah wahdahu la sharika lah, wa anna Muhammadan 'abduhu wa rasuluh, Allahumma aj'alni minat-tawwabin waj'alni minal-mutatahhirin", en: "Whoever performs Wudu well and says the Shahadah, the 8 gates of Paradise open for him to enter from whichever he wishes.", de: "Wer die Wudu gut vollzieht und die Shahadah spricht, dem öffnen sich die 8 Tore des Paradieses." },
+        { t: "2. صلاة الفجر في جماعة (Fajr in Congregation)", ar: "«مَنْ صَلَّى الْفَجْرَ فِي جَمَاعَةٍ ثُمَّ قَعَدَ يَذْكُرُ اللَّهَ حَتَّى تَطْلُعَ الشَّمْسُ ثُمَّ صَلَّى رَكْعَتَيْنِ كَانَتْ لَهُ كَأَجْرِ حَجَّةٍ وَعُمْرَةٍ تَامَّةٍ تَامَّةٍ تَامَّةٍ.»", tr: "Man salla al-fajr fi jama'ah thumma qa'ada yadhkurullahu hatta tatlu'a al-shamsu thumma salla rak'atayn kanat lahu ka-ajri hajjatin wa 'umratin tammatin", en: "Whoever prays Fajr in congregation then sits remembering Allah until sunrise, then prays 2 rak'ahs, gets the complete reward of Hajj and Umrah.", de: "Wer das Fajr-Gebet in Gemeinschaft verrichtet und Gottes gedenkt bis zum Sonnenaufgang, erhält den Lohn von Hajj und Umrah." },
+        { t: "3. قراءة سورة الكهف (Surah Al-Kahf on Friday)", ar: "«مَنْ قَرَأَ سُورَةَ الْكَهْفِ فِي يَوْمِ الْجُمُعَةِ أَضَاءَ لَهُ مِنَ النُّورِ مَا بَيْنَ الْجُمُعَتَيْنِ.»", tr: "Man qara'a surah al-kahf fi yawm al-jumu'ah ada'a lahu minal-nuri ma baynal-jumu'atayn", en: "Whoever reads Surah Al-Kahf on Friday, a light will shine for him between the two Fridays.", de: "Wer die Sure Al-Kahf am Freitag liest, dem erstrahlt Licht zwischen den beiden Freitagen." },
+        { t: "4. الصيام في سبيل الله (Fasting for Allah)", ar: "«مَنْ صَامَ يَوْمًا فِي سَبِيلِ اللَّهِ بَاعَدَ اللَّهُ وَجْهَهُ عَنِ النَّارِ سَبْعِينَ خَرِيفًا.»", tr: "Man sama yawman fi sabilillah ba'ada Allahu wajhahu 'anin-nari sab'ina kharifa", en: "Whoever fasts a day for the sake of Allah, Allah will distance his face from the Hellfire by seventy years.", de: "Wer einen Tag um Allahs willen fastet, von dessen Gesicht Allah das Höllenfeuer 70 Jahre fernhält." },
+        { t: "5. لا إله إلا الله 100 مرة (Ultimate Dhikr 100x)", ar: "«مَنْ قَالَ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، فِي يَوْمٍ مِائَةَ مَرَّةٍ؛ كَانَتْ لَهُ عَدْلَ عَشْرِ رِقَابٍ، وَكُتِبَتْ لَهُ مِائَةُ حَسَنَةٍ، وَمُحِيَتْ عَنْهُ مِائَةُ سَيِّئَةٍ...»", tr: "Man qala la ilaha illa Allah wahdahu la sharika lah, lahul-mulku walahul-hamd, wa huwa 'ala kulli shay'in qadir fi yawmin mi'ata marrah...", en: "Whoever says 'La ilaha illa Allah' 100 times daily, it is equivalent to freeing 10 slaves, 100 good deeds are recorded for him, and 100 bad deeds are erased.", de: "Wer hundertmal täglich La ilaha illa Allah sagt, hat den Lohn für die Befreiung von 10 Sklaven, und 100 Sünden werden ihm vergeben." },
+        { t: "6. الغسل والمشي للجمعة (Early to Friday Prayer)", ar: "«مَنْ غَسَّلَ يَوْمَ الْجُمُعَةِ وَاغْتَسَلَ، ثُمَّ بَكَّرَ وَابْتَكَرَ، وَمَشَى وَلَمْ يَرْكَبْ، وَدَنَا مِنَ الْإِمَامِ وَأَنْصَتَ، كَانَ لَهُ بِكُلِّ خُطْوَةٍ عَمَلُ سَنَةٍ؛ صِيَامُهَا وَقِيَامُهَا.»", tr: "Man ghassala yawma al-jumu'ati waghtasala, wa bakkara wabtakara, wa masha walam yarkab... kana lahu bikulli khutwatin 'amalu sanatin ajru siyamiha wa qiyamiha", en: "Whoever performs a perfect bath on Friday, goes early to the mosque walking and not riding, and sits close to the Imam... for every step he takes, he receives the reward of a year of fasting and praying.", de: "Wer am Freitag rituell badet und früh zur Moschee geht, für jeden Schritt den Lohn eines Jahres Fasten und Stehen." },
+        { t: "7. الصلاة على الجنازة (Attending Janazah)", ar: "«مَنْ صَلَّى عَلَى جِنَازَةٍ فَلَهُ قِيرَاطٌ، وَمَنْ شَهِدَ دَفْنَهَا فَلَهُ قِيرَاطَانِ قِيلَ: وَمَا الْقِيرَاطَانِ؟ قَالَ: مِثْلُ الْجَبَلَيْنِ الْعَظِيمَيْنِ.»", tr: "Man salla 'ala janazatin falahu qirat, wa man shahada dafannaha falahu qiratani... mithlul-jabalaynil-'azimayn", en: "Whoever attends a funeral prayer gets a Qirat of reward, and if he attends the burial he gets two Qirats, each equivalent to a huge mountain.", de: "Wer dem Totengebet beiwohnt, erhält ein Qirat; wer dem Begräbnis beiwohnt, zwei Qirats (wie große Berge)." },
+        { t: "8. قراءة سورة الإخلاص (Surat Al-Ikhlas 10x)", ar: "«مَنْ قَرَأَ قُلْ هُوَ اللَّهُ أَحَدٌ عَشْرَ مَرَّاتٍ بَنَى اللَّهُ لَهُ بَيْتًا فِي الْجَنَّةِ.»", tr: "Man qara'a qul huwallahu ahad 'ashra marratin banallahu lahu baytan fil-jannah", en: "Whoever recites Surah Al-Ikhlas ten times, Allah will build a house for him in Paradise.", de: "Wer Sure Al-Ikhlas 10 Mal liest, dem baut Allah ein Haus im Paradies." },
+        { t: "9. التسبيح المحبوب (Most Beloved Words)", ar: "«لَأَنْ أَقُولَ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ؛ أَحَبُّ إِلَيَّ مِمَّا طَلَعَتْ عَلَيْهِ الشَّمْسُ.»", tr: "La-an aqoola subhanallahi walhamdulillah wa la ilaha illallahu wallahu akbar, ahabbu ilayya mimma tala'at 'alayhish-shams", en: "Saying 'Subhanallah, Alhamdulillah, La ilaha illa Allah, Allahu Akbar' is more beloved to me than everything the sun rises upon.", de: "Die Worte 'Subhanallah, Alhamdulillah, La ilaha illa Allah, Allahu Akbar' sind mir lieber als alles, worüber die Sonne aufgeht." },
+        { t: "10. عيادة المريض (Visiting the Sick)", ar: "«مَنْ أَتَى أَخَاهُ الْمُسْلِمَ عَائِداً، مَشَى فِي خِرَافَةِ الْجَنَّةِ حَتَّى يَجْلِسَ... صَلَّى عَلَيْهِ سَبْعُونَ أَلْفَ مَلَكٍ.»", tr: "Man ata akhahul-muslima 'aidan, masha fi kharafatil-jannah... salla 'alayhi sab'una alfa malakin", en: "Whoever visits a sick Muslim brother walks in the gardens of Paradise until he sits, and 70,000 angels pray for his forgiveness.", de: "Wer einen kranken Muslim besucht, wandelt in den Gärten des Paradieses, und 70.000 Engel beten für ihn." },
+        { t: "11. ركعتا الفجر (Two Rak'ahs of Fajr)", ar: "«رَكْعَتَا الْفَجْرِ خَيْرٌ مِنَ الدُّنْيَا وَمَا فِيهَا.»", tr: "Rak'atal-fajri khayrun minad-dunya wa ma fiha", en: "The two voluntary rak'ahs before the obligatory Fajr prayer are better than this world and everything in it.", de: "Die zwei Rak'a vor dem Fajr-Gebet sind besser als das Diesseits und alles, was darin ist." },
+        { t: "12. صوم يوم عرفة وعاشوراء (Arafah & Ashura)", ar: "«صَوْمُ يَوْمِ عَرَفَةَ يُكَفِّرُ سَنَتَيْنِ مَاضِيَةً وَمُسْتَقْبَلَةً، وَصَوْمُ عَاشُورَاءَ يُكَفِّرُ سَنَةً مَاضِيَةً.»", tr: "Sawmu yawmi 'arafata yukaffiru sanatayni madiyatan wa mustaqbalatan, wa sawmu 'ashura yukaffiru sanatan madiyatan", en: "Fasting the Day of Arafah expiates the sins of the past year and the coming year, and fasting Ashura expiates the sins of the past year.", de: "Das Fasten am Tag von Arafah sühnt die Sünden von zwei Jahren, und Ashura sühnt ein vergangenes Jahr." }
+    ];
+
+    function toggleAccordion(contentId, arrowId) {
+        let content = document.getElementById(contentId);
+        let arrow = document.getElementById(arrowId);
+        content.classList.toggle("open");
+        arrow.innerText = content.classList.contains("open") ? "▲" : "▼";
+    }
+
+    function toggleHadith() { toggleAccordion('hadith-content', 'hadith-arrow'); }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        let saved = localStorage.getItem("active_session_user");
+        if(saved) { currentUser = saved; initApp(); }
+        setTheme(localStorage.getItem("site_theme") || "light");
     });
 
-    function setTheme(name, save = true) {
-        if(save) localStorage.setItem("site_theme", name);
-        document.body.classList.remove("dark-mode", "pink-mode");
-        if(name === "dark") document.body.classList.add("dark-mode");
-        if(name === "pink") document.body.classList.add("pink-mode");
-    }
-
-    function initUserSession() {
-        let displayName = currentUser === "Dima" ? "Dima 🤍👸🏻" : "Mohamad";
-        document.getElementById("welcome-user").innerText = "Welcome, " + displayName;
-        if(currentUser === "Mohamad") {
-            document.getElementById("admin-gear-btn").classList.remove("hidden");
-        } else {
-            document.getElementById("admin-gear-btn").classList.add("hidden");
-        }
-        document.getElementById("login-screen").classList.add("hidden");
-        document.getElementById("main-screen").classList.remove("hidden");
-        loadPrayerTimes();
-        loadState();
-        loadStoreHistory();
-    }
-
-    function openAdminModal() { document.getElementById("admin-modal").classList.remove("hidden"); }
-    function closeAdminModal() { document.getElementById("admin-modal").classList.add("hidden"); }
-
-    function showToast(msg) {
-        let t = document.getElementById("inapp-notification");
-        t.innerText = msg; t.classList.remove("hidden");
-        setTimeout(() => t.classList.add("hidden"), 4000);
+    function setTheme(mode) {
+        localStorage.setItem("site_theme", mode);
+        document.body.className = mode === 'dark' ? 'dark-mode' : (mode === 'pink' ? 'pink-mode' : '');
     }
 
     function login() {
-        let sel = document.getElementById("username-select").value;
+        let user = document.getElementById("username-select").value.includes("Dima") ? "Dima" : "Mohamad";
         let pass = document.getElementById("passcode-input").value;
-        let clean = sel.includes("Dima") ? "Dima" : sel;
-        if(passcodes[clean] === pass) {
-            currentUser = clean;
+        if(passcodes[user] === pass) {
+            currentUser = user;
             localStorage.setItem("active_session_user", currentUser);
             document.getElementById("login-error").innerText = "";
             document.getElementById("passcode-input").value = "";
-            initUserSession();
+            initApp();
         } else {
-            document.getElementById("login-error").innerText = "Incorrect passcode!";
+            document.getElementById("login-error").innerText = "Wrong passcode! | الرمز السري خاطئ";
         }
     }
 
     function logout() {
         localStorage.removeItem("active_session_user");
-        currentUser = "";
         document.getElementById("main-screen").classList.add("hidden");
         document.getElementById("login-screen").classList.remove("hidden");
     }
 
-    function switchTab(idx) {
-        document.querySelectorAll('.nav-tab').forEach((b, i) => b.classList.toggle('active', i+1 === idx));
-        document.querySelectorAll('.tab-content').forEach((c, i) => c.classList.toggle('hidden', i+1 !== idx));
+    function initApp() {
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("main-screen").classList.remove("hidden");
+        document.getElementById("welcome-user").innerText = currentUser === "Dima" ? "Welcome, Dima 🤍👸🏻 | أهلاً ديما" : "Welcome, Mohamad | أهلاً محمد";
+        
+        let adminBtn = document.getElementById("admin-gear-btn");
+        if(currentUser === "Mohamad") { adminBtn.style.display = "block"; adminBtn.classList.remove("hidden"); } 
+        else { adminBtn.style.display = "none"; adminBtn.classList.add("hidden"); }
+        
+        renderTasks();
+        loadState();
+        loadStoreHistory();
+    }
+
+    function switchTab(id) {
+        document.querySelectorAll('.nav-tab').forEach((t, i) => t.classList.toggle('active', i+1 === id));
+        document.querySelectorAll('.tab-content').forEach((c, i) => c.classList.toggle('hidden', i+1 !== id));
+    }
+
+    function renderTasks() {
+        let html = "";
+        actualTasks.forEach((t, i) => {
+            let n = i + 1;
+            let btnStr = `<button id="btn-task-${n}" class="uniform-action-btn" onclick="completeTask(${n})">Done ✅ | تم التنفيذ</button>`;
+            if (n === 9) {
+                btnStr = `<button id="btn-task-${n}" class="uniform-action-btn" style="background:#d97706;" onclick="openQuran()">Open Quran 📖 | فتح القرآن</button>`;
+            } else if (n === 1) {
+                btnStr = `<button id="btn-task-${n}" class="uniform-action-btn" onclick="openReader('أذكار الصباح (Morning Adhkar)', morningAdhkarData, 'task_${n}', 2)">Read Adhkar 📜 | قراءة الأذكار (+2)</button>`;
+            } else if (n === 7) {
+                btnStr = `<button id="btn-task-${n}" class="uniform-action-btn" onclick="openReader('أذكار المساء (Evening Adhkar)', eveningAdhkarData, 'task_${n}', 2)">Read Adhkar 📜 | قراءة الأذكار (+2)</button>`;
+            } else if (n >= 2 && n <= 6) {
+                btnStr = `<button id="btn-task-${n}" class="uniform-action-btn" style="background:#2563eb;" onclick="openPostPrayer('task_${n}', '📿 Post-Prayer Adhkar | أذكار ما بعد الصلاة')">Adhkar & Points ➡️ | الأذكار</button>`;
+            } else if (n === 8) {
+                btnStr = `<button id="btn-task-${n}" class="uniform-action-btn" onclick="completeTaskWithPoints(${n}, 3)">Done ✅ | تم التنفيذ (+3)</button>`;
+            }
+            html += `<div class="task-card"><div class="task-top-row"><span>${n}. ${t}</span></div><div class="task-bottom-row"><div class="names-status-box"><div id="status-${n}-Mohamad" class="mini-badge bg-not">Mo: ❌</div><div id="status-${n}-Dima" class="mini-badge bg-not">Di 🤍: ❌</div></div><div class="action-box">${btnStr}</div></div></div>`;
+        });
+        document.getElementById("tasks-container").innerHTML = html;
+
+        let sHtml = "";
+        sunnahTasks.forEach((s, i) => {
+            let sId = i + 1;
+            sHtml += `<div class="task-card"><div class="task-top-row"><span>${s}</span><span style="color:var(--success-color);">+5 pts ✨</span></div><div class="task-bottom-row"><div class="names-status-box"><div id="status-side-${sId}-Mohamad" class="mini-badge bg-not">Mo: ❌</div><div id="status-side-${sId}-Dima" class="mini-badge bg-not">Di 🤍: ❌</div></div><div class="action-box"><button id="btn-side-${sId}" class="uniform-action-btn" onclick="completeSideTaskWithPoints(${sId}, 5)">Done ✅ | تم (+5)</button></div></div></div>`;
+        });
+        document.getElementById("sunnah-container").innerHTML = sHtml;
+    }
+
+    function openQuran() {
+        let page1 = 1, page2 = 2; 
+        document.getElementById("main-screen").classList.add("hidden"); document.getElementById("reader-page").classList.remove("hidden");
+        document.getElementById("reader-title").innerText = `Quran (Pages ${page1} & ${page2}) | القرآن`;
+        let finishBtn = document.getElementById("reader-finish-btn");
+        finishBtn.innerText = "Done Reading ✅ | تم الإنجاز (+5 Points)";
+        finishBtn.onclick = function() {
+            if(localStorage.getItem("task_9_" + currentUser) !== "true") {
+                let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+                localStorage.setItem("coins_" + currentUser, (coins + 5).toString()); localStorage.setItem("task_9_" + currentUser, "true");
+                showToast("Quran Reading Logged! +5 Points ✨ | تم تسجيل قراءة القرآن"); loadState();
+            }
+            closeReader();
+        };
+
+        let container = document.getElementById("reader-content-container");
+        container.innerHTML = "<div style='text-align:center; padding: 20px; font-weight:bold;'>Loading Quran Pages... ⏳ | جاري التحميل...</div>";
+
+        Promise.all([
+            fetch(`https://api.alquran.cloud/v1/page/${page1}/ar.alafasy`).then(r => r.json()), fetch(`https://api.alquran.cloud/v1/page/${page2}/ar.alafasy`).then(r => r.json()),
+            fetch(`https://api.alquran.cloud/v1/page/${page1}/en.transliteration`).then(r => r.json()), fetch(`https://api.alquran.cloud/v1/page/${page2}/en.transliteration`).then(r => r.json()),
+            fetch(`https://api.alquran.cloud/v1/page/${page1}/en.sahih`).then(r => r.json()), fetch(`https://api.alquran.cloud/v1/page/${page2}/en.sahih`).then(r => r.json()),
+            fetch(`https://api.alquran.cloud/v1/page/${page1}/de.aburida`).then(r => r.json()), fetch(`https://api.alquran.cloud/v1/page/${page2}/de.aburida`).then(r => r.json())
+        ]).then(([ar1, ar2, tr1, tr2, en1, en2, de1, de2]) => {
+            let buildPage = (pNum, ar, tr, en, de) => {
+                let tAr = ar.data.ayahs.map(a => `${a.text} ﴿${a.numberInSurah}﴾`).join(" "); let tTr = tr.data.ayahs.map(a => `${a.numberInSurah}. ${a.text}`).join(" ");
+                let tEn = en.data.ayahs.map(a => `${a.numberInSurah}. ${a.text}`).join(" "); let tDe = de.data.ayahs.map(a => `${a.numberInSurah}. ${a.text}`).join(" ");
+                return `<div class="quran-sheet"><div style="font-weight:bold; color:var(--primary-color); margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px;">Page ${pNum} | صفحة</div><div class="arabic-block">${tAr}</div><div class="translation-auto-box translit"><b>Translit (for Dima 🤍):</b><br>${tTr}</div><div class="translation-auto-box en"><b>EN:</b><br>${tEn}</div><div class="translation-auto-box de" style="margin-bottom:0;"><b>DE:</b><br>${tDe}</div></div>`;
+            };
+            container.innerHTML = buildPage(page1, ar1, tr1, en1, de1) + buildPage(page2, ar2, tr2, en2, de2);
+        }).catch(() => { container.innerHTML = "<div style='color:red; text-align:center;'>Failed to load Quran. Please try again. | عذراً، فشل تحميل القرآن.</div>"; });
+    }
+
+    function buildReaderHtml(dataArray) {
+        return dataArray.map(item => `<div style="margin-bottom: 20px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;"><h4 style="color:var(--primary-color); margin-top:0; margin-bottom:10px;">${item.t}</h4><div class="arabic-block">${item.ar}</div><div class="translation-auto-box translit"><b>Translit (for Dima 🤍):</b><br>${item.tr}</div><div class="translation-auto-box en"><b>EN:</b><br>${item.en}</div><div class="translation-auto-box de" style="margin-bottom:0;"><b>DE:</b><br>${item.de}</div></div>`).join('');
+    }
+
+    function openReader(title, dataArray, storageKey, points) {
+        document.getElementById("main-screen").classList.add("hidden"); document.getElementById("reader-page").classList.remove("hidden");
+        document.getElementById("reader-title").innerText = title;
+        let finishBtn = document.getElementById("reader-finish-btn"); finishBtn.innerText = `Done ✅ | تم الإنجاز (+${points} Points)`;
+        finishBtn.onclick = function() {
+            if(localStorage.getItem(storageKey + "_" + currentUser) !== "true") {
+                let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+                localStorage.setItem("coins_" + currentUser, (coins + points).toString()); localStorage.setItem(storageKey + "_" + currentUser, "true");
+                showToast(`Task Completed! +${points} Points ✨ | تم الإنجاز!`); loadState();
+            }
+            closeReader();
+        };
+        document.getElementById("reader-content-container").innerHTML = `<div class="quran-sheet">${buildReaderHtml(dataArray)}</div>`;
+    }
+
+    function openPostPrayer(taskId, title) {
+        document.getElementById("main-screen").classList.add("hidden"); document.getElementById("reader-page").classList.remove("hidden");
+        document.getElementById("reader-title").innerText = title;
+        let finishBtn = document.getElementById("reader-finish-btn"); finishBtn.innerText = `Done ✅ | تم الإنجاز (+3 Points)`;
+        finishBtn.onclick = function() {
+            if(localStorage.getItem(taskId + "_" + currentUser) !== "true") {
+                let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+                localStorage.setItem("coins_" + currentUser, (coins + 3).toString()); localStorage.setItem(taskId + "_" + currentUser, "true");
+                showToast(`Prayer Adhkar Completed! +3 Points ✨ | تم تسجيل الأذكار!`); loadState();
+            }
+            closeReader();
+        };
+        let html = `
+        <div class="quran-sheet" style="padding-bottom: 5px;">
+            <div class="accordion-header" onclick="toggleAccordion('pp-acc-1', 'pp-arrow-1')"><span>1️⃣ Full Adhkar | القسم الأول: الأذكار الشاملة</span><span id="pp-arrow-1" style="font-size: 16px;">▼</span></div>
+            <div id="pp-acc-1" class="accordion-content"><hr style="border:0; border-top: 1px solid var(--border-color); margin-bottom: 15px;">${buildReaderHtml(postPrayerData1)}</div>
+        </div>
+        <div class="quran-sheet" style="padding-bottom: 5px;">
+            <div class="accordion-header" onclick="toggleAccordion('pp-acc-2', 'pp-arrow-2')"><span>2️⃣ Short Adhkar | القسم الثاني: التسبيح وآية الكرسي</span><span id="pp-arrow-2" style="font-size: 16px;">▼</span></div>
+            <div id="pp-acc-2" class="accordion-content"><hr style="border:0; border-top: 1px solid var(--border-color); margin-bottom: 15px;">${buildReaderHtml(postPrayerData2)}</div>
+        </div>`;
+        document.getElementById("reader-content-container").innerHTML = html;
+    }
+
+    function closeReader() { document.getElementById("reader-page").classList.add("hidden"); document.getElementById("wheel-page").classList.add("hidden"); document.getElementById("main-screen").classList.remove("hidden"); }
+
+    function showToast(msg) {
+        let t = document.getElementById("inapp-notification"); t.innerText = msg; t.classList.remove("hidden");
+        setTimeout(() => t.classList.add("hidden"), 4000);
+    }
+
+    function completeTask(id) {
+        if(localStorage.getItem("task_" + id + "_" + currentUser) === "true") return;
+        localStorage.setItem("task_" + id + "_" + currentUser, "true"); loadState(); showToast("Task Completed ✅ | تم الإنجاز");
+    }
+
+    function completeTaskWithPoints(id, pts) {
+        if(localStorage.getItem("task_" + id + "_" + currentUser) === "true") return;
+        let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+        localStorage.setItem("coins_" + currentUser, (coins + pts).toString()); localStorage.setItem("task_" + id + "_" + currentUser, "true");
+        loadState(); showToast(`Task Completed! +${pts} Points ✨ | تم الإنجاز!`);
+    }
+
+    function completeSideTaskWithPoints(sId, pts) {
+        if(localStorage.getItem("side_task_" + sId + "_" + currentUser) === "true") return;
+        let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
+        localStorage.setItem("coins_" + currentUser, (coins + pts).toString()); localStorage.setItem("side_task_" + sId + "_" + currentUser, "true");
+        loadState(); showToast(`Sunnah Completed! +${pts} Points ✨ | تم إنجاز السنة!`);
+    }
+
+    function openWheelPage() {
+        let w = localStorage.getItem("game_winner");
+        if(!w || w !== currentUser) { showToast("🔒 Wheel is locked! Only the winner can spin. | العجلة مقفلة، للفائز فقط."); return; }
+        document.getElementById("main-screen").classList.add("hidden"); document.getElementById("wheel-page").classList.remove("hidden");
+        let prize = localStorage.getItem("winner_prize_" + currentUser); if(prize) document.getElementById("wheel-display").innerText = "🎉 Your Prize | جائزتك: " + prize;
+    }
+
+    function spinWheel() {
+        let w = rewards[Math.floor(Math.random() * rewards.length)];
+        document.getElementById("wheel-display").innerText = "🎉 You Won | لقد ربحت: " + w;
+        localStorage.setItem("winner_prize_" + currentUser, w); localStorage.removeItem("prize_fulfilled_" + currentUser);
+        let partner = currentUser === "Mohamad" ? "Dima" : "Mohamad";
+        localStorage.setItem("store_alert_" + partner, `👑 Won the race and spun the wheel! Prize: ${w} | فاز ولف العجلة!`);
+        document.getElementById("spin-btn").disabled = true;
     }
 
     function buyStoreItem(cost, name) {
         let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
         if(coins >= cost) {
             localStorage.setItem("coins_" + currentUser, (coins - cost).toString());
-            let buyer = currentUser === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
-            let time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             let h = JSON.parse(localStorage.getItem("store_history") || "[]");
-            h.unshift({ user: buyer, item: name, time: time });
-            localStorage.setItem("store_history", JSON.stringify(h));
-            let partner = currentUser === "Mohamad" ? "Dima" : "Mohamad";
-            localStorage.setItem("store_alert_" + partner, `🛍️ ${buyer} redeemed: ${name}!`);
-            loadState(); loadStoreHistory();
-            showToast(`🎉 Redeemed: ${name}`);
-        } else {
-            showToast("❌ Insufficient points!");
-        }
+            h.unshift({ user: currentUser === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻", item: name, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+            localStorage.setItem("store_history", JSON.stringify(h)); loadState(); loadStoreHistory(); showToast(`🎉 Redeemed | تم الشراء: ${name}`);
+        } else { showToast("❌ Not enough points! | الرصيد غير كافٍ!"); }
     }
 
     function loadStoreHistory() {
-        let box = document.getElementById("store-history-list");
-        if(!box) return;
-        let h = JSON.parse(localStorage.getItem("store_history") || "[]");
-        if(h.length === 0) { box.innerHTML = `<div style="color: #64748b; font-style: italic;">No purchases yet...</div>`; return; }
-        let html = "";
-        h.forEach(x => html += `<div class="history-item">✨ <b>${x.user}</b> got <b>${x.item}</b> at ${x.time}</div>`);
-        box.innerHTML = html;
+        let box = document.getElementById("store-history-list"); let h = JSON.parse(localStorage.getItem("store_history") || "[]");
+        if(h.length === 0) { box.innerHTML = `<div style="color: #64748b; font-style: italic;">No items redeemed yet... | لا توجد مشتريات بعد...</div>`; return; }
+        box.innerHTML = h.map(x => `<div class="history-item">✨ <b>${x.user}</b> got <b>${x.item}</b> at ${x.time}</div>`).join("");
+    }
+
+    function sendPoke() {
+        let target = currentUser === "Mohamad" ? "Dima" : "Mohamad";
+        localStorage.setItem("poke_alert_" + target, `⚡ Your partner poked you! Wake up! | شريكك ينكزك!`); showToast("Poke Sent! ⚡ | تم إرسال النكزة!");
     }
 
     setInterval(() => {
         if(!currentUser) return;
-        let p = localStorage.getItem("poke_alert_" + currentUser);
-        if(p) { showToast(p); localStorage.removeItem("poke_alert_" + currentUser); }
-        let s = localStorage.getItem("store_alert_" + currentUser);
-        if(s) { showToast(s); loadStoreHistory(); localStorage.removeItem("store_alert_" + currentUser); loadState(); }
-        
-        // Handle persistent loser alert (Only shown to the loser)
-        let wWinner = localStorage.getItem("game_winner");
-        let pBanner = document.getElementById("persistent-banner");
-        if(wWinner && pBanner) {
-            if(wWinner !== currentUser) {
-                let winnerNameDis = wWinner === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
-                pBanner.innerText = `❌ خسرت السباق اليوم! ${winnerNameDis} أنهى جميع المهام قبلك وعليك تنفيذ الجائزة!`;
-                pBanner.classList.remove("hidden");
-            } else {
-                pBanner.classList.add("hidden");
-            }
-        }
-
-        // Handle persistent prize / partner prize banner
-        let prizeBanner = document.getElementById("persistent-prize-banner");
-        let winnerUser = localStorage.getItem("game_winner");
-        if(winnerUser) {
-            let winnerPrize = localStorage.getItem("winner_prize_" + winnerUser);
-            let fulfilled = localStorage.getItem("prize_fulfilled_" + winnerUser);
-            
-            if(winnerPrize && !fulfilled) {
-                let winnerDispName = winnerUser === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
-                if(winnerUser === currentUser) {
-                    prizeBanner.innerHTML = `🎁 جائزتك المربوحة من عجلة الحظ: <b>${winnerPrize}</b> <button onclick="fulfillPrize()" style="margin-top:5px; background:#059669; color:white; padding:4px 10px; border-radius:6px; font-size:11px; border:none; cursor:pointer;">تم التنفيذ ✅</button>`;
-                } else {
-                    prizeBanner.innerHTML = `👑 ${winnerDispName} فاز بالسباق وربح جائزة: <b>${winnerPrize}</b>. يجب تنفيذها! <button onclick="fulfillPrize()" style="margin-top:5px; background:#059669; color:white; padding:4px 10px; border-radius:6px; font-size:11px; border:none; cursor:pointer;">تم التنفيذ ✅</button>`;
-                }
-                prizeBanner.classList.remove("hidden");
-            } else {
-                prizeBanner.classList.add("hidden");
-            }
-        } else {
-            prizeBanner.classList.add("hidden");
-        }
+        let p = localStorage.getItem("poke_alert_" + currentUser); if(p) { showToast(p); localStorage.removeItem("poke_alert_" + currentUser); }
+        let s = localStorage.getItem("store_alert_" + currentUser); if(s) { showToast(s); loadStoreHistory(); localStorage.removeItem("store_alert_" + currentUser); loadState(); }
     }, 2000);
 
-    function fulfillPrize() {
-        let winnerUser = localStorage.getItem("game_winner") || currentUser;
-        localStorage.setItem("prize_fulfilled_" + winnerUser, "true");
-        let prizeBanner = document.getElementById("persistent-prize-banner");
-        if(prizeBanner) prizeBanner.classList.add("hidden");
-        showToast("Great! Prize marked as fulfilled ✅");
-    }
-
-    function sendPoke() {
-        let sender = currentUser === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
-        let target = currentUser === "Mohamad" ? "Dima" : "Mohamad";
-        localStorage.setItem("poke_alert_" + target, `⚡ ${sender} poked you! Wake up!`);
-        showToast("Poke sent! ⚡");
-    }
-
-    function getQuranDay() { return parseInt(localStorage.getItem("quran_current_day") || "1"); }
-    function devNextQuranDay() {
-        let d = getQuranDay() + 1;
-        localStorage.setItem("quran_current_day", d.toString());
-        showToast(`Skipped to Day ${d}! 🚀`);
-    }
-
-    function openQuranPage() {
-        let day = getQuranDay();
-        let p1Num = (day - 1) * 2 + 1;
-        let p2Num = p1Num + 1;
-
-        document.getElementById("quran-day-banner").innerText = `Day ${day} (Pages ${p1Num} & ${p2Num})`;
-        document.getElementById("p1-num-label").innerText = `Page ${p1Num}`;
-        document.getElementById("p2-num-label").innerText = `Page ${p2Num}`;
-
-        ["p1", "p2"].forEach(p => {
-            document.getElementById(`quran-${p}-ar`).innerText = "Loading... ⏳";
-            document.getElementById(`quran-${p}-en`).innerHTML = "<strong>English:</strong> Loading...";
-            document.getElementById(`quran-${p}-de`).innerHTML = "<strong>Deutsch:</strong> Lade...";
-            document.getElementById(`quran-${p}-tr`).innerHTML = "<strong>Transliteration:</strong> Loading...";
-        });
-
-        document.getElementById("main-screen").classList.add("hidden");
-        document.getElementById("quran-page").classList.remove("hidden");
-
-        fetchFullPageDetails(p1Num, "p1");
-        fetchFullPageDetails(p2Num, "p2");
-    }
-
-    function fetchFullPageDetails(pageNum, prefix) {
-        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/ar.alafasy`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById(`quran-${prefix}-ar`).innerText = d.data.ayahs.map(a => `${a.text} ﴿${a.numberInSurah}﴾`).join(" "); });
-
-        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/en.sahih`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById(`quran-${prefix}-en`).innerHTML = `<strong>English:</strong> ${d.data.ayahs.map(a => `${a.numberInSurah}.${a.text}`).join(" ")}`; });
-
-        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/de.aburida`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById(`quran-${prefix}-de`).innerHTML = `<strong>Deutsch:</strong> ${d.data.ayahs.map(a => `${a.numberInSurah}.${a.text}`).join(" ")}`; });
-
-        fetch(`https://api.alquran.cloud/v1/page/${pageNum}/en.transliteration`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById(`quran-${prefix}-tr`).innerHTML = `<strong>Transliteration:</strong> ${d.data.ayahs.map(a => `${a.numberInSurah}.${a.text}`).join(" ")}`; })
-            .catch(() => { document.getElementById(`quran-${prefix}-tr`).innerHTML = `<strong>Transliteration:</strong> Not available`; });
-    }
-
-    function closeQuranPage() { document.getElementById("quran-page").classList.add("hidden"); document.getElementById("main-screen").classList.remove("hidden"); }
-
-    function finishQuranReading() {
-        if(localStorage.getItem("task_9_" + currentUser) === "true") return;
-        let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-        localStorage.setItem("coins_" + currentUser, (coins + 5).toString());
-        localStorage.setItem("task_9_" + currentUser, "true");
-        closeQuranPage(); loadState(); showToast("Quran completed! +5 pts ✨");
-    }
-
-    function openAyatKursiPage() {
-        document.getElementById("prayer-page").classList.add("hidden");
-        document.getElementById("ayat-kursi-page").classList.remove("hidden");
-
-        document.getElementById("ak-ar").innerText = "Loading... ⏳";
-        document.getElementById("ak-en").innerHTML = "<strong>English:</strong> Loading...";
-        document.getElementById("ak-de").innerHTML = "<strong>Deutsch:</strong> Lade...";
-        document.getElementById("ak-tr").innerHTML = "<strong>Transliteration:</strong> Loading...";
-
-        fetch(`https://api.alquran.cloud/v1/ayah/262/ar.alafasy`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById("ak-ar").innerText = d.data.text + " ﴿٢٥٥﴾"; });
-        fetch(`https://api.alquran.cloud/v1/ayah/262/en.sahih`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById("ak-en").innerHTML = `<strong>English:</strong> ${d.data.text}`; });
-        fetch(`https://api.alquran.cloud/v1/ayah/262/de.aburida`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById("ak-de").innerHTML = `<strong>Deutsch:</strong> ${d.data.text}`; });
-        fetch(`https://api.alquran.cloud/v1/ayah/262/en.transliteration`)
-            .then(res => res.json())
-            .then(d => { if(d && d.data) document.getElementById("ak-tr").innerHTML = `<strong>Transliteration:</strong> ${d.data.text}`; })
-            .catch(() => { document.getElementById("ak-tr").innerHTML = `<strong>Transliteration:</strong> Not available`; });
-    }
-    function closeAyatKursiPage() { document.getElementById("ayat-kursi-page").classList.add("hidden"); document.getElementById("prayer-page").classList.remove("hidden"); }
-
-    function completeTask(id) {
-        if(localStorage.getItem("task_" + id + "_" + currentUser) === "true") return;
-        localStorage.setItem("task_" + id + "_" + currentUser, "true");
-        loadState(); showToast("Task done ✅");
-    }
-    function completeTaskWithPoints(id, pts) {
-        if(localStorage.getItem("task_" + id + "_" + currentUser) === "true") return;
-        let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-        localStorage.setItem("coins_" + currentUser, (coins + pts).toString());
-        localStorage.setItem("task_" + id + "_" + currentUser, "true");
-        loadState(); showToast(`Task done! +${pts} pts ✨`);
-    }
-    function completeSideTaskWithPoints(sId, pts) {
-        if(localStorage.getItem("side_task_" + sId + "_" + currentUser) === "true") return;
-        let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-        localStorage.setItem("coins_" + currentUser, (coins + pts).toString());
-        localStorage.setItem("side_task_" + sId + "_" + currentUser, "true");
-        loadState(); showToast(`Sunnah done! +${pts} pts ✨`);
-    }
-
-    function openPrayerPage(id, name) {
-        activePrayerTaskId = id; activePrayerName = name;
-        document.getElementById("prayer-page-title").innerText = name + " Azkar";
-        document.getElementById("main-screen").classList.add("hidden");
-        document.getElementById("prayer-page").classList.remove("hidden");
-    }
-    function closePrayerPage() { document.getElementById("prayer-page").classList.add("hidden"); document.getElementById("main-screen").classList.remove("hidden"); }
-
-    function finishPrayerWithPoints() {
-        if(localStorage.getItem("task_" + activePrayerTaskId + "_" + currentUser) === "true") return;
-        let coins = parseInt(localStorage.getItem("coins_" + currentUser) || "0");
-        localStorage.setItem("coins_" + currentUser, (coins + 3).toString());
-        localStorage.setItem("task_" + activePrayerTaskId + "_" + currentUser, "true");
-        closePrayerPage(); loadState(); showToast("Prayer recorded! +3 pts 🌟");
-    }
-
-    function openWheelPage() {
-        let currentGameWinner = localStorage.getItem("game_winner");
-        if(!currentGameWinner || currentGameWinner !== currentUser) {
-            showToast("🔒 عجلة الحظ مخصصة للفائز بالسباق فقط!");
-            return;
-        }
-        document.getElementById("main-screen").classList.add("hidden");
-        document.getElementById("wheel-page").classList.remove("hidden");
-        let wonPrize = localStorage.getItem("winner_prize_" + currentUser);
-        if(wonPrize) {
-            document.getElementById("wheel-display").innerText = "🎉 Your Prize to claim: " + wonPrize;
-        }
-    }
-    function closeWheelPage() { document.getElementById("wheel-page").classList.add("hidden"); document.getElementById("main-screen").classList.remove("hidden"); }
-    function spinWheel() {
-        let w = rewards[Math.floor(Math.random() * rewards.length)];
-        document.getElementById("wheel-display").innerText = "🎉 Won: " + w;
-        localStorage.setItem("winner_prize_" + currentUser, w);
-        localStorage.removeItem("prize_fulfilled_" + currentUser);
-        
-        let partner = currentUser === "Mohamad" ? "Dima" : "Mohamad";
-        let winnerName = currentUser === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
-        localStorage.setItem("store_alert_" + partner, `👑 ${winnerName} won the race & spun the wheel! Prize: ${w}. You must fulfill it!`);
-        
-        document.getElementById("spin-btn").disabled = true;
-    }
-
-    function adminResetQuran() { localStorage.setItem("quran_current_day", "1"); loadState(); showToast("Quran reset!"); closeAdminModal(); }
-    function adminResetPoints() { localStorage.setItem("coins_Mohamad", "0"); localStorage.setItem("coins_Dima", "0"); loadState(); showToast("Points reset!"); closeAdminModal(); }
+    function openAdminModal() { document.getElementById("admin-modal").classList.remove("hidden"); }
+    function closeAdminModal() { document.getElementById("admin-modal").classList.add("hidden"); }
+    
     function adminResetTasksOnly() {
         for(let i=1; i<=10; i++) { localStorage.removeItem("task_"+i+"_Mohamad"); localStorage.removeItem("task_"+i+"_Dima"); }
         for(let s=1; s<=5; s++) { localStorage.removeItem("side_task_"+s+"_Mohamad"); localStorage.removeItem("side_task_"+s+"_Dima"); }
-        localStorage.removeItem("game_winner");
-        localStorage.removeItem("winner_prize_Mohamad");
-        localStorage.removeItem("winner_prize_Dima");
-        localStorage.removeItem("prize_fulfilled_Mohamad");
-        localStorage.removeItem("prize_fulfilled_Dima");
-        let pBanner = document.getElementById("persistent-banner");
-        let prizeBanner = document.getElementById("persistent-prize-banner");
-        if(pBanner) pBanner.classList.add("hidden");
-        if(prizeBanner) prizeBanner.classList.add("hidden");
-        loadState(); showToast("Tasks reset!"); closeAdminModal();
+        localStorage.removeItem("gold_opp_Mohamad"); localStorage.removeItem("gold_opp_Dima"); localStorage.removeItem("post_prayer_Mohamad"); localStorage.removeItem("post_prayer_Dima");
+        localStorage.removeItem("game_winner"); localStorage.removeItem("winner_prize_Mohamad"); localStorage.removeItem("winner_prize_Dima"); localStorage.removeItem("prize_fulfilled_Mohamad"); localStorage.removeItem("prize_fulfilled_Dima");
+        loadState(); showToast("Tasks Reset! | تمت إعادة تعيين المهام"); closeAdminModal();
     }
+    function adminResetPoints() { localStorage.setItem("coins_Mohamad", "0"); localStorage.setItem("coins_Dima", "0"); loadState(); showToast("Points Reset! | تم تصفير النقاط"); closeAdminModal(); }
+    function adminResetQuran() { showToast("Quran Reset | تم تصفير القرآن"); closeAdminModal(); }
 
-    function loadPrayerTimes() {
-        prayerTimesCache["Fajr Prayer"] = "05:00";
-        prayerTimesCache["Dhuhr Prayer"] = "12:30";
-        prayerTimesCache["Asr Prayer"] = "15:45";
-        prayerTimesCache["Maghrib Prayer"] = "18:15";
-        prayerTimesCache["Isha Prayer"] = "19:45";
-        for(let i=2; i<=6; i++) {
-            let el = document.getElementById("time-p-" + i);
-            if(el) el.innerText = Object.values(prayerTimesCache)[i-2];
-        }
+    function fulfillPrize() {
+        let w = localStorage.getItem("game_winner") || currentUser;
+        localStorage.setItem("prize_fulfilled_" + w, "true");
+        document.getElementById("persistent-prize-banner").classList.add("hidden");
+        showToast("Prize Fulfilled ✅ | تم تنفيذ الجائزة!");
     }
 
     function loadState() {
-        let mohamadAllDone = true;
-        let dimaAllDone = true;
-
+        let mAll = true, dAll = true;
         for(let i=1; i<=10; i++) {
-            let m = localStorage.getItem("task_"+i+"_Mohamad") === "true";
-            let d = localStorage.getItem("task_"+i+"_Dima") === "true";
-            
-            let mBox = document.getElementById(`status-${i}-Mohamad`);
-            let dBox = document.getElementById(`status-${i}-Dima`);
-            
-            if(mBox) {
-                mBox.className = "mini-badge " + (m ? "bg-done" : "bg-not");
-                mBox.innerHTML = `Mohamad: ${m ? '✅' : '❌'}`;
-            }
-            if(dBox) {
-                dBox.className = "mini-badge " + (d ? "bg-done" : "bg-not");
-                dBox.innerHTML = `Dima 🤍: ${d ? '✅' : '❌'}`;
-            }
-
-            if(!m) mohamadAllDone = false;
-            if(!d) dimaAllDone = false;
-
-            let btn = document.getElementById("btn-task-" + i);
-            let myTaskStatus = localStorage.getItem("task_"+i+"_"+currentUser) === "true";
-            if(btn && i !== 2 && i !== 3 && i !== 4 && i !== 5 && i !== 6) {
-                if(myTaskStatus) {
-                    btn.disabled = true; 
-                    btn.innerText = "Done ✅";
-                } else {
-                    btn.disabled = false;
-                }
-            }
+            let m = localStorage.getItem("task_"+i+"_Mohamad") === "true", d = localStorage.getItem("task_"+i+"_Dima") === "true";
+            let mb = document.getElementById(`status-${i}-Mohamad`), db = document.getElementById(`status-${i}-Dima`);
+            if(mb) { mb.className = "mini-badge " + (m ? "bg-done" : "bg-not"); mb.innerHTML = `Mo: ${m ? '✅' : '❌'}`; }
+            if(db) { db.className = "mini-badge " + (d ? "bg-done" : "bg-not"); db.innerHTML = `Di 🤍: ${d ? '✅' : '❌'}`; }
+            if(!m) mAll = false; if(!d) dAll = false;
+            let btn = document.getElementById("btn-task-" + i); if(btn) { let st = localStorage.getItem("task_"+i+"_"+currentUser) === "true"; btn.disabled = st; if(st) btn.innerText = "Done ✅ | تم"; }
         }
-
         for(let s=1; s<=5; s++) {
-            let m = localStorage.getItem("side_task_"+s+"_Mohamad") === "true";
-            let d = localStorage.getItem("side_task_"+s+"_Dima") === "true";
-            
-            let mBox = document.getElementById(`status-side-${s}-Mohamad`);
-            let dBox = document.getElementById(`status-side-${s}-Dima`);
-
-            if(mBox) {
-                mBox.className = "mini-badge " + (m ? "bg-done" : "bg-not");
-                mBox.innerHTML = `Mohamad: ${m ? '✅' : '❌'}`;
-            }
-            if(dBox) {
-                dBox.className = "mini-badge " + (d ? "bg-done" : "bg-not");
-                dBox.innerHTML = `Dima 🤍: ${d ? '✅' : '❌'}`;
-            }
-
-            let b = document.getElementById("btn-side-"+s);
-            let mySideStatus = localStorage.getItem("side_task_"+s+"_"+currentUser) === "true";
-            if(b) {
-                if(mySideStatus) {
-                    b.disabled = true; 
-                    b.innerText = "Done ✅";
-                } else {
-                    b.disabled = false;
-                }
-            }
+            let m = localStorage.getItem("side_task_"+s+"_Mohamad") === "true", d = localStorage.getItem("side_task_"+s+"_Dima") === "true";
+            let mb = document.getElementById(`status-side-${s}-Mohamad`), db = document.getElementById(`status-side-${s}-Dima`);
+            if(mb) { mb.className = "mini-badge " + (m ? "bg-done" : "bg-not"); mb.innerHTML = `Mo: ${m ? '✅' : '❌'}`; }
+            if(db) { db.className = "mini-badge " + (d ? "bg-done" : "bg-not"); db.innerHTML = `Di 🤍: ${d ? '✅' : '❌'}`; }
+            let b = document.getElementById("btn-side-"+s); if(b) { let st = localStorage.getItem("side_task_"+s+"_"+currentUser) === "true"; b.disabled = st; if(st) b.innerText = "Done ✅ | تم"; }
         }
+        let gM = localStorage.getItem("gold_opp_Mohamad") === "true", gD = localStorage.getItem("gold_opp_Dima") === "true";
+        let smb = document.getElementById("status-gold-Mohamad"); if(smb) { smb.className = "mini-badge " + (gM ? "bg-done" : "bg-not"); smb.innerHTML = `Mo: ${gM ? '✅' : '❌'}`; }
+        let sdb = document.getElementById("status-gold-Dima"); if(sdb) { sdb.className = "mini-badge " + (gD ? "bg-done" : "bg-not"); sdb.innerHTML = `Di 🤍: ${gD ? '✅' : '❌'}`; }
+        let gb = document.getElementById("btn-gold"); if(gb) { gb.disabled = localStorage.getItem("gold_opp_"+currentUser)==="true"; if(gb.disabled) gb.innerText = "Done ✅ | تم"; }
+
+        let pM = localStorage.getItem("post_prayer_Mohamad") === "true", pD = localStorage.getItem("post_prayer_Dima") === "true";
+        let pmb = document.getElementById("status-postprayer-Mohamad"); if(pmb) { pmb.className = "mini-badge " + (pM ? "bg-done" : "bg-not"); pmb.innerHTML = `Mo: ${pM ? '✅' : '❌'}`; }
+        let pdb = document.getElementById("status-postprayer-Dima"); if(pdb) { pdb.className = "mini-badge " + (pD ? "bg-done" : "bg-not"); pdb.innerHTML = `Di 🤍: ${pD ? '✅' : '❌'}`; }
+        let pb = document.getElementById("btn-postprayer"); if(pb) { pb.disabled = localStorage.getItem("post_prayer_"+currentUser)==="true"; if(pb.disabled) pb.innerText = "Done ✅ | تم"; }
 
         document.getElementById("user-coins").innerText = localStorage.getItem("coins_" + currentUser) || "0";
 
-        // Check Winner Logic
-        let currentGameWinner = localStorage.getItem("game_winner");
-        if(!currentGameWinner) {
-            if(mohamadAllDone && !dimaAllDone) {
-                localStorage.setItem("game_winner", "Mohamad");
-            } else if(dimaAllDone && !mohamadAllDone) {
-                localStorage.setItem("game_winner", "Dima");
-            }
-        }
-
-        currentGameWinner = localStorage.getItem("game_winner");
-        const mohamadBanner = document.getElementById("banner-mohamad");
-        const dimaBanner = document.getElementById("banner-dima");
-
-        if(currentGameWinner) {
-            if(currentGameWinner === "Mohamad") {
-                mohamadBanner.className = "mini-badge bg-done";
-                mohamadBanner.innerHTML = `Mohamad: Winner 🏆`;
-                dimaBanner.className = "mini-badge bg-loser";
-                dimaBanner.innerHTML = `Dima 🤍: Loser ❌`;
+        let w = localStorage.getItem("game_winner");
+        if(!w) { if(mAll && !dAll) localStorage.setItem("game_winner", "Mohamad"); else if(dAll && !mAll) localStorage.setItem("game_winner", "Dima"); w = localStorage.getItem("game_winner"); }
+        
+        let mBan = document.getElementById("banner-mohamad"), dBan = document.getElementById("banner-dima");
+        let pBanner = document.getElementById("persistent-banner");
+        
+        if(w) { 
+            mBan.className = "mini-badge " + (w === "Mohamad" ? "bg-done" : "bg-loser"); mBan.innerHTML = `Mohamad: ${w === "Mohamad" ? "Winner 🏆" : "Loser ❌"}`; 
+            dBan.className = "mini-badge " + (w === "Dima" ? "bg-done" : "bg-loser"); dBan.innerHTML = `Dima 🤍: ${w === "Dima" ? "Winner 🏆" : "Loser ❌"}`; 
+            
+            if(w === currentUser) {
+                pBanner.innerText = `🏆 You won the race today! Spin the Wheel. | لقد فزت بالسباق اليوم! لف العجلة.`;
+                pBanner.className = "persistent-loser-banner banner-success";
             } else {
-                dimaBanner.className = "mini-badge bg-done";
-                dimaBanner.innerHTML = `Dima 🤍: Winner 🏆`;
-                mohamadBanner.className = "mini-badge bg-loser";
-                mohamadBanner.innerHTML = `Mohamad: Loser ❌`;
+                let winnerName = w === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
+                pBanner.innerText = `❌ You lost the race today! ${winnerName} finished first. | خسرت السباق اليوم! ${winnerName} أنهى المهام أولاً.`;
+                pBanner.className = "persistent-loser-banner banner-error";
             }
-        } else {
-            mohamadBanner.className = "mini-badge bg-not";
-            mohamadBanner.innerHTML = `Mohamad: ${mohamadAllDone ? 'Finished 🏆' : 'Racing ⏳'}`;
-            dimaBanner.className = "mini-badge bg-not";
-            dimaBanner.innerHTML = `Dima 🤍: ${dimaAllDone ? 'Finished 🏆' : 'Racing ⏳'}`;
+            pBanner.classList.remove("hidden");
+        } else { 
+            mBan.className = "mini-badge bg-not"; mBan.innerHTML = `Mo: ${mAll ? 'Finished 🏆' : 'Racing ⏳'}`; 
+            dBan.className = "mini-badge bg-not"; dBan.innerHTML = `Di 🤍: ${dAll ? 'Finished 🏆' : 'Racing ⏳'}`; 
+            pBanner.classList.add("hidden");
         }
 
-        let myAllTasksDone = true;
-        for(let i=1; i<=10; i++) {
-            if(localStorage.getItem("task_"+i+"_"+currentUser) !== "true") myAllTasksDone = false;
-        }
+        let prizeBanner = document.getElementById("persistent-prize-banner");
+        let winnerPrize = localStorage.getItem("winner_prize_" + w);
+        let fulfilled = localStorage.getItem("prize_fulfilled_" + w);
 
-        let wheelStatusText = document.getElementById("wheel-status-text");
-        if(currentGameWinner === currentUser) {
-            if(wheelStatusText) wheelStatusText.innerText = "🎉 عجلة الحظ مفتوحة لك!";
-        } else if(currentGameWinner) {
-            if(wheelStatusText) wheelStatusText.innerText = "🔒 فاز بها شريكك";
+        if(w && winnerPrize && !fulfilled) {
+            if(w === currentUser) {
+                 prizeBanner.innerHTML = `🎁 Your Prize | جائزتك: <b>${winnerPrize}</b> <br><button onclick="fulfillPrize()" style="margin-top:8px; background:#059669; color:white; padding:6px 12px; border-radius:6px; border:none; cursor:pointer;">Mark as Done ✅ | تم التنفيذ</button>`;
+            } else {
+                 let winnerDispName = w === "Mohamad" ? "Mohamad" : "Dima 🤍👸🏻";
+                 prizeBanner.innerHTML = `👑 ${winnerDispName} won: <b>${winnerPrize}</b>. You must fulfill it! | يجب عليك تنفيذها!<br><button onclick="fulfillPrize()" style="margin-top:8px; background:#059669; color:white; padding:6px 12px; border-radius:6px; border:none; cursor:pointer;">Mark as Done ✅ | تم التنفيذ</button>`;
+            }
+            prizeBanner.classList.remove("hidden");
         } else {
-            if(wheelStatusText) wheelStatusText.innerText = "أكمل المهام لفتحها";
+            prizeBanner.classList.add("hidden");
         }
     }
-    function changeLanguage(l) {}
 </script>
-
 </body>
 </html>
