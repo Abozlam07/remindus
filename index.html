@@ -108,6 +108,8 @@ select,input{font-size:16px;min-height:44px}
 .burst{position:fixed;bottom:-30px;font-size:26px;z-index:1001;pointer-events:none;animation:rise 1.8s ease-out forwards}
 @keyframes rise{to{transform:translateY(-90vh) rotate(25deg);opacity:0}}
 @media(prefers-reduced-motion:reduce){.burst{display:none}*{transition:none!important}}
+.stk{width:52px;text-align:end;font-size:12px;white-space:nowrap}
+.pg-info{font-size:11px;color:var(--muted);line-height:1.7}
 </style>
 </head>
 <body>
@@ -147,7 +149,7 @@ select,input{font-size:16px;min-height:44px}
       <div class="wheel-box" onclick="openWheelPage()">
         <div style="font-weight:700;font-size:11px;color:var(--primary)">Wheel of Fortune | عجلة الحظ 🎡</div>
         <div class="wheel-icon">🎁</div>
-        <div style="font-size:10px;opacity:.8">Complete tasks | أكمل المهام</div>
+        <div id="wheel-status-text" style="font-size:10px;opacity:.85;min-height:26px;line-height:1.3;text-align:center">...</div>
       </div>
       <div class="right-box">
         <div class="race">
@@ -162,8 +164,9 @@ select,input{font-size:16px;min-height:44px}
     <div id="persistent-prize-banner" class="banner banner-prize hidden"></div>
 
     <div class="progress">
-      <div class="pg-row"><span>Mo</span><div class="pg-bar"><div id="pg-Mohamad" class="pg-fill"></div></div><span id="pgn-Mohamad" class="pg-num">0/10</span></div>
-      <div class="pg-row"><span>Di 🤍</span><div class="pg-bar"><div id="pg-Dima" class="pg-fill"></div></div><span id="pgn-Dima" class="pg-num">0/10</span></div>
+      <div class="pg-row"><span>Mo</span><div class="pg-bar"><div id="pg-Mohamad" class="pg-fill"></div></div><span id="pgn-Mohamad" class="pg-num">0/10</span><span id="stk-Mohamad" class="stk">🔥0</span></div>
+      <div class="pg-row"><span>Di 🤍</span><div class="pg-bar"><div id="pg-Dima" class="pg-fill"></div></div><span id="pgn-Dima" class="pg-num">0/10</span><span id="stk-Dima" class="stk">🔥0</span></div>
+      <div id="cycle-info" class="pg-info"></div>
     </div>
 
     <div class="nav-tabs">
@@ -176,9 +179,17 @@ select,input{font-size:16px;min-height:44px}
       <div class="pt-card">
         <div class="pt-main"><div id="pt-info"></div><button class="pt-gear" onclick="togglePtLoc()" aria-label="Prayer location">📍</button></div>
         <div id="pt-loc" class="pt-form hidden">
-          <button onclick="useGps()">📍 Use my location | موقعي الحالي</button>
-          <div class="pt-row"><input id="pt-city" placeholder="City | المدينة"><input id="pt-country" placeholder="Country | الدولة"></div>
+          <input id="pt-city" list="city-list" placeholder="Type or pick a city | اكتب أو اختر مدينة" autocomplete="off">
+          <datalist id="city-list"></datalist>
+          <select id="pt-method" aria-label="Calculation method">
+            <option value="3">Muslim World League | رابطة العالم الإسلامي</option>
+            <option value="4">Umm al-Qura | أم القرى</option>
+            <option value="5">Egyptian | الهيئة المصرية</option>
+            <option value="2">ISNA | أمريكا الشمالية</option>
+            <option value="13">Diyanet | تركيا</option>
+          </select>
           <button onclick="saveCity()" style="background:var(--blue)">Save city | حفظ المدينة</button>
+          <button onclick="useGps()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">📍 Try GPS | الموقع التلقائي</button>
         </div>
       </div>
       <div id="tasks-container"></div>
@@ -247,6 +258,7 @@ select,input{font-size:16px;min-height:44px}
       <button onclick="adminResetQuran()" style="background:var(--gold)">📖 Reset Quran Pages</button>
       <button onclick="adminResetPoints()" style="background:#f59e0b">🪙 Reset All Points</button>
       <button onclick="adminResetTasks()" style="background:var(--bad)">🔄 Reset Daily Tasks</button>
+      <button onclick="adminResetStreaks()" style="background:#7c3aed">🔥 Reset Streaks & Wheel Cycle</button>
       <button onclick="toggleAdmin(false)" style="background:#64748b;margin-top:12px">Close ❌ | إغلاق</button>
     </div>
   </div>
@@ -385,6 +397,8 @@ function logout() {
 function initApp() {
   $("welcome-user").textContent = currentUser === "Dima" ? "Welcome, Dima 🤍👸🏻 | أهلاً ديما" : "Welcome, Mohamad | أهلاً محمد";
   $("admin-gear-btn").classList.toggle("hidden", currentUser !== "Mohamad");
+  rollover();
+  fillCities();
   renderTasks();
   renderPrayerTimes();
   loadPrayerTimes();
@@ -512,41 +526,136 @@ function openQuran() {
     });
 }
 
-/* ---------- Wheel ---------- */
+/* ---------- Daily reset, streaks & 5-day wheel ---------- */
+const WEEK_BONUS = 30;   // points for every 7-day streak
+const CYCLE_DAYS = 5;    // wheel opens for the leader every 5 days
+function dayKey(d) {
+  d = d || new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function daysBetween(a, b) {
+  const pa = a.split("-").map(Number), pb = b.split("-").map(Number);
+  return Math.round((new Date(pb[0], pb[1] - 1, pb[2]) - new Date(pa[0], pa[1] - 1, pa[2])) / 86400000);
+}
+function num(k) { return parseInt(store.get(k) || "0", 10) || 0; }
+function userAllDone(u) {
+  for (let i = 1; i <= 10; i++) if (!isDone("task_" + i, u)) return false;
+  return true;
+}
+function resetTasksState() {
+  USERS.forEach(u => {
+    for (let i = 1; i <= 10; i++) store.del("task_" + i + "_" + u);
+    for (let n = 1; n <= 5; n++) store.del("side_task_" + n + "_" + u);
+    ["gold_opp_", "post_prayer_"].forEach(k => store.del(k + u));
+  });
+  store.del("game_winner");
+}
+function rollover() {
+  const today = dayKey();
+  const last = store.get("last_day");
+  if (!last) { store.set("last_day", today); return; }
+  if (last === today) return;
+  const gap = Math.max(1, daysBetween(last, today));
+  const msgs = { Mohamad: [], Dima: [] };
+
+  // streaks (+ weekly bonus)
+  USERS.forEach(u => {
+    let st = num("streak_" + u);
+    if (userAllDone(u)) {
+      st++;
+      if (st % 7 === 0) {
+        store.set("coins_" + u, String(getCoins(u) + WEEK_BONUS));
+        msgs[u].push(`🔥 ${st}-day streak! +${WEEK_BONUS} points | مكافأة السلسلة`);
+      }
+    } else st = 0;
+    if (gap > 1) st = 0;
+    store.set("streak_" + u, String(st));
+  });
+
+  // race wins -> 5-day cycle
+  const winner = store.get("game_winner");
+  if (winner) store.set("wins_" + winner, String(num("wins_" + winner) + 1));
+  let cd = num("cycle_days") + gap;
+  if (cd >= CYCLE_DAYS) {
+    const m = num("wins_Mohamad"), d = num("wins_Dima");
+    const who = m > d ? ["Mohamad"] : d > m ? ["Dima"] : (m > 0 ? USERS : []);
+    who.forEach(u => {
+      store.set("wheel_token_" + u, "true");
+      msgs[u].push("🎡 Your wheel is ready! | عجلتك جاهزة!");
+    });
+    USERS.forEach(u => store.del("wins_" + u));
+    cd = 0;
+  }
+  store.set("cycle_days", String(cd));
+
+  resetTasksState();
+  store.set("last_day", today);
+  USERS.forEach(u => { if (msgs[u].length) store.set("store_alert_" + u, msgs[u].join("  •  ")); });
+}
+
+/* ---------- Wheel & prizes ---------- */
+function getPrizes() {
+  try { const a = JSON.parse(store.get("prizes") || "[]"); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+}
+function addPrize(w, prize) {
+  const a = getPrizes();
+  a.push({ id: Date.now(), w, prize });
+  store.set("prizes", JSON.stringify(a));
+}
+function fulfillPrize(id) {
+  store.set("prizes", JSON.stringify(getPrizes().filter(p => p.id !== id)));
+  loadState();
+  showToast("Prize Fulfilled ✅ | تم تنفيذ الجائزة!");
+}
 function openWheelPage() {
-  if (store.get("game_winner") !== currentUser) { showToast("🔒 Wheel is locked! Only the winner can spin. | العجلة مقفلة، للفائز فقط."); return; }
-  const prize = store.get("winner_prize_" + currentUser);
-  $("wheel-display").textContent = prize ? "🎉 Your Prize | جائزتك: " + prize : "Tap to spin! | اضغط للف العجلة 🎁";
-  $("spin-btn").disabled = !!prize;
+  if (store.get("wheel_token_" + currentUser) !== "true") {
+    showToast(`🔒 The wheel opens every ${CYCLE_DAYS} days for the one ahead. | العجلة بتفتح كل ${CYCLE_DAYS} أيام للمتقدم.`);
+    return;
+  }
+  $("wheel-display").textContent = "Tap to spin! | اضغط للف العجلة 🎁";
+  $("spin-btn").disabled = false;
   show("wheel-page");
 }
 function spinWheel() {
-  if (store.get("winner_prize_" + currentUser)) return;
-  const btn = $("spin-btn");
-  btn.disabled = true;
+  if (store.get("wheel_token_" + currentUser) !== "true") return;
+  $("spin-btn").disabled = true;
+  store.del("wheel_token_" + currentUser);
   $("wheel-display").textContent = "🎡 ...";
+  const me = currentUser;
   setTimeout(() => {
     const w = rewards[Math.floor(Math.random() * rewards.length)];
+    addPrize(me, w);
+    const partner = me === "Mohamad" ? "Dima" : "Mohamad";
+    store.set("store_alert_" + partner, `👑 ${DISPLAY[me]} spun the wheel! Prize: ${w} | لف العجلة!`);
     $("wheel-display").textContent = "🎉 You Won | لقد ربحت: " + w;
-    store.set("winner_prize_" + currentUser, w);
-    store.del("prize_fulfilled_" + currentUser);
-    const partner = currentUser === "Mohamad" ? "Dima" : "Mohamad";
-    store.set("store_alert_" + partner, `👑 Won the race and spun the wheel! Prize: ${w} | فاز ولف العجلة!`);
+    buzz();
+    burst();
   }, 1000);
-}
-function fulfillPrize() {
-  const w = store.get("game_winner");
-  if (w) store.set("prize_fulfilled_" + w, "true");
-  loadState();
-  showToast("Prize Fulfilled ✅ | تم تنفيذ الجائزة!");
 }
 
 /* ---------- Prayer times ---------- */
 const PRAYERS = { 2: "Fajr", 3: "Dhuhr", 4: "Asr", 5: "Maghrib", 6: "Isha" };
 const SUNNAH_PRAYER = { 1: "Fajr", 2: "Dhuhr", 3: "Maghrib", 4: "Isha", 5: "Isha" };
 const PRAYER_AR = { Fajr: "الفجر", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" };
+const CITIES = [
+  ["Damascus", 33.513, 36.292], ["Aleppo", 36.202, 37.134], ["Homs", 34.730, 36.709], ["Latakia", 35.519, 35.790],
+  ["Beirut", 33.894, 35.502], ["Amman", 31.954, 35.910], ["Jerusalem", 31.768, 35.214], ["Gaza", 31.502, 34.467],
+  ["Cairo", 30.044, 31.236], ["Baghdad", 33.315, 44.366], ["Riyadh", 24.714, 46.675], ["Jeddah", 21.543, 39.173],
+  ["Mecca", 21.389, 39.858], ["Medina", 24.468, 39.614], ["Dubai", 25.205, 55.271], ["Abu Dhabi", 24.453, 54.377],
+  ["Doha", 25.286, 51.533], ["Kuwait City", 29.376, 47.977], ["Manama", 26.228, 50.586], ["Muscat", 23.588, 58.383],
+  ["Casablanca", 33.573, -7.590], ["Tunis", 36.806, 10.182], ["Algiers", 36.754, 3.059], ["Tripoli", 32.887, 13.191],
+  ["Khartoum", 15.500, 32.560], ["Istanbul", 41.008, 28.978], ["Ankara", 39.933, 32.860], ["Gaziantep", 37.066, 37.383],
+  ["Berlin", 52.520, 13.405], ["Hamburg", 53.551, 9.994], ["Munich", 48.137, 11.576], ["Cologne", 50.938, 6.960],
+  ["Frankfurt", 50.110, 8.682], ["Stuttgart", 48.775, 9.182], ["Düsseldorf", 51.228, 6.774], ["Dortmund", 51.514, 7.468],
+  ["Vienna", 48.208, 16.374], ["Zurich", 47.377, 8.541], ["Stockholm", 59.329, 18.069], ["Copenhagen", 55.676, 12.568],
+  ["Amsterdam", 52.370, 4.895], ["Brussels", 50.850, 4.352], ["Paris", 48.857, 2.352], ["London", 51.507, -0.128],
+  ["Toronto", 43.653, -79.383], ["New York", 40.713, -74.006]
+];
+const METHOD_ANGLES = { 2: { f: 15, i: 15 }, 3: { f: 18, i: 17 }, 4: { f: 18.5, i: "90min" }, 5: { f: 19.5, i: 17.5 }, 13: { f: 18, i: 17 } };
+const firedPrayers = new Set();
 let prayerData = null;
 
+function fillCities() { $("city-list").innerHTML = CITIES.map(c => `<option value="${c[0]}">`).join(""); }
 function todayKey() {
   const d = new Date();
   return `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
@@ -567,28 +676,74 @@ function toDate(t, nextDay) {
   if (nextDay) d.setDate(d.getDate() + 1);
   return d;
 }
+
+/* Offline fallback: standard astronomical calculation (uses the device time zone) */
+function calcLocal(lat, lng, method) {
+  const M = METHOD_ANGLES[method] || METHOD_ANGLES[3];
+  const R = Math.PI / 180;
+  const sin = x => Math.sin(x * R), cos = x => Math.cos(x * R), tan = x => Math.tan(x * R);
+  const acos = x => Math.acos(x) / R, asin = x => Math.asin(x) / R, atan2 = (y, x) => Math.atan2(y, x) / R;
+  const fix = (a, b) => { a = a - b * Math.floor(a / b); return a < 0 ? a + b : a; };
+  const now = new Date();
+  const tz = -now.getTimezoneOffset() / 60;
+  let yy = now.getFullYear(), mm = now.getMonth() + 1;
+  const day = now.getDate();
+  if (mm <= 2) { yy--; mm += 12; }
+  const A = Math.floor(yy / 100), B = 2 - A + Math.floor(A / 4);
+  const jd = Math.floor(365.25 * (yy + 4716)) + Math.floor(30.6001 * (mm + 1)) + day + B - 1524.5 - lng / 360;
+  const D = jd - 2451545.0;
+  const g = fix(357.529 + 0.98560028 * D, 360), q = fix(280.459 + 0.98564736 * D, 360);
+  const L = fix(q + 1.915 * sin(g) + 0.020 * sin(2 * g), 360);
+  const e = 23.439 - 0.00000036 * D;
+  const RA = fix(atan2(cos(e) * sin(L), cos(L)) / 15, 24);
+  const decl = asin(sin(e) * sin(L));
+  const noon = fix(12 - (q / 15 - RA), 24) + tz - lng / 15;
+  const T = ang => acos((-sin(ang) - sin(decl) * sin(lat)) / (cos(decl) * cos(lat))) / 15;
+  const asrAng = -Math.atan(1 / (1 + tan(Math.abs(lat - decl)))) / R;
+  const sunset = noon + T(0.833);
+  const raw = { Fajr: noon - T(M.f), Dhuhr: noon, Asr: noon + T(asrAng), Maghrib: sunset, Isha: M.i === "90min" ? sunset + 1.5 : noon + T(M.i) };
+  const out = {};
+  Object.keys(raw).forEach(k => {
+    const h = fix(raw[k], 24);
+    if (isNaN(h)) { out[k] = "--:--"; return; }
+    const mins = Math.round(h * 60);
+    out[k] = String(Math.floor(mins / 60) % 24).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
+  });
+  return out;
+}
+function localHijri() {
+  try { return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn", { day: "numeric", month: "long", year: "numeric" }).format(new Date()); } catch (e) { return ""; }
+}
+
 async function loadPrayerTimes(force) {
   const locRaw = store.get("pt_loc");
-  if (!locRaw) { prayerData = null; renderPrayerTimes(); return; }
+  let loc = null;
+  try { loc = JSON.parse(locRaw || "null"); } catch (e) {}
+  if (!loc || loc.lat == null || loc.lng == null) { prayerData = null; renderPrayerTimes(); return; }
   let cache = null;
   try { cache = JSON.parse(store.get("pt_cache") || "null"); } catch (e) {}
   prayerData = cache && cache.loc === locRaw ? cache : null;
   if (!force && prayerData && prayerData.date === todayKey()) { renderPrayerTimes(); return; }
   renderPrayerTimes();
+  const method = loc.method || 3;
+  let timings, hijri, source = "api";
   try {
-    const loc = JSON.parse(locRaw);
-    const url = loc.city
-      ? `https://api.aladhan.com/v1/timingsByCity/${todayKey()}?city=${encodeURIComponent(loc.city)}&country=${encodeURIComponent(loc.country || "")}`
-      : `https://api.aladhan.com/v1/timings/${todayKey()}?latitude=${loc.lat}&longitude=${loc.lng}`;
-    const r = await fetch(url);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    const r = await fetch(`https://api.aladhan.com/v1/timings/${todayKey()}?latitude=${loc.lat}&longitude=${loc.lng}&method=${method}`, { signal: ctrl.signal });
+    clearTimeout(timer);
     const j = await r.json();
     if (!r.ok || j.code !== 200) throw new Error("bad response");
+    timings = j.data.timings;
     const h = j.data.date.hijri;
-    prayerData = { date: todayKey(), loc: locRaw, timings: j.data.timings, hijri: `${h.day} ${h.month.ar} ${h.year} هـ` };
-    store.set("pt_cache", JSON.stringify(prayerData));
+    hijri = `${h.day} ${h.month.ar} ${h.year} هـ`;
   } catch (e) {
-    showToast("⚠️ Couldn't load prayer times | تعذر تحميل المواقيت");
+    timings = calcLocal(loc.lat, loc.lng, method);
+    hijri = localHijri();
+    source = "local";
   }
+  prayerData = { date: todayKey(), loc: locRaw, timings, hijri, source };
+  store.set("pt_cache", JSON.stringify(prayerData));
   renderPrayerTimes();
 }
 function renderPrayerTimes() {
@@ -602,39 +757,55 @@ function tickPrayer() {
   document.querySelectorAll(".task-card.next").forEach(c => c.classList.remove("next"));
   const t = prayerData && prayerData.timings;
   if (!t) {
-    info.innerHTML = `<div class="pt-next">🕌 Prayer times | مواقيت الصلاة</div><div class="pt-hijri">${store.get("pt_loc") ? "Loading... ⏳ | جاري التحميل" : "Tap 📍 to set your location | اضغط 📍 لتحديد موقعك"}</div>`;
+    info.innerHTML = `<div class="pt-next">🕌 Prayer times | مواقيت الصلاة</div><div class="pt-hijri">${store.get("pt_loc") ? "Loading... ⏳ | جاري التحميل" : "Tap 📍 and pick your city | اضغط 📍 واختر مدينتك"}</div>`;
     return;
   }
   const now = new Date();
-  let next = Object.values(PRAYERS).find(n => { const d = toDate(t[n]); return d && d > now; });
+  const names = Object.values(PRAYERS);
+  names.forEach(n => {
+    const d = toDate(t[n]);
+    const key = todayKey() + n;
+    if (d && now >= d && now - d < 90000 && !firedPrayers.has(key)) {
+      firedPrayers.add(key);
+      showToast(`🕌 حان وقت ${PRAYER_AR[n]} | It's time for ${n}`);
+      buzz();
+    }
+  });
+  let next = names.find(n => { const d = toDate(t[n]); return d && d > now; });
   const nextDate = next ? toDate(t[next]) : toDate(t.Fajr, true);
   if (!next) next = "Fajr";
-  const mins = Math.max(0, Math.round((nextDate - now) / 60000));
+  const mins = nextDate ? Math.max(0, Math.round((nextDate - now) / 60000)) : 0;
   const left = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
-  info.innerHTML = `<div class="pt-next">🕌 Next: ${next} | ${PRAYER_AR[next]} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}</div>`;
+  info.innerHTML = `<div class="pt-next">🕌 Next: ${next} | ${PRAYER_AR[next]} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline calc" : ""}</div>`;
   const idx = Object.keys(PRAYERS).find(k => PRAYERS[k] === next);
   const card = $("card-task-" + idx);
   if (card) card.classList.add("next");
 }
 function togglePtLoc() { $("pt-loc").classList.toggle("hidden"); }
 function useGps() {
-  if (!navigator.geolocation) { showToast("GPS not supported | الموقع غير مدعوم"); return; }
+  if (!navigator.geolocation) { showToast("GPS not supported, pick a city | الموقع غير مدعوم، اختر مدينة"); $("pt-loc").classList.remove("hidden"); return; }
   showToast("📍 Locating... | جاري تحديد الموقع");
   navigator.geolocation.getCurrentPosition(pos => {
-    store.set("pt_loc", JSON.stringify({ lat: +pos.coords.latitude.toFixed(3), lng: +pos.coords.longitude.toFixed(3) }));
+    store.set("pt_loc", JSON.stringify({ name: "GPS", lat: +pos.coords.latitude.toFixed(3), lng: +pos.coords.longitude.toFixed(3), method: +$("pt-method").value }));
     $("pt-loc").classList.add("hidden");
     loadPrayerTimes(true);
-  }, () => showToast("Location blocked, enter your city instead | الموقع مرفوض، اكتب مدينتك"), { timeout: 10000 });
+  }, () => {
+    showToast("GPS blocked by the browser, pick your city from the list | الموقع محظور، اختر مدينتك من القائمة");
+    $("pt-loc").classList.remove("hidden");
+  }, { timeout: 10000 });
 }
 function saveCity() {
-  const city = $("pt-city").value.trim(), country = $("pt-country").value.trim();
-  if (!city || !country) { showToast("Enter city and country | اكتب المدينة والدولة"); return; }
-  store.set("pt_loc", JSON.stringify({ city, country }));
+  const q = $("pt-city").value.trim().toLowerCase();
+  let c = CITIES.find(x => x[0].toLowerCase() === q);
+  if (!c && q) { const m = CITIES.filter(x => x[0].toLowerCase().includes(q)); if (m.length === 1) c = m[0]; }
+  if (!c) { showToast("Pick a city from the list | اختر مدينة من القائمة"); return; }
+  store.set("pt_loc", JSON.stringify({ name: c[0], lat: c[1], lng: c[2], method: +$("pt-method").value }));
   $("pt-loc").classList.add("hidden");
   loadPrayerTimes(true);
 }
 setInterval(() => {
   if (!currentUser) return;
+  if (store.get("last_day") !== dayKey()) { rollover(); loadState(); }
   if (prayerData && prayerData.date !== todayKey()) loadPrayerTimes(); else tickPrayer();
 }, 30000);
 
@@ -701,14 +872,16 @@ window.addEventListener("storage", () => { if (currentUser) { loadState(); loadS
 /* ---------- Admin ---------- */
 function toggleAdmin(open) { $("admin-modal").classList.toggle("hidden", !open); }
 function adminResetTasks() {
-  USERS.forEach(u => {
-    for (let i = 1; i <= 10; i++) store.del("task_" + i + "_" + u);
-    for (let s = 1; s <= 5; s++) store.del("side_task_" + s + "_" + u);
-    ["gold_opp_", "post_prayer_", "winner_prize_", "prize_fulfilled_"].forEach(k => store.del(k + u));
-  });
-  store.del("game_winner");
+  resetTasksState();
   loadState();
   showToast("Tasks Reset! | تمت إعادة تعيين المهام");
+  toggleAdmin(false);
+}
+function adminResetStreaks() {
+  USERS.forEach(u => { ["streak_", "wins_", "wheel_token_"].forEach(k => store.del(k + u)); });
+  store.set("cycle_days", "0");
+  loadState();
+  showToast("Streaks & wheel cycle reset | تم تصفير السلسلة والعجلة");
   toggleAdmin(false);
 }
 function adminResetPoints() {
@@ -777,7 +950,7 @@ function loadState() {
 
   if (w) {
     if (w === currentUser) {
-      banner.textContent = "🏆 You won the race today! Spin the Wheel. | لقد فزت بالسباق اليوم! لف العجلة.";
+      banner.textContent = "🏆 You won today's race! +1 win toward the wheel | فزت بسباق اليوم! نقطة نحو العجلة";
       banner.className = "banner banner-success";
     } else {
       banner.textContent = `❌ You lost the race today! ${DISPLAY[w]} finished first. | خسرت السباق اليوم! ${DISPLAY[w]} أنهى المهام أولاً.`;
@@ -787,13 +960,23 @@ function loadState() {
     banner.className = "banner hidden";
   }
 
+  const token = store.get("wheel_token_" + currentUser) === "true";
+  const left = Math.max(1, CYCLE_DAYS - num("cycle_days"));
+  const wins = { Mohamad: num("wins_Mohamad"), Dima: num("wins_Dima") };
+  if (w) wins[w]++;
+  $("wheel-status-text").textContent = token ? "🎁 Ready to spin! | جاهزة للف!" : `Opens in ${left}d | بعد ${left} أيام`;
+  USERS.forEach(u => { $("stk-" + u).textContent = "🔥" + (num("streak_" + u) + (userAllDone(u) ? 1 : 0)); });
+  $("cycle-info").innerHTML = `🎡 Wheel in ${left}d for the leader · Wins: Mo ${wins.Mohamad} – Di ${wins.Dima}<br>🎁 +${WEEK_BONUS} pts bonus for every 7-day streak`;
+
   const pb = $("persistent-prize-banner");
-  const prize = w && store.get("winner_prize_" + w);
-  if (w && prize && !store.get("prize_fulfilled_" + w)) {
-    const msg = w === currentUser
-      ? `🎁 Your Prize | جائزتك: <b>${prize}</b>`
-      : `👑 ${DISPLAY[w]} won: <b>${prize}</b>. You must fulfill it! | يجب عليك تنفيذها!`;
-    pb.innerHTML = `${msg}<br><button onclick="fulfillPrize()">Mark as Done ✅ | تم التنفيذ</button>`;
+  const prizes = getPrizes();
+  if (prizes.length) {
+    pb.innerHTML = prizes.map(p => {
+      const msg = p.w === currentUser
+        ? `🎁 Your Prize | جائزتك: <b>${p.prize}</b>`
+        : `👑 ${DISPLAY[p.w]} won: <b>${p.prize}</b>. You must fulfill it! | يجب عليك تنفيذها!`;
+      return `<div style="margin-bottom:8px">${msg}<br><button onclick="fulfillPrize(${p.id})">Mark as Done ✅ | تم التنفيذ</button></div>`;
+    }).join("");
     pb.className = "banner banner-prize";
   } else {
     pb.className = "banner banner-prize hidden";
