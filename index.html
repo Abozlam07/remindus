@@ -66,6 +66,48 @@ select,input{width:100%;padding:10px 14px;margin:8px 0;border:1px solid var(--bo
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center;z-index:999}
 .modal-card{background:var(--card);border:1px solid var(--border);padding:20px;border-radius:16px;width:90%;max-width:400px;text-align:center}
 .modal-card button{display:block;width:100%;margin:6px 0;font-size:12px}
+/* ---- mobile consistency ---- */
+html{-webkit-text-size-adjust:100%}
+body{padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));-webkit-tap-highlight-color:transparent}
+button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;line-height:1.25;text-align:center;touch-action:manipulation}
+select,input{font-size:16px;min-height:44px}
+.theme-btn{width:40px;height:40px;min-height:40px;padding:0;font-size:18px;border-radius:12px}
+.top-bar{min-height:52px}
+.head-row button{min-height:38px;padding:6px 12px;font-size:12px}
+.nav-tab{min-height:50px;padding:6px 4px;font-size:12px;line-height:1.3}
+.mini-badge{min-height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;padding:4px 6px}
+.names{justify-content:space-between}
+.action button{min-height:62px;font-size:12px}
+.dash{align-items:stretch}
+.wheel-box{display:flex;flex-direction:column;justify-content:center;align-items:center}
+.race{flex:1;justify-content:center}
+.poke{min-height:44px}
+.back-btn{min-height:40px}
+.task-top{flex-wrap:wrap;min-height:30px}
+.task-title{flex:1 1 150px;min-width:0}
+/* ---- prayer times ---- */
+.pt-chip{flex:none;min-width:88px;text-align:center;font-size:11px;font-weight:700;padding:5px 8px;border-radius:999px;background:var(--tint);border:1px solid var(--border);color:var(--primary);font-variant-numeric:tabular-nums}
+.pt-card{background:linear-gradient(135deg,var(--tint),transparent);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:12px}
+.pt-main{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pt-next{font-weight:700;font-size:14px}
+.pt-count{font-size:22px;font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums}
+.pt-hijri{font-size:12px;color:var(--muted);margin-top:2px}
+.pt-gear{flex:none;width:44px;padding:0;background:var(--tint);color:var(--text);border:1px solid var(--border);font-size:18px}
+.pt-form{margin-top:10px;display:grid;gap:6px}
+.pt-form input{margin:0}
+.pt-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.task-card.next{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary2),var(--shadow)}
+.task-card.done{border-inline-start:4px solid var(--ok)}
+/* ---- progress & celebration ---- */
+.progress{display:grid;gap:8px;background:var(--tint);border:1px solid var(--border);border-radius:14px;padding:10px 12px;margin-bottom:12px}
+.pg-row{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700}
+.pg-row span:first-child{width:44px}
+.pg-bar{flex:1;height:10px;background:var(--border);border-radius:99px;overflow:hidden}
+.pg-fill{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:99px;transition:width .5s}
+.pg-num{width:38px;text-align:end}
+.burst{position:fixed;bottom:-30px;font-size:26px;z-index:1001;pointer-events:none;animation:rise 1.8s ease-out forwards}
+@keyframes rise{to{transform:translateY(-90vh) rotate(25deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){.burst{display:none}*{transition:none!important}}
 </style>
 </head>
 <body>
@@ -119,13 +161,28 @@ select,input{width:100%;padding:10px 14px;margin:8px 0;border:1px solid var(--bo
     <div id="persistent-banner" class="banner hidden"></div>
     <div id="persistent-prize-banner" class="banner banner-prize hidden"></div>
 
+    <div class="progress">
+      <div class="pg-row"><span>Mo</span><div class="pg-bar"><div id="pg-Mohamad" class="pg-fill"></div></div><span id="pgn-Mohamad" class="pg-num">0/10</span></div>
+      <div class="pg-row"><span>Di 🤍</span><div class="pg-bar"><div id="pg-Dima" class="pg-fill"></div></div><span id="pgn-Dima" class="pg-num">0/10</span></div>
+    </div>
+
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchTab(1)">Tasks | المهام (10)</button>
       <button class="nav-tab" onclick="switchTab(2)">Sunnah & Furas | السنن والفرص</button>
       <button class="nav-tab" onclick="switchTab(3)">Store | المتجر</button>
     </div>
 
-    <div class="tab" id="tab-1"><div id="tasks-container"></div></div>
+    <div class="tab" id="tab-1">
+      <div class="pt-card">
+        <div class="pt-main"><div id="pt-info"></div><button class="pt-gear" onclick="togglePtLoc()" aria-label="Prayer location">📍</button></div>
+        <div id="pt-loc" class="pt-form hidden">
+          <button onclick="useGps()">📍 Use my location | موقعي الحالي</button>
+          <div class="pt-row"><input id="pt-city" placeholder="City | المدينة"><input id="pt-country" placeholder="Country | الدولة"></div>
+          <button onclick="saveCity()" style="background:var(--blue)">Save city | حفظ المدينة</button>
+        </div>
+      </div>
+      <div id="tasks-container"></div>
+    </div>
 
     <div class="tab hidden" id="tab-2">
       <div class="sheet" style="padding-bottom:5px">
@@ -140,7 +197,7 @@ select,input{width:100%;padding:10px 14px;margin:8px 0;border:1px solid var(--bo
 
       <div id="sunnah-container"></div>
 
-      <div class="task-card" style="border-color:var(--gold)">
+      <div class="task-card" id="card-gold" style="border-color:var(--gold)">
         <div class="task-top"><span style="color:var(--gold)">🌟 Golden Opportunities | الفرص الذهبية</span><span class="pts">+5 pts ✨</span></div>
         <div class="task-bottom">
           <div class="names"><div id="status-gold-Mohamad" class="mini-badge bg-not">Mo: ❌</div><div id="status-gold-Dima" class="mini-badge bg-not">Di 🤍: ❌</div></div>
@@ -148,7 +205,7 @@ select,input{width:100%;padding:10px 14px;margin:8px 0;border:1px solid var(--bo
         </div>
       </div>
 
-      <div class="task-card" style="border-color:var(--blue)">
+      <div class="task-card" id="card-postprayer" style="border-color:var(--blue)">
         <div class="task-top"><span style="color:var(--blue)">📿 Post-Prayer Adhkar | أذكار بعد الصلاة</span><span class="pts">+5 pts ✨</span></div>
         <div class="task-bottom">
           <div class="names"><div id="status-postprayer-Mohamad" class="mini-badge bg-not">Mo: ❌</div><div id="status-postprayer-Dima" class="mini-badge bg-not">Di 🤍: ❌</div></div>
@@ -211,7 +268,7 @@ const rewards = ["📦 Buy Product", "🍔 Buy Meal", "💵 Give $5", "👑 Mand
 const taskNames = ["Morning Azkar", "Fajr Prayer", "Dhuhr Prayer", "Asr Prayer", "Maghrib Prayer", "Isha Prayer", "Evening Azkar", "Supplication (Duaa)", "Quran Daily (2 Pages)", "Studying"];
 const sunnahNames = ["1. Sunnah Fajr (2 Before)", "2. Sunnah Dhuhr (4 Before & 2 After)", "3. Sunnah Maghrib (2 After)", "4. Sunnah Isha (2 After)", "5. Witr Prayer (1 Rakaat)"];
 let currentUser = "";
-let toastTimer;
+let toastTimer, readerToken = 0;
 
 /* ---------- Data (each item: [title, arabic, translit, en, de]) ---------- */
 const KURSI = ["آية الكرسي (Ayat al-Kursi)", "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.", "Allahu la ilaha illa huwal hayyul qayyum, la ta'khuduhu sinatun wala nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfa'u 'indahu illa bi-idhnihi, ya'lamu ma baina aidihim wama khalfahum, wala yuhiytuna bishay'in min 'ilmihi illa bima sha'a, wasi'a kursiyyuhus-samawati wal-arda, wala ya'uduhu hifzuhuma wahuwal-aliyyul-'azim.", "Allah - there is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is presently before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.", "Allah - es gibt keinen Gott außer Ihm, dem Lebendigen, dem Beständigen. Ihn ergreift weder Schlummer noch Schlaf. Ihm gehört, was in den Himmeln und was auf der Erde ist. Wer ist es, der bei Ihm Fürsprache einlegen könnte außer mit Seiner Erlaubnis? Er weiß, was vor ihnen und was hinter ihnen liegt; sie aber begreifen nichts von Seinem Wissen, es sei denn das, was Er will. Sein Thronschemel umfasst die Himmel und die Erde, und ihre Bewahrung fällt Ihm nicht schwer. Und Er ist der Erhabene, der Allmächtige."];
@@ -329,6 +386,8 @@ function initApp() {
   $("welcome-user").textContent = currentUser === "Dima" ? "Welcome, Dima 🤍👸🏻 | أهلاً ديما" : "Welcome, Mohamad | أهلاً محمد";
   $("admin-gear-btn").classList.toggle("hidden", currentUser !== "Mohamad");
   renderTasks();
+  renderPrayerTimes();
+  loadPrayerTimes();
   loadStoreHistory();
   loadState();
   show("main-screen");
@@ -351,12 +410,13 @@ function renderTasks() {
     else if (n >= 2 && n <= 6) btn = `<button id="btn-task-${n}" style="background:var(--blue)" onclick="openPostPrayer('task_${n}',3)">Adhkar & Points ➡️ | الأذكار (+3)</button>`;
     else if (n === 8) btn = `<button id="btn-task-8" onclick="completeTask(8,3)">Done ✅ | تم التنفيذ (+3)</button>`;
     else if (n === 9) btn = `<button id="btn-task-9" style="background:var(--gold)" onclick="openQuran()">Open Quran 📖 | فتح القرآن (+5)</button>`;
-    return `<div class="task-card"><div class="task-top"><span>${n}. ${name}</span></div><div class="task-bottom">${statusBoxes("task-" + n)}<div class="action">${btn}</div></div></div>`;
+    const chip = PRAYERS[n] ? `<span class="pt-chip" data-prayer="${PRAYERS[n]}">🕐 --:--</span>` : "";
+    return `<div class="task-card" id="card-task-${n}"><div class="task-top"><span class="task-title">${n}. ${name}</span>${chip}</div><div class="task-bottom">${statusBoxes("task-" + n)}<div class="action">${btn}</div></div></div>`;
   }).join("");
 
   $("sunnah-container").innerHTML = sunnahNames.map((s, i) => {
     const n = i + 1;
-    return `<div class="task-card"><div class="task-top"><span>${s}</span><span class="pts">+5 pts ✨</span></div><div class="task-bottom">${statusBoxes("side-" + n)}<div class="action"><button id="btn-side-${n}" onclick="completeSide(${n},5)">Done ✅ | تم (+5)</button></div></div></div>`;
+    return `<div class="task-card" id="card-side-${n}"><div class="task-top"><span class="task-title">${s}</span><span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">🕐 --:--</span><span class="pts">+5 pts ✨</span></div><div class="task-bottom">${statusBoxes("side-" + n)}<div class="action"><button id="btn-side-${n}" onclick="completeSide(${n},5)">Done ✅ | تم (+5)</button></div></div></div>`;
   }).join("");
 }
 
@@ -367,6 +427,7 @@ function completeTask(n, pts) {
   store.set("task_" + n + "_" + currentUser, "true");
   loadState();
   showToast(pts ? `Task Completed! +${pts} Points ✨ | تم الإنجاز!` : "Task Completed ✅ | تم الإنجاز");
+  afterComplete("task_" + n);
 }
 function completeSide(n, pts) {
   if (isDone("side_task_" + n)) return;
@@ -374,10 +435,12 @@ function completeSide(n, pts) {
   store.set("side_task_" + n + "_" + currentUser, "true");
   loadState();
   showToast(`Sunnah Completed! +${pts} Points ✨ | تم إنجاز السنة!`);
+  buzz();
 }
 
 /* ---------- Reader ---------- */
 function openReaderPage(title, html, btnLabel, onFinish) {
+  readerToken++;
   $("reader-title").textContent = title;
   $("reader-content").innerHTML = html;
   const fb = $("reader-finish-btn");
@@ -391,6 +454,7 @@ function finishWith(key, pts, extra) {
       addCoins(pts);
       store.set(key + "_" + currentUser, "true");
       if (extra) extra();
+      afterComplete(key);
       showToast(`Task Completed! +${pts} Points ✨ | تم الإنجاز!`);
     }
     closeReader();
@@ -414,23 +478,38 @@ function closeReader() {
 }
 
 /* ---------- Quran ---------- */
+const QURAN_EDITIONS = ["ar.alafasy", "en.transliteration", "en.sahih", "de.aburida"];
+async function fetchQuranPage(p) {
+  const cached = store.get("qcache_" + p);
+  if (cached) { try { return JSON.parse(cached); } catch (e) {} }
+  const parts = await Promise.all(QURAN_EDITIONS.map(ed =>
+    fetch(`https://api.alquran.cloud/v1/page/${p}/${ed}`)
+      .then(r => { if (!r.ok) throw new Error(ed + " " + r.status); return r.json(); })
+      .then(j => j.data.ayahs.map(a => ({ n: a.numberInSurah, t: a.text })))
+  ));
+  store.set("qcache_" + p, JSON.stringify(parts));
+  return parts;
+}
+function quranPageHtml(p, d) {
+  const join = (arr, mark) => arr.map(a => mark ? `${a.t} ﴿${a.n}﴾` : `${a.n}. ${a.t}`).join(" ");
+  return `<div class="sheet"><div style="font-weight:700;color:var(--primary);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px">Page ${p} | صفحة</div><div class="arabic-block">${join(d[0], true)}</div><div class="tbox tr"><b>Translit (for Dima 🤍):</b><br>${join(d[1])}</div><div class="tbox"><b>EN:</b><br>${join(d[2])}</div><div class="tbox de"><b>DE:</b><br>${join(d[3])}</div></div>`;
+}
 function openQuran() {
   let p1 = parseInt(store.get("quran_page_" + currentUser) || "1", 10);
   if (!(p1 >= 1 && p1 <= 603)) p1 = 1;
   const p2 = p1 + 1;
+  try { Object.keys(localStorage).forEach(k => { if (k.startsWith("qcache_") && k !== "qcache_" + p1 && k !== "qcache_" + p2) localStorage.removeItem(k); }); } catch (e) {}
   openReaderPage(`Quran (Pages ${p1} & ${p2}) | القرآن`,
     "<div style='text-align:center;padding:20px;font-weight:700'>Loading Quran Pages... ⏳ | جاري التحميل...</div>",
     "Done Reading ✅ | تم الإنجاز (+5 Points)",
     finishWith("task_9", 5, () => store.set("quran_page_" + currentUser, String(p1 + 2 > 603 ? 1 : p1 + 2))));
-
-  const load = p => fetch(`https://api.alquran.cloud/v1/page/${p}/editions/quran-uthmani,en.transliteration,en.sahih,de.aburida`)
-    .then(r => { if (!r.ok) throw new Error("bad response"); return r.json(); });
-  const joinAyahs = (ed, withMark) => ed.ayahs.map(a => withMark ? `${a.text} ﴿${a.numberInSurah}﴾` : `${a.numberInSurah}. ${a.text}`).join(" ");
-  const build = (p, d) => `<div class="sheet"><div style="font-weight:700;color:var(--primary);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px">Page ${p} | صفحة</div><div class="arabic-block">${joinAyahs(d[0], true)}</div><div class="tbox tr"><b>Translit (for Dima 🤍):</b><br>${joinAyahs(d[1])}</div><div class="tbox"><b>EN:</b><br>${joinAyahs(d[2])}</div><div class="tbox de"><b>DE:</b><br>${joinAyahs(d[3])}</div></div>`;
-
-  Promise.all([load(p1), load(p2)])
-    .then(([a, b]) => { $("reader-content").innerHTML = build(p1, a.data) + build(p2, b.data); })
-    .catch(() => { $("reader-content").innerHTML = "<div style='color:var(--bad);text-align:center;padding:20px'>Failed to load Quran. Check your internet and try again. | فشل تحميل القرآن، تأكد من الإنترنت.</div>"; });
+  const token = readerToken;
+  Promise.all([fetchQuranPage(p1), fetchQuranPage(p2)])
+    .then(([a, b]) => { if (token === readerToken) $("reader-content").innerHTML = quranPageHtml(p1, a) + quranPageHtml(p2, b); })
+    .catch(() => {
+      if (token !== readerToken) return;
+      $("reader-content").innerHTML = "<div style='text-align:center;padding:20px'><div style='color:var(--bad);font-weight:700;margin-bottom:12px'>Failed to load Quran. Check your internet. | فشل تحميل القرآن، تأكد من الإنترنت.</div><button onclick='openQuran()'>Retry 🔄 | إعادة المحاولة</button></div>";
+    });
 }
 
 /* ---------- Wheel ---------- */
@@ -460,6 +539,126 @@ function fulfillPrize() {
   if (w) store.set("prize_fulfilled_" + w, "true");
   loadState();
   showToast("Prize Fulfilled ✅ | تم تنفيذ الجائزة!");
+}
+
+/* ---------- Prayer times ---------- */
+const PRAYERS = { 2: "Fajr", 3: "Dhuhr", 4: "Asr", 5: "Maghrib", 6: "Isha" };
+const SUNNAH_PRAYER = { 1: "Fajr", 2: "Dhuhr", 3: "Maghrib", 4: "Isha", 5: "Isha" };
+const PRAYER_AR = { Fajr: "الفجر", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" };
+let prayerData = null;
+
+function todayKey() {
+  const d = new Date();
+  return `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
+}
+function fmt12(t) {
+  const m = /(\d{1,2}):(\d{2})/.exec(t || "");
+  if (!m) return "--:--";
+  let h = +m[1];
+  const ap = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return `${h}:${m[2]} ${ap}`;
+}
+function toDate(t, nextDay) {
+  const m = /(\d{1,2}):(\d{2})/.exec(t || "");
+  if (!m) return null;
+  const d = new Date();
+  d.setHours(+m[1], +m[2], 0, 0);
+  if (nextDay) d.setDate(d.getDate() + 1);
+  return d;
+}
+async function loadPrayerTimes(force) {
+  const locRaw = store.get("pt_loc");
+  if (!locRaw) { prayerData = null; renderPrayerTimes(); return; }
+  let cache = null;
+  try { cache = JSON.parse(store.get("pt_cache") || "null"); } catch (e) {}
+  prayerData = cache && cache.loc === locRaw ? cache : null;
+  if (!force && prayerData && prayerData.date === todayKey()) { renderPrayerTimes(); return; }
+  renderPrayerTimes();
+  try {
+    const loc = JSON.parse(locRaw);
+    const url = loc.city
+      ? `https://api.aladhan.com/v1/timingsByCity/${todayKey()}?city=${encodeURIComponent(loc.city)}&country=${encodeURIComponent(loc.country || "")}`
+      : `https://api.aladhan.com/v1/timings/${todayKey()}?latitude=${loc.lat}&longitude=${loc.lng}`;
+    const r = await fetch(url);
+    const j = await r.json();
+    if (!r.ok || j.code !== 200) throw new Error("bad response");
+    const h = j.data.date.hijri;
+    prayerData = { date: todayKey(), loc: locRaw, timings: j.data.timings, hijri: `${h.day} ${h.month.ar} ${h.year} هـ` };
+    store.set("pt_cache", JSON.stringify(prayerData));
+  } catch (e) {
+    showToast("⚠️ Couldn't load prayer times | تعذر تحميل المواقيت");
+  }
+  renderPrayerTimes();
+}
+function renderPrayerTimes() {
+  const t = prayerData && prayerData.timings;
+  document.querySelectorAll("[data-prayer]").forEach(el => { el.textContent = "🕐 " + (t ? fmt12(t[el.dataset.prayer]) : "--:--"); });
+  tickPrayer();
+}
+function tickPrayer() {
+  const info = $("pt-info");
+  if (!info) return;
+  document.querySelectorAll(".task-card.next").forEach(c => c.classList.remove("next"));
+  const t = prayerData && prayerData.timings;
+  if (!t) {
+    info.innerHTML = `<div class="pt-next">🕌 Prayer times | مواقيت الصلاة</div><div class="pt-hijri">${store.get("pt_loc") ? "Loading... ⏳ | جاري التحميل" : "Tap 📍 to set your location | اضغط 📍 لتحديد موقعك"}</div>`;
+    return;
+  }
+  const now = new Date();
+  let next = Object.values(PRAYERS).find(n => { const d = toDate(t[n]); return d && d > now; });
+  const nextDate = next ? toDate(t[next]) : toDate(t.Fajr, true);
+  if (!next) next = "Fajr";
+  const mins = Math.max(0, Math.round((nextDate - now) / 60000));
+  const left = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
+  info.innerHTML = `<div class="pt-next">🕌 Next: ${next} | ${PRAYER_AR[next]} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}</div>`;
+  const idx = Object.keys(PRAYERS).find(k => PRAYERS[k] === next);
+  const card = $("card-task-" + idx);
+  if (card) card.classList.add("next");
+}
+function togglePtLoc() { $("pt-loc").classList.toggle("hidden"); }
+function useGps() {
+  if (!navigator.geolocation) { showToast("GPS not supported | الموقع غير مدعوم"); return; }
+  showToast("📍 Locating... | جاري تحديد الموقع");
+  navigator.geolocation.getCurrentPosition(pos => {
+    store.set("pt_loc", JSON.stringify({ lat: +pos.coords.latitude.toFixed(3), lng: +pos.coords.longitude.toFixed(3) }));
+    $("pt-loc").classList.add("hidden");
+    loadPrayerTimes(true);
+  }, () => showToast("Location blocked, enter your city instead | الموقع مرفوض، اكتب مدينتك"), { timeout: 10000 });
+}
+function saveCity() {
+  const city = $("pt-city").value.trim(), country = $("pt-country").value.trim();
+  if (!city || !country) { showToast("Enter city and country | اكتب المدينة والدولة"); return; }
+  store.set("pt_loc", JSON.stringify({ city, country }));
+  $("pt-loc").classList.add("hidden");
+  loadPrayerTimes(true);
+}
+setInterval(() => {
+  if (!currentUser) return;
+  if (prayerData && prayerData.date !== todayKey()) loadPrayerTimes(); else tickPrayer();
+}, 30000);
+
+/* ---------- Feedback & celebration ---------- */
+function buzz() { try { if (navigator.vibrate) navigator.vibrate(25); } catch (e) {} }
+function allTasksDone() {
+  for (let i = 1; i <= 10; i++) if (!isDone("task_" + i)) return false;
+  return true;
+}
+function burst() {
+  const emojis = ["🎉", "✨", "🌸", "⭐", "💖"];
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement("span");
+    s.className = "burst";
+    s.textContent = emojis[i % emojis.length];
+    s.style.left = Math.random() * 92 + "vw";
+    s.style.animationDelay = Math.random() * 0.5 + "s";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 2600);
+  }
+}
+function afterComplete(key) {
+  buzz();
+  if (key.indexOf("task_") === 0 && allTasksDone()) burst();
 }
 
 /* ---------- Store ---------- */
@@ -538,6 +737,7 @@ function setButton(btnId, key) {
 function loadState() {
   if (!currentUser) return;
   const all = { Mohamad: true, Dima: true };
+  const count = { Mohamad: 0, Dima: 0 };
   const rows = [];
   for (let i = 1; i <= 10; i++) rows.push({ id: "task-" + i, key: "task_" + i, race: true });
   for (let i = 1; i <= 5; i++) rows.push({ id: "side-" + i, key: "side_task_" + i });
@@ -547,11 +747,14 @@ function loadState() {
     USERS.forEach(u => {
       const d = isDone(r.key, u);
       setBadge(r.id, u, d);
-      if (r.race && !d) all[u] = false;
+      if (r.race) { if (d) count[u]++; else all[u] = false; }
     });
     setButton("btn-" + r.id, r.key);
+    const card = $("card-" + r.id);
+    if (card) card.classList.toggle("done", isDone(r.key));
   });
 
+  USERS.forEach(u => { $("pg-" + u).style.width = count[u] * 10 + "%"; $("pgn-" + u).textContent = count[u] + "/10"; });
   $("user-coins").textContent = getCoins(currentUser);
 
   let w = store.get("game_winner");
