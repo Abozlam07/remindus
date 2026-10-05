@@ -87,7 +87,7 @@ body.rose-dark .nav-tab.active{color:#2b0a1d}
 .task-card{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);padding:12px 14px;border-radius:18px;margin-bottom:8px;box-shadow:var(--shadow)}
 .task-card .tm{flex:1;min-width:0}
 .task-card.done{border-inline-start:4px solid var(--ok)}
-.task-card.next{border-color:var(--primary);box-shadow:0 0 0 3px var(--tint),var(--shadow)}
+.task-card.now{border-color:var(--primary);box-shadow:0 0 0 3px var(--tint),var(--shadow)}
 .task-top{font-size:14px;font-weight:700;line-height:1.5}
 .task-title .num{color:var(--muted);font-weight:600}
 .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:5px}
@@ -175,6 +175,8 @@ body.rose-dark .nav-tab.active{color:#2b0a1d}
 .modal-card button{display:flex;width:100%;margin:6px 0;font-size:12px}
 .set-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .set-row.two{grid-template-columns:1fr 1fr}
+.set-row.three{grid-template-columns:repeat(3,1fr)}
+.set-row.three button{font-size:13px}
 .set-row button{background:var(--tint);color:var(--text);border:1px solid var(--border);margin:0;font-size:18px}
 .set-row.two button{font-size:12px;min-height:46px;padding:6px 8px}
 .set-row button.sel{outline:3px solid var(--primary2);outline-offset:0}
@@ -199,6 +201,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 .pt-results{display:grid;gap:4px}
 .pt-results button{margin:0;background:var(--tint);color:var(--text);border:1px solid var(--border);justify-content:flex-start;text-align:start;min-height:42px;font-size:13px;font-weight:700;flex-direction:column;align-items:flex-start;gap:0}
 .pt-results small{font-size:11px;font-weight:500;color:var(--muted)}
+#poke-langs button{font-size:13px;padding:6px 4px;min-height:42px}
 </style>
 </head>
 <body>
@@ -288,7 +291,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 
     <!-- Tab 4: Store -->
     <div class="tab hidden" id="tab-4">
-      <div class="coins">🪙 Balance | الرصيد: <span id="user-coins">0</span></div>
+      <div class="coins"><span>🪙 Balance | الرصيد:</span> <span id="user-coins">0</span></div>
       <p class="hint">🎁 +30 pts for every 7-day streak | مكافأة 30 نقطة لكل سلسلة 7 أيام</p>
       <div id="store-requests"></div>
 
@@ -358,9 +361,10 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
         <button data-theme="rose-dark" onclick="setTheme('rose-dark')" title="Dark Pink">💖</button>
       </div>
       <div class="set-title">🌐 Language | اللغة</div>
-      <div class="set-row two">
+      <div class="set-row three">
         <button data-lang="ar" onclick="setLang('ar')">العربية</button>
         <button data-lang="en" onclick="setLang('en')">English</button>
+        <button data-lang="de" onclick="setLang('de')">Deutsch</button>
       </div>
       <div class="set-title">📖 Reading texts | لغة النصوص (القراءة والتسبيح)</div>
       <div id="rl-row" class="set-row two"></div>
@@ -405,6 +409,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
   <div id="poke-modal" class="modal hidden" onclick="if(event.target===this)closePoke()">
     <div class="modal-card">
       <h3 style="margin-top:0">👉 Poke | نكزة</h3>
+      <div id="poke-langs" class="set-row" style="margin-bottom:10px"></div>
       <div id="poke-list"></div>
       <input id="poke-custom" maxlength="60" placeholder="Write your own... | اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendCustomPoke()">
       <button onclick="sendCustomPoke()" style="background:var(--blue)">Send ✉️ | إرسال</button>
@@ -442,14 +447,219 @@ let currentUser = "";
 let toastTimer, readerToken = 0, placedSig = null;
 
 /* ---------- Language ---------- */
-let LANG = store.get("site_lang") === "en" ? "en" : "ar";
-const T = (en, ar) => LANG === "ar" ? ar : en;
+let LANG = ["en", "de"].indexOf(store.get("site_lang")) >= 0 ? store.get("site_lang") : "ar";
+const DE = {
+"1️⃣ Full Adhkar": "1️⃣ Vollständige Adhkar",
+"2️⃣ Short Adhkar": "2️⃣ Kurze Adhkar",
+"7-day streak 🔥": "7-Tage-Serie 🔥",
+"Add 🎁": "Hinzufügen 🎁",
+"Adhkar ➡️": "Adhkar ➡️",
+"Approve ✅": "Zustimmen ✅",
+"Approved ✅": "Zugestimmt ✅",
+"Arabic in English letters": "Arabisch in lateinischen Buchstaben",
+"Asr Prayer": "Asr-Gebet",
+"Assalamu alaykum, Dima 🤍": "Assalamu alaykum, Dima 🤍",
+"Assalamu alaykum, Mohamad": "Assalamu alaykum, Mohamad",
+"City name (any language)": "Stadtname (beliebige Sprache)",
+"City not found, check the spelling or your internet": "Stadt nicht gefunden, prüfe die Schreibweise oder dein Internet",
+"Close ❌": "Schließen ❌",
+"Decline ❌": "Ablehnen ❌",
+"Declined, points refunded": "Abgelehnt, Punkte erstattet",
+"Delicious Meal 🍔": "Leckeres Essen 🍔",
+"Dhuhr Prayer": "Dhuhr-Gebet",
+"Diyanet": "Diyanet",
+"Done Reading ✅": "Gelesen ✅",
+"Done ✅": "Erledigt ✅",
+"Done! +5 Points ✨": "Erledigt! +5 Punkte ✨",
+"Egyptian": "Ägyptisch",
+"Enter a name and points": "Gib einen Namen und Punkte ein",
+"Evening Adhkar": "Abend-Adhkar",
+"Evening Azkar": "Abend-Adhkar",
+"Failed to load Quran. Check your internet.": "Koran konnte nicht geladen werden. Prüfe dein Internet.",
+"Fajr Prayer": "Fajr-Gebet",
+"Free counter": "Freier Zähler",
+"Golden Opportunities": "Goldene Gelegenheiten",
+"ISNA": "ISNA",
+"Isha Prayer": "Isha-Gebet",
+"Later": "Später",
+"Loading Quran Pages... ⏳": "Koranseiten werden geladen... ⏳",
+"Location permission denied. Allow it in the browser settings, or search for your city": "Standortzugriff verweigert. Erlaube ihn in den Browsereinstellungen oder suche deine Stadt",
+"Log In": "Anmelden",
+"Log Out 🚪": "Abmelden 🚪",
+"Maghrib Prayer": "Maghrib-Gebet",
+"Morning Adhkar": "Morgen-Adhkar",
+"Morning Azkar": "Morgen-Adhkar",
+"Muslim World League": "Muslimische Weltliga",
+"My bookmark (page)": "Mein Lesezeichen (Seite)",
+"Open 🌟": "Öffnen 🌟",
+"Open 📖": "Öffnen 📖",
+"Open 📿": "Öffnen 📿",
+"Page must be 1-604": "Seite muss 1-604 sein",
+"Pages per day": "Seiten pro Tag",
+"Passcode": "Passcode",
+"Pick your city for accurate prayer times": "Wähle deine Stadt für genaue Gebetszeiten",
+"Points": "Punkte",
+"Points Reset!": "Punkte zurückgesetzt!",
+"Poke Sent! ⚡": "Stups gesendet! ⚡",
+"Post-Prayer Adhkar": "Adhkar nach dem Gebet",
+"Prize Fulfilled ✅": "Preis eingelöst ✅",
+"Quran (Pages #-#)": "Koran (Seiten #-#)",
+"Quran Daily (# Pages)": "Täglicher Koran (# Seiten)",
+"Quran Reset to page 1": "Koran auf Seite 1 zurückgesetzt",
+"Read 📜": "Lesen 📜",
+"Redeem 🎟️": "Einlösen 🎟️",
+"Reset 🔄": "Zurücksetzen 🔄",
+"Retry 🔄": "Erneut versuchen 🔄",
+"Reward added ✅": "Belohnung hinzugefügt ✅",
+"Reward name": "Name der Belohnung",
+"Save city": "Stadt speichern",
+"Save 💾": "Speichern 💾",
+"Saved ✅": "Gespeichert ✅",
+"Select your name": "Wähle deinen Namen",
+"Send ✉️": "Senden ✉️",
+"Spin 🎰": "Drehen 🎰",
+"Store": "Shop",
+"Streaks & wheel cycle reset": "Serien und Glücksrad zurückgesetzt",
+"Studying": "Lernen",
+"Sunnah": "Sunna",
+"Sunnah Completed! +# Points ✨": "Sunna erledigt! +# Punkte ✨",
+"Sunnah Dhuhr (4 Before & 2 After)": "Sunna Dhuhr (4 davor & 2 danach)",
+"Sunnah Fajr (2 Before)": "Sunna Fajr (2 davor)",
+"Sunnah Isha (2 After)": "Sunna Isha (2 danach)",
+"Sunnah Maghrib (2 After)": "Sunna Maghrib (2 danach)",
+"Supplication (Duaa)": "Bittgebet (Dua)",
+"System Login": "Anmeldung",
+"Tap to spin!": "Tippe zum Drehen!",
+"Tasbih": "Tasbih",
+"Tasbih Fatimah 33/33/34": "Tasbih Fatima 33/33/34",
+"Task Completed ✅": "Aufgabe erledigt ✅",
+"Task Completed! +# Points ✨": "Aufgabe erledigt! +# Punkte ✨",
+"Tasks": "Aufgaben",
+"Tasks Reset!": "Aufgaben zurückgesetzt!",
+"Type your city or use your location": "Gib deine Stadt ein oder nutze deinen Standort",
+"Umm al-Qura": "Umm al-Qura",
+"Wheel of Fortune": "Glücksrad",
+"Witr Prayer (1 Rakaat)": "Witr-Gebet (1 Rakʿa)",
+"Write your own...": "Schreibe selbst...",
+"Wrong passcode!": "Falscher Passcode!",
+"or search a city": "oder suche eine Stadt",
+"↩️ Undo": "↩️ Rückgängig",
+"⚙️ Settings": "⚙️ Einstellungen",
+"⚠️ Reciter unavailable": "⚠️ Rezitator nicht verfügbar",
+"✅ Completed (#)": "✅ Erledigt (#)",
+"✅ Listening finished": "✅ Zuhören beendet",
+"✨ Extras": "✨ Extras",
+"✨ Other": "✨ Weitere",
+"❌ Not enough points!": "❌ Nicht genug Punkte!",
+"➕ Add a reward for your partner": "➕ Belohnung für deinen Partner hinzufügen",
+"🌅 Morning": "🌅 Morgen",
+"🌐 Language": "🌐 Sprache",
+"🌕 White days (#)": "🌕 Weiße Tage (#)",
+"🌙 Evening": "🌙 Abend",
+"🌟 Golden Opportunities": "🌟 Goldene Gelegenheiten",
+"🌟 Sunnah": "🌟 Sunna",
+"🍔 Buy Meal": "🍔 Essen kaufen",
+"🎁 +30 pts for every 7-day streak": "🎁 +30 Punkte für jede 7-Tage-Serie",
+"🎉 Khatma completed!": "🎉 Khatma abgeschlossen!",
+"🎉 Tasbih complete!": "🎉 Tasbih abgeschlossen!",
+"🎉 You Won": "🎉 Du hast gewonnen",
+"🎟️ Request sent, waiting for approval": "🎟️ Anfrage gesendet, wartet auf Zustimmung",
+"🎡 Your wheel is ready!": "🎡 Dein Glücksrad ist bereit!",
+"🎧 Tap any ayah to listen from it": "🎧 Tippe auf einen Vers, um ab dort zuzuhören",
+"🎨 Theme": "🎨 Design",
+"👉 Poke": "👉 Stups",
+"👑 Admin": "👑 Admin",
+"👑 Mandatory Order": "👑 Pflichtauftrag",
+"💵 Give $5": "💵 5 $ geben",
+"📊 This week": "📊 Diese Woche",
+"📍 Change location": "📍 Standort ändern",
+"📍 Locating...": "📍 Standort wird ermittelt...",
+"📍 Prayer location": "📍 Gebetsort",
+"📍 Prayer times": "📍 Gebetszeiten",
+"📍 Use my location": "📍 Meinen Standort nutzen",
+"📖 Quran": "📖 Koran",
+"📖 Reading texts": "📖 Lesetexte",
+"📖 Reset Quran Pages": "📖 Koranseiten zurücksetzen",
+"📖 Sunnah Prayers Hadith": "📖 Hadith zu den Sunna-Gebeten",
+"📖 Surah Al-Kahf (Friday)": "📖 Sure Al-Kahf (Freitag)",
+"📦 Buy Product": "📦 Produkt kaufen",
+"📿 Post-Prayer Adhkar": "📿 Adhkar nach dem Gebet",
+"🔄 Reset Daily Tasks": "🔄 Tagesaufgaben zurücksetzen",
+"🔇 Audio error, try another reciter": "🔇 Audiofehler, versuche einen anderen Rezitator",
+"🔎 Searching...": "🔎 Suche...",
+"🔒 The wheel opens every # days for the one ahead.": "🔒 Das Glücksrad öffnet alle # Tage für den Führenden.",
+"🔙 Back": "🔙 Zurück",
+"🔥 #-day streak! +# points": "🔥 #-Tage-Serie! +# Punkte",
+"🔥 Reset Streaks & Wheel Cycle": "🔥 Serien & Glücksrad zurücksetzen",
+"🕌 Prayers": "🕌 Gebete",
+"🛍️ Rewards": "🛍️ Belohnungen",
+"🛒 Orders": "🛒 Bestellungen",
+"🧾 Points log": "🧾 Punkteprotokoll",
+"🪙 Balance": "🪙 Guthaben",
+"🪙 Reset All Points": "🪙 Alle Punkte zurücksetzen",
+"⭐ Today's special": "⭐ Heute besonders",
+"🏆 You won today's race! +1 win toward the wheel": "🏆 Du hast das heutige Rennen gewonnen! +1 Sieg fürs Glücksrad",
+"🔇 Couldn't play audio, check your internet": "🔇 Audio konnte nicht abgespielt werden, prüfe dein Internet",
+"Couldn't get your location, search for your city": "Standort nicht ermittelbar, suche deine Stadt",
+"Location isn't supported here, search for your city": "Standort wird hier nicht unterstützt, suche deine Stadt",
+"🌙 Voluntary fast (Monday)": "🌙 Freiwilliges Fasten (Montag)",
+"🌙 Voluntary fast (Thursday)": "🌙 Freiwilliges Fasten (Donnerstag)",
+"Quran Khatma": "Koran-Khatma",
+"Page": "Seite",
+"ayat": "Verse",
+"Prayer times": "Gebetszeiten",
+"Loading... ⏳": "Lädt... ⏳",
+"Set your city from Settings ⚙️": "Wähle deine Stadt in den Einstellungen ⚙️",
+"My location": "Mein Standort",
+"Completed rounds today": "Abgeschlossene Runden heute",
+"Points earned": "Verdiente Punkte",
+"Race wins": "Rennsiege",
+"Current streak": "Aktuelle Serie",
+"Longest streak": "Längste Serie",
+"requests": "fragt an",
+"pts": "Pkt.",
+"from": "von",
+"Cost": "Kosten",
+"yours": "deine",
+"No orders yet...": "Noch keine Bestellungen...",
+"No points yet...": "Noch keine Punkte...",
+"Winner": "Sieger",
+"Loser": "Verlierer",
+"Finished": "Fertig",
+"Racing": "Im Rennen",
+"Ready to spin!": "Bereit zum Drehen!",
+"Race wins this cycle": "Rennsiege in diesem Zyklus",
+"Your Prize": "Dein Preis",
+"won": "gewann",
+"You must fulfill it!": "Du musst ihn einlösen!",
+"Mark as Done ✅": "Als erledigt markieren ✅"
+};
+function deLookup(en) {
+  if (DE[en] !== undefined) return DE[en];
+  const m = /^(Store|Refund): (.*)$/.exec(en);
+  if (m) return (m[1] === "Store" ? "Shop: " : "Erstattung: ") + deLookup(m[2]);
+  const nums = en.match(/\d+/g);
+  if (nums) {
+    const key = en.replace(/\d+/g, "#");
+    if (DE[key] !== undefined) { let i = 0; return DE[key].replace(/#/g, () => nums[i++]); }
+  }
+  window.__missingDe = window.__missingDe || {};
+  window.__missingDe[en] = 1;
+  return en;
+}
+const T = (en, ar, de) => LANG === "ar" ? ar : LANG === "de" ? (de !== undefined ? de : deLookup(en)) : en;
 const hasAr = s => /[\u0600-\u06FF]/.test(s);
 function pick(t) {
   if (typeof t !== "string" || !/\s\|\s/.test(t)) return t;
-  const parts = t.split(/\s\|\s/), want = LANG === "ar";
-  const m = parts.filter(p => hasAr(p) === want);
-  return (m.length ? m[0] : parts[0]).trim();
+  const parts = t.split(/\s\|\s/);
+  if (LANG === "ar") {
+    const m = parts.filter(p => hasAr(p));
+    return (m.length ? m[0] : parts[0]).trim();
+  }
+  const lat = parts.filter(p => !hasAr(p));
+  if (!lat.length) return parts[0].trim();
+  if (LANG === "de") return (lat[1] !== undefined ? lat[1] : deLookup(lat[0].trim())).trim();
+  return lat[0].trim();
 }
 const skin = t => document.body.classList.contains("rose-dark") ? t.replace(/✅/g, "💗").replace(/❌/g, "✖") : t;
 const tr = t => skin(pick(t));
@@ -471,7 +681,7 @@ function applyLang(root) {
 }
 function setHtml(el, html) { el.innerHTML = skin(html); applyLang(el); }
 function setLang(l) {
-  LANG = l === "en" ? "en" : "ar";
+  LANG = ["en", "de"].indexOf(l) >= 0 ? l : "ar";
   store.set("site_lang", LANG);
   document.documentElement.lang = LANG;
   document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
@@ -610,13 +820,13 @@ function setReadLang(m) {
 }
 function renderReadButtons() {
   const L = [
-    ["ar", "العربية", "Arabic"], ["tr", "عربي بحروف إنجليزية", "Arabic in English letters"],
-    ["en", "English", "English"], ["de", "Deutsch", "Deutsch"],
-    ["ar_tr", "عربي + بحروف إنجليزية", "Arabic + English letters"], ["ar_en", "عربي + English", "Arabic + English"],
-    ["ar_de", "عربي + Deutsch", "Arabic + Deutsch"], ["all", "الكل", "All"]
+    ["ar", "العربية", "Arabic", "Arabisch"], ["tr", "عربي بحروف إنجليزية", "Arabic in English letters", "Arabisch in lateinischen Buchstaben"],
+    ["en", "English", "English", "English"], ["de", "Deutsch", "Deutsch", "Deutsch"],
+    ["ar_tr", "عربي + بحروف إنجليزية", "Arabic + English letters", "Arabisch + lateinische Buchstaben"], ["ar_en", "عربي + English", "Arabic + English", "Arabisch + English"],
+    ["ar_de", "عربي + Deutsch", "Arabic + Deutsch", "Arabisch + Deutsch"], ["all", "الكل", "All", "Alle"]
   ];
   const cur = readMode();
-  $("rl-row").innerHTML = L.map(x => `<button class="${x[0] === cur ? "sel" : ""}" onclick="setReadLang('${x[0]}')">${LANG === "ar" ? x[1] : x[2]}</button>`).join("");
+  $("rl-row").innerHTML = L.map(x => `<button class="${x[0] === cur ? "sel" : ""}" onclick="setReadLang('${x[0]}')">${LANG === "ar" ? x[1] : LANG === "de" ? x[3] : x[2]}</button>`).join("");
 }
 function markSettings() {
   renderReadButtons();
@@ -668,7 +878,7 @@ function renderDate() {
   const el = $("today-date");
   if (!el) return;
   let t = "";
-  try { t = new Date().toLocaleDateString(LANG === "ar" ? "ar-u-nu-latn" : "en-GB", { weekday: "long", day: "numeric", month: "long" }); } catch (e) {}
+  try { t = new Date().toLocaleDateString(LANG === "ar" ? "ar-u-nu-latn" : LANG === "de" ? "de-DE" : "en-GB", { weekday: "long", day: "numeric", month: "long" }); } catch (e) {}
   el.textContent = t;
 }
 function switchTab(id) {
@@ -726,7 +936,7 @@ function renderTasks() {
 
   const sp = specialsToday();
   setHtml($("special-container"), sp.length
-    ? `<div class="sec-title">⭐ Today's special | مميز اليوم</div>` + sp.map(s => cardHtml(s.id, `<span class="task-title">${s.title}</span>`, `<span class="pts">+5 pts ✨</span>`, `<button id="btn-${s.id}" style="background:var(--gold)" onclick="completeSpecial('${s.key}')">Done ✅ | تم (+5)</button>`, 'style="border-color:var(--gold)"')).join("")
+    ? `<div class="sec-title">⭐ Today's special | مميز اليوم</div>` + sp.map(s => cardHtml(s.id, `<span class="task-title">${s.title}</span>`, `<span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`, `<button id="btn-${s.id}" style="background:var(--gold)" onclick="completeSpecial('${s.key}')">Done ✅ | تم (+5)</button>`, 'style="border-color:var(--gold)"')).join("")
     : "");
 
   const secHtml = SECTIONS.map(s => {
@@ -742,14 +952,14 @@ function renderTasks() {
   setHtml($("sunnah-container"), sunnahNames.map((s, i) => {
     const n = i + 1;
     return cardHtml("side-" + n, `<span class="task-title"><b class="num">${n}.</b> <span>${s}</span></span>`,
-      `<span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">🕐 --:--</span><span class="pts">+5 pts ✨</span>`,
+      `<span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">🕐 --:--</span><span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`,
       `<button id="btn-side-${n}" onclick="completeSide(${n},5)">Done ✅ | تم (+5)</button>`);
   }).join(""));
 
   setHtml($("extra-container"),
-    cardHtml("gold", `<span class="task-title" style="color:var(--gold)">🌟 Golden Opportunities | الفرص الذهبية</span>`, `<span class="pts">+5 pts ✨</span>`,
+    cardHtml("gold", `<span class="task-title" style="color:var(--gold)">🌟 Golden Opportunities | الفرص الذهبية</span>`, `<span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`,
       `<button id="btn-gold" style="background:var(--gold)" onclick="openFuras()">Open 🌟 | فتح</button>`, 'style="border-color:var(--gold)"') +
-    cardHtml("postprayer", `<span class="task-title" style="color:var(--blue)">📿 Post-Prayer Adhkar | أذكار بعد الصلاة</span>`, `<span class="pts">+5 pts ✨</span>`,
+    cardHtml("postprayer", `<span class="task-title" style="color:var(--blue)">📿 Post-Prayer Adhkar | أذكار بعد الصلاة</span>`, `<span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`,
       `<button id="btn-postprayer" style="background:var(--blue)" onclick="openPostPrayer('post_prayer',5)">Open 📿 | فتح</button>`, 'style="border-color:var(--blue)"'));
 
   renderKhatma();
@@ -1117,7 +1327,7 @@ function spinWheel() {
   setTimeout(() => {
     const w = rewards[Math.floor(Math.random() * rewards.length)];
     addPrize(me, w);
-    store.set("store_alert_" + partnerOf(me), `👑 ${DISPLAY[me]} spun the wheel! Prize: ${tr(w)} | لف العجلة! ${tr(w)}`);
+    store.set("store_alert_" + partnerOf(me), `👑 ${DISPLAY[me]} spun the wheel! Prize: ${tr(w)} | لف العجلة! ${tr(w)} | ${DISPLAY[me]} hat das Glücksrad gedreht! Preis: ${tr(w)}`);
     setBi($("wheel-display"), "🎉 You Won | لقد ربحت: " + w);
     buzz();
     burst();
@@ -1247,7 +1457,7 @@ function locLabel() {
 function tickPrayer() {
   const info = $("pt-info");
   if (!info) return;
-  document.querySelectorAll(".task-card.next").forEach(c => c.classList.remove("next"));
+  document.querySelectorAll(".task-card.now").forEach(c => c.classList.remove("now"));
   const t = prayerData && prayerData.timings;
   if (!t) {
     info.innerHTML = `<div class="pt-next">🕌 ${T("Prayer times", "مواقيت الصلاة")}</div><div class="pt-hijri">${store.get("pt_loc") ? T("Loading... ⏳", "جاري التحميل ⏳") : T("Set your city from Settings ⚙️", "حدّد مدينتك من الإعدادات ⚙️")}</div>`;
@@ -1260,7 +1470,7 @@ function tickPrayer() {
     const key = todayKey() + n;
     if (d && now >= d && now - d < 90000 && !firedPrayers.has(key)) {
       firedPrayers.add(key);
-      showToast(`🕌 حان وقت ${PRAYER_AR[n]} | It's time for ${n}`);
+      showToast(`🕌 حان وقت ${PRAYER_AR[n]} | It's time for ${n} | Zeit für ${n}`);
       buzz();
     }
   });
@@ -1268,11 +1478,13 @@ function tickPrayer() {
   const nextDate = next ? toDate(t[next]) : toDate(t.Fajr, true);
   if (!next) next = "Fajr";
   const mins = nextDate ? Math.max(0, Math.round((nextDate - now) / 60000)) : 0;
-  const left = mins >= 60 ? `${Math.floor(mins / 60)}${T("h", "س")} ${mins % 60}${T("m", "د")}` : `${mins}${T("m", "د")}`;
-  info.innerHTML = `<div class="pt-next">🕌 ${T("Next: " + next, "القادمة: " + PRAYER_AR[next])} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline" : ""}</div><div class="pt-hijri">📍 ${locLabel()}</div>`;
-  const idx = Object.keys(PRAYERS).find(k => PRAYERS[k] === next);
+  const left = mins >= 60 ? `${Math.floor(mins / 60)}${T("h", "س", "Std")} ${mins % 60}${T("m", "د", "Min")}` : `${mins}${T("m", "د", "Min")}`;
+  info.innerHTML = `<div class="pt-next">🕌 ${T("Next: " + next, "القادمة: " + PRAYER_AR[next], "Nächstes: " + next)} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline" : ""}</div><div class="pt-hijri">📍 ${locLabel()}</div>`;
+  let cur = "Isha";
+  names.forEach(n => { const d = toDate(t[n]); if (d && d <= now) cur = n; });
+  const idx = Object.keys(PRAYERS).find(k => PRAYERS[k] === cur);
   const card = $("card-task-" + idx);
-  if (card) card.classList.add("next");
+  if (card) card.classList.add("now");
 }
 function openLoc() {
   let l = null;
@@ -1296,7 +1508,7 @@ function localMatches(q) {
 async function onlineMatches(q) {
   const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 6000);
   try {
-    const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&format=json&language=${LANG === "ar" ? "ar" : "en"}`, { signal: ctrl.signal });
+    const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&format=json&language=${LANG === "ar" ? "ar" : LANG === "de" ? "de" : "en"}`, { signal: ctrl.signal });
     const j = await r.json();
     return (j.results || []).map(x => ({ name: x.name, label: x.name, sub: [x.admin1, x.country].filter(Boolean).join(" · "), lat: +(+x.latitude).toFixed(3), lng: +(+x.longitude).toFixed(3) }));
   } catch (e) { return []; }
@@ -1321,7 +1533,7 @@ function citySuggest() {
 function saveLoc(c) {
   store.set("pt_loc", JSON.stringify({ name: c.name, label: c.label || c.name, lat: c.lat, lng: c.lng, method: +$("pt-method").value }));
   closeLoc(false);
-  showToast(`✅ Location saved: ${c.label || c.name} | تم حفظ الموقع: ${c.label || c.name}`);
+  showToast(`✅ Location saved: ${c.label || c.name} | تم حفظ الموقع: ${c.label || c.name} | Standort gespeichert: ${c.label || c.name}`);
   loadPrayerTimes(true);
 }
 function pickCity(i) { if (cityList[i]) saveLoc(cityList[i]); }
