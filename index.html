@@ -1377,4 +1377,360 @@ function afterComplete(key) {
 const TSB_PH = [
   [["سُبْحَانَ اللَّهِ", "Subhanallah", "Glory be to Allah", "Preis sei Allah"], 33],
   [["الْحَمْدُ لِلَّهِ", "Alhamdulillah", "Praise be to Allah", "Lob sei Allah"], 33],
-  [["اللَّهُ أَكْبَرُ", "Allahu Akbar", "Allah is the Greatest", "Alla
+  [["اللَّهُ أَكْبَرُ", "Allahu Akbar", "Allah is the Greatest", "Allah ist am größten"], 34]
+];
+const TSB_FREE = ["ذِكْرٌ حُرّ", "Free dhikr", "Free dhikr", "Freier Dhikr"];
+function tsbPhraseHtml(arr) {
+  const keys = ["ar", "tr", "en", "de"], on = readLayers();
+  let first = true;
+  return keys.map((k, i) => {
+    if (on.indexOf(k) < 0) return "";
+    const c = "tsb-l " + k + (first ? " big" : "");
+    first = false;
+    return `<div class="${c}">${arr[i]}</div>`;
+  }).join("");
+}
+let tsb = { mode: "f", t: 0, f: 0, r: 0, d: "" };
+function tsbLoad() {
+  tsb = Object.assign({ mode: "f", t: 0, f: 0, r: 0, d: dayKey() }, readJson("tsb_" + currentUser, {}));
+  if (tsb.d !== dayKey()) { tsb.r = 0; tsb.d = dayKey(); }
+  $("tsb-mode").value = tsb.mode;
+  tsbRender();
+}
+function tsbSave() { store.set("tsb_" + currentUser, JSON.stringify(tsb)); }
+function tsbRender() {
+  let cnt, of = "", phrase, ph = -1;
+  if (tsb.mode === "f") {
+    ph = tsb.t < 33 ? 0 : tsb.t < 66 ? 1 : 2;
+    cnt = tsb.t - (ph === 0 ? 0 : ph === 1 ? 33 : 66);
+    of = "/ " + TSB_PH[ph][1];
+    phrase = TSB_PH[ph][0];
+  } else {
+    cnt = tsb.f;
+    phrase = TSB_FREE;
+    of = tsb.f >= 33 ? "× " + Math.floor(tsb.f / 33) : "";
+  }
+  $("tsb-count").textContent = cnt;
+  $("tsb-of").textContent = of;
+  $("tsb-phrase").innerHTML = tsbPhraseHtml(phrase);
+  $("tsb-dots").innerHTML = tsb.mode === "f" ? TSB_PH.map((p, i) => `<span class="tsb-dot ${i === ph ? "on" : ""}">${p[1]}</span>`).join("") : "";
+  $("tsb-total").textContent = `${T("Completed rounds today", "الجولات المكتملة اليوم")}: ${tsb.r}`;
+}
+function tsbTap() {
+  if (tsb.mode === "f") {
+    tsb.t++;
+    if (tsb.t >= 100) {
+      tsb.t = 0; tsb.r++;
+      vib([100, 60, 100, 60, 220]);
+      showToast("🎉 Tasbih complete! | تم التسبيح، تقبّل الله 🤍");
+      burst();
+    } else if (tsb.t === 33 || tsb.t === 66) vib([70, 40, 70]);
+    else vib(18);
+  } else {
+    tsb.f++;
+    if (tsb.f % 33 === 0) vib([70, 40, 70]); else vib(18);
+  }
+  tsbSave(); tsbRender();
+}
+function tsbUndo() {
+  if (tsb.mode === "f") tsb.t = Math.max(0, tsb.t - 1); else tsb.f = Math.max(0, tsb.f - 1);
+  tsbSave(); tsbRender();
+}
+function tsbReset() {
+  tsb.t = 0; tsb.f = 0;
+  tsbSave(); tsbRender();
+}
+function tsbMode() {
+  tsb.mode = $("tsb-mode").value;
+  tsbSave(); tsbRender();
+}
+
+/* ---------- Store: rewards, requests, stats, log ---------- */
+const DEFAULT_ITEM = { id: "meal", name: "Delicious Meal 🍔 | وجبة طعام شهية 🍔", cost: 100, by: "*" };
+function getItems() { const a = readJson("store_items", null); return Array.isArray(a) ? a : [DEFAULT_ITEM]; }
+function saveItems(a) { store.set("store_items", JSON.stringify(a)); }
+function getReqs() { const a = readJson("store_requests", []); return Array.isArray(a) ? a : []; }
+function saveReqs(a) { store.set("store_requests", JSON.stringify(a.slice(0, 80))); }
+function timeStr(t) { return new Date(t).toLocaleString([], { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); }
+
+function addItem() {
+  const name = $("ri-name").value.trim().replace(/\|/g, "/");
+  const cost = parseInt($("ri-cost").value, 10);
+  if (!name || !(cost >= 1)) { showToast("Enter a name and points | اكتب اسم المكافأة والنقاط"); return; }
+  const a = getItems();
+  a.push({ id: String(Date.now()), name, cost, by: currentUser });
+  saveItems(a);
+  $("ri-name").value = ""; $("ri-cost").value = "";
+  store.set("store_alert_" + partnerOf(currentUser), `🎁 ${DISPLAY[currentUser]} added a reward: ${name} | أضاف مكافأة جديدة: ${name} | ${DISPLAY[currentUser]} hat eine Belohnung hinzugefügt: ${name}`);
+  renderStore();
+  showToast("Reward added ✅ | تمت إضافة المكافأة");
+}
+function removeItem(id) {
+  saveItems(getItems().filter(i => String(i.id) !== String(id)));
+  renderStore();
+}
+function requestItem(id) {
+  const it = getItems().find(i => String(i.id) === String(id));
+  if (!it || it.by === currentUser) return;
+  const coins = getCoins(currentUser);
+  if (coins < it.cost) { showToast("❌ Not enough points! | الرصيد غير كافٍ!"); return; }
+  addCoins(-it.cost, "Store: " + it.name);
+  const r = getReqs();
+  r.unshift({ id: String(Date.now()), buyer: currentUser, name: it.name, cost: it.cost, status: "pending", t: Date.now() });
+  saveReqs(r);
+  store.set("store_alert_" + partnerOf(currentUser), `🛍️ ${DISPLAY[currentUser]} requested: ${tr(it.name)} | طلب جديد في المتجر: ${tr(it.name)} | ${DISPLAY[currentUser]} hat angefragt: ${tr(it.name)}`);
+  loadState();
+  showToast(`🎟️ Request sent, waiting for approval | تم إرسال الطلب بانتظار الموافقة`);
+}
+function approveReq(id) {
+  const r = getReqs(), q = r.find(x => x.id === id);
+  if (!q || q.status !== "pending") return;
+  q.status = "approved";
+  saveReqs(r);
+  store.set("store_alert_" + q.buyer, `✅ ${DISPLAY[currentUser]} approved: ${tr(q.name)} | تمت الموافقة: ${tr(q.name)} | ${DISPLAY[currentUser]} hat zugestimmt: ${tr(q.name)}`);
+  loadState();
+  showToast("Approved ✅ | تمت الموافقة");
+}
+function declineReq(id) {
+  const r = getReqs(), q = r.find(x => x.id === id);
+  if (!q || q.status !== "pending") return;
+  q.status = "declined";
+  saveReqs(r);
+  addCoins(q.cost, "Refund: " + q.name, q.buyer);
+  store.set("store_alert_" + q.buyer, `❌ ${DISPLAY[currentUser]} declined: ${tr(q.name)} (refunded) | تم الرفض واسترجاع النقاط: ${tr(q.name)} | ${DISPLAY[currentUser]} hat abgelehnt: ${tr(q.name)} (erstattet)`);
+  loadState();
+  showToast("Declined, points refunded | تم الرفض واسترجاع النقاط");
+}
+function renderStats() {
+  const since = Date.now() - 7 * 864e5, pts = { Mohamad: 0, Dima: 0 };
+  readJson("pts_log", []).forEach(e => { if (e.t >= since && e.n > 0 && pts[e.u] != null) pts[e.u] += e.n; });
+  const minDay = dayKey(new Date(Date.now() - 6 * 864e5)), wins = { Mohamad: 0, Dima: 0 };
+  readJson("race_log", []).forEach(e => { if (e.d >= minDay && wins[e.w] != null) wins[e.w]++; });
+  const w = store.get("game_winner");
+  if (w) wins[w]++;
+  const cur = {}, best = {};
+  USERS.forEach(u => { cur[u] = num("streak_" + u) + (userAllDone(u) ? 1 : 0); best[u] = Math.max(num("best_" + u), cur[u]); });
+  const row = (label, a, b) => `<div class="st-l">${label}</div><div class="st-v ${a > b ? "lead" : ""}">${a}</div><div class="st-v ${b > a ? "lead" : ""}">${b}</div>`;
+  $("week-stats").innerHTML = `<div></div><div class="st-h">Mo</div><div class="st-h">Di 🤍</div>` +
+    row("🪙 " + T("Points earned", "النقاط المكتسبة"), pts.Mohamad, pts.Dima) +
+    row("🏆 " + T("Race wins", "الفوز بالسباق"), wins.Mohamad, wins.Dima) +
+    row("🔥 " + T("Current streak", "السلسلة الحالية"), cur.Mohamad, cur.Dima) +
+    row("⭐ " + T("Longest streak", "أطول سلسلة"), best.Mohamad, best.Dima);
+}
+function renderStore() {
+  if (!currentUser) return;
+  $("user-coins").textContent = getCoins(currentUser);
+  const reqs = getReqs();
+
+  const waiting = reqs.filter(r => r.status === "pending" && r.buyer !== currentUser);
+  setHtml($("store-requests"), waiting.map(r => `<div class="banner banner-prize" style="text-align:start"><div>🛍️ <b>${DISPLAY[r.buyer]}</b> ${T("requests", "يطلب")}: <b>${esc(tr(r.name))}</b> (${r.cost} ${T("pts", "نقطة")})</div><div class="row2"><button onclick="approveReq('${r.id}')" style="background:var(--ok)">Approve ✅ | موافقة</button><button class="danger" onclick="declineReq('${r.id}')">Decline ❌ | رفض</button></div></div>`).join(""));
+  const nb = $("nb-store");
+  nb.textContent = waiting.length;
+  nb.classList.toggle("hidden", !waiting.length);
+
+  setHtml($("store-items"), getItems().map(it => {
+    const mine = it.by === currentUser;
+    const from = it.by === "*" ? "" : ` · ${T("from", "من")} ${PILL[it.by]}`;
+    const btn = mine
+      ? `<button class="danger sm" onclick="removeItem('${it.id}')">🗑</button>`
+      : `<button class="sm" style="background:var(--gold)" onclick="requestItem('${it.id}')">Redeem 🎟️ | شراء</button>`;
+    return `<div class="task-card" style="flex-direction:row;justify-content:space-between;align-items:center"><div><strong style="font-size:13px">${esc(tr(it.name))}</strong><br><span class="sub">${T("Cost", "التكلفة")}: ${it.cost} ${T("pts", "نقطة")}${from}${mine ? " · " + T("yours", "مكافأتك") : ""}</span></div>${btn}</div>`;
+  }).join(""));
+
+  const icon = { pending: "⏳", approved: "✅", declined: "❌" };
+  setHtml($("store-history-list"), reqs.length
+    ? reqs.slice(0, 30).map(r => `<div>${icon[r.status] || "•"} <b>${DISPLAY[r.buyer]}</b> → <b>${esc(tr(r.name))}</b> · ${timeStr(r.t)}</div>`).join("")
+    : `<div style="color:var(--muted);font-style:italic">${T("No orders yet...", "لا توجد طلبات بعد...")}</div>`);
+
+  renderStats();
+
+  const log = readJson("pts_log", []);
+  setHtml($("pts-log"), log.length
+    ? log.slice(0, 30).map(e => `<div>${e.n > 0 ? "🟢 +" : "🔴 "}${e.n} · <b>${PILL[e.u] || e.u}</b> · ${esc(tr(e.r))} <span class="sub">${timeStr(e.t)}</span></div>`).join("")
+    : `<div style="color:var(--muted);font-style:italic">${T("No points yet...", "لا توجد نقاط بعد...")}</div>`);
+}
+function loadStoreHistory() { renderStore(); }
+
+/* ---------- Poke with messages ---------- */
+const POKE = {
+  ar: { f: ["⚡ نكزة!", "يلا حبيبتي 💗", "حان وقت الصلاة 🕌", "كمّلي مهامك 💪", "فخور فيكِ ✨", "وحشتيني 🥰"],
+        m: ["⚡ نكزة!", "يلا حبيبي 💗", "حان وقت الصلاة 🕌", "كمّل مهامك 💪", "فخورة فيك ✨", "وحشتني 🥰"] },
+  tr: { f: ["⚡ Nakze!", "Yalla habibti 💗", "Hane wa2t el salet 🕌", "Kammli mhamik 💪", "Fakhir fiki ✨", "Wahashtini 🥰"],
+        m: ["⚡ Nakze!", "Yalla habibi 💗", "Hane wa2t el salet 🕌", "Kammel mhamak 💪", "Fakhra fik ✨", "Wahashtni 🥰"] },
+  en: { f: ["⚡ Poke!", "Come on, love 💗", "Time to pray 🕌", "Finish your tasks 💪", "Proud of you ✨", "I miss you 🥰"] },
+  de: { f: ["⚡ Stups!", "Los, mein Schatz 💗", "Zeit zum Gebet 🕌", "Mach deine Aufgaben fertig 💪", "Ich bin stolz auf dich ✨", "Ich vermisse dich 🥰"] }
+};
+let pokeLang = "ar";
+function pokeMessages(target, lang) {
+  const set = POKE[lang || pokeLang] || POKE.ar;
+  return target === "Dima" ? set.f : (set.m || set.f);
+}
+function renderPoke() {
+  const target = partnerOf(currentUser);
+  const L = [["ar", "العربية"], ["tr", "Aa"], ["en", "English"], ["de", "Deutsch"]];
+  $("poke-langs").innerHTML = L.map(x => `<button class="${x[0] === pokeLang ? "sel" : ""}" onclick="setPokeLang('${x[0]}')">${x[1]}</button>`).join("");
+  $("poke-list").innerHTML = pokeMessages(target).map((m, i) => `<button onclick="sendPoke(${i})" style="background:var(--tint);color:var(--text);border:1px solid var(--border);font-size:14px">${m}</button>`).join("");
+}
+function setPokeLang(l) { pokeLang = l; renderPoke(); }
+function openPoke() {
+  pokeLang = LANG;
+  renderPoke();
+  $("poke-custom").value = "";
+  $("poke-modal").classList.remove("hidden");
+}
+function closePoke() { $("poke-modal").classList.add("hidden"); }
+function deliverPoke(msg) {
+  store.set("poke_alert_" + partnerOf(currentUser), `⚡ ${PILL[currentUser]}: ${msg}`);
+  closePoke();
+  showToast("Poke Sent! ⚡ | تم إرسال النكزة!");
+}
+function sendPoke(i) { deliverPoke(pokeMessages(partnerOf(currentUser))[i]); }
+function sendCustomPoke() {
+  const m = $("poke-custom").value.trim().replace(/\|/g, "/");
+  if (!m) return;
+  deliverPoke(m);
+}
+function checkAlerts() {
+  if (!currentUser) return;
+  const p = store.get("poke_alert_" + currentUser);
+  if (p) { showToast(p); vib([80, 50, 80]); store.del("poke_alert_" + currentUser); }
+  const s = store.get("store_alert_" + currentUser);
+  if (s) { showToast(s); store.del("store_alert_" + currentUser); loadState(); }
+}
+setInterval(checkAlerts, 2000);
+window.addEventListener("storage", () => { if (currentUser) loadState(); });
+
+/* ---------- Admin ---------- */
+function adminResetTasks() {
+  resetTasksState();
+  loadState();
+  showToast("Tasks Reset! | تمت إعادة تعيين المهام");
+  toggleSettings(false);
+}
+function adminResetStreaks() {
+  USERS.forEach(u => { ["streak_", "wins_", "wheel_token_", "best_"].forEach(k => store.del(k + u)); });
+  store.del("race_log");
+  store.set("cycle_days", "0");
+  loadState();
+  showToast("Streaks & wheel cycle reset | تم تصفير السلسلة والعجلة");
+  toggleSettings(false);
+}
+function adminResetPoints() {
+  USERS.forEach(u => store.set("coins_" + u, "0"));
+  store.del("pts_log");
+  loadState();
+  showToast("Points Reset! | تم تصفير النقاط");
+  toggleSettings(false);
+}
+function adminResetQuran() {
+  USERS.forEach(u => { store.del("quran_page_" + u); store.del("khatmas_" + u); });
+  renderKhatma();
+  showToast("Quran Reset to page 1 | تم تصفير القرآن");
+  toggleSettings(false);
+}
+
+/* ---------- State ---------- */
+function setBadge(id, u, done) {
+  const el = $(`status-${id}-${u}`);
+  if (!el) return;
+  el.className = "pill " + (done ? "on" : "off");
+  el.textContent = `${PILL[u]} ${done ? "✓" : "·"}`;
+}
+function setButton(btnId, key) {
+  const b = $(btnId);
+  if (b && isDone(key)) { b.disabled = true; setBi(b, "Done ✅ | تم"); }
+}
+function loadState() {
+  if (!currentUser) return;
+  const all = { Mohamad: true, Dima: true };
+  const count = { Mohamad: 0, Dima: 0 };
+  const rows = [];
+  for (let i = 1; i <= 10; i++) rows.push({ id: "task-" + i, key: "task_" + i, race: true });
+  for (let i = 1; i <= 5; i++) rows.push({ id: "side-" + i, key: "side_task_" + i });
+  rows.push({ id: "gold", key: "gold_opp" }, { id: "postprayer", key: "post_prayer" },
+    { id: "sp-kahf", key: "sp_kahf" }, { id: "sp-fast", key: "sp_fast" }, { id: "sp-white", key: "sp_white" });
+
+  rows.forEach(r => {
+    USERS.forEach(u => {
+      const d = isDone(r.key, u);
+      setBadge(r.id, u, d);
+      if (r.race) { if (d) count[u]++; else all[u] = false; }
+    });
+    setButton("btn-" + r.id, r.key);
+    const card = $("card-" + r.id);
+    if (card) card.classList.toggle("done", isDone(r.key));
+  });
+  placeCards();
+
+  USERS.forEach(u => { $("pg-" + u).style.width = count[u] * 10 + "%"; $("pgn-" + u).textContent = count[u] + "/10"; });
+  updateKhatma();
+  renderStore();
+
+  let w = store.get("game_winner");
+  if (!w && all.Mohamad !== all.Dima) {
+    w = all.Mohamad ? "Mohamad" : "Dima";
+    store.set("game_winner", w);
+  }
+
+  const banner = $("persistent-banner");
+  USERS.forEach(u => {
+    const el = $("banner-" + u);
+    if (w) {
+      el.className = "mini-badge " + (w === u ? "bg-done" : "bg-loser");
+      el.textContent = skin(`${SHORT[u]}: ${w === u ? T("Winner", "فائز") + " 🏆" : T("Loser", "خاسر") + " ❌"}`);
+    } else {
+      el.className = "mini-badge bg-not";
+      el.textContent = `${SHORT[u]}: ${all[u] ? T("Finished", "أنهى") + " 🏆" : T("Racing", "يتسابق") + " ⏳"}`;
+    }
+  });
+
+  if (w) {
+    if (w === currentUser) {
+      banner.textContent = tr("🏆 You won today's race! +1 win toward the wheel | فزت بسباق اليوم! نقطة نحو العجلة");
+      banner.className = "banner banner-success";
+    } else {
+      banner.textContent = skin(T(`❌ You lost the race today! ${DISPLAY[w]} finished first.`, `❌ خسرت السباق اليوم! ${DISPLAY[w]} أنهى المهام أولاً.`, `❌ Du hast das Rennen heute verloren! ${DISPLAY[w]} war zuerst fertig.`));
+      banner.className = "banner banner-error";
+    }
+  } else {
+    banner.className = "banner hidden";
+  }
+
+  const token = store.get("wheel_token_" + currentUser) === "true";
+  const left = Math.max(1, CYCLE_DAYS - num("cycle_days"));
+  const wins = { Mohamad: num("wins_Mohamad"), Dima: num("wins_Dima") };
+  if (w) wins[w]++;
+  $("wheel-status-text").textContent = "🎡 " + (token ? T("Ready to spin!", "جاهزة للف!") : T(`Opens in ${left}d`, `بعد ${left} أيام`, `Öffnet in ${left} T`));
+  $("wheel-btn").classList.toggle("ready", token);
+  USERS.forEach(u => { $("stk-" + u).textContent = "🔥" + (num("streak_" + u) + (userAllDone(u) ? 1 : 0)); });
+  $("cycle-info").textContent = `🏆 ${T("Race wins this cycle", "الفوز بالسباق")}: Mo ${wins.Mohamad} – Di 🤍 ${wins.Dima}`;
+
+  const pb = $("persistent-prize-banner");
+  const prizes = getPrizes();
+  if (prizes.length) {
+    pb.innerHTML = skin(prizes.map(p => {
+      const msg = p.w === currentUser
+        ? `🎁 ${T("Your Prize", "جائزتك")}: <b>${esc(tr(p.prize))}</b>`
+        : `👑 ${DISPLAY[p.w]} ${T("won", "ربح")}: <b>${esc(tr(p.prize))}</b>. ${T("You must fulfill it!", "يجب عليك تنفيذها!")}`;
+      return `<div style="margin-bottom:8px">${msg}<br><button onclick="fulfillPrize(${p.id})">${T("Mark as Done ✅", "تم التنفيذ ✅")}</button></div>`;
+    }).join(""));
+    pb.className = "banner banner-prize";
+  } else {
+    pb.className = "banner banner-prize hidden";
+  }
+}
+
+/* ---------- Start ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  setTheme(store.get("site_theme") || "light");
+  applyReadLang();
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+  const saved = store.get("active_session_user");
+  if (saved && passcodes[saved]) { currentUser = saved; initApp(); }
+  applyLang(document.body);
+  markSettings();
+});
+</script>
+</body>
+</html>
