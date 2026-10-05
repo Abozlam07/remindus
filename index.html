@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,88 +7,98 @@
 <meta name="theme-color" content="#4f46e5">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🕌%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 /* ---------- Themes ---------- */
-:root{--bg:#f6f7fb;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#dde3ee;--primary:#4f46e5;--primary2:#7c3aed;--tint:rgba(79,70,229,.07);--ok:#059669;--ok-soft:rgba(16,185,129,.15);--bad:#e11d48;--bad-text:#e11d48;--bad-soft:rgba(225,29,72,.12);--loser:#9f1239;--gold:#d97706;--blue:#2563eb;--shadow:0 2px 10px rgba(30,41,59,.07);color-scheme:light}
-body.dark-mode{--bg:#0b0f19;--card:#162033;--text:#f1f5f9;--muted:#94a3b8;--border:#2a3a55;--primary:#6366f1;--primary2:#8b5cf6;--tint:rgba(129,140,248,.1);--bad-text:#fb7185;--shadow:0 2px 12px rgba(0,0,0,.4);color-scheme:dark}
-body.pink-mode{--bg:#fff1f5;--card:#fff;--text:#831843;--muted:#9d5a77;--border:#fbcfe8;--primary:#db2777;--primary2:#f472b6;--tint:rgba(219,39,119,.07);--ok:#db2777;--ok-soft:rgba(219,39,119,.12);--blue:#be185d;--gold:#c2410c;--shadow:0 2px 10px rgba(219,39,119,.12)}
-body.rose-dark{--bg:#170a13;--card:#26111f;--text:#fce7f3;--muted:#d6a3bf;--border:#52243f;--primary:#f472b6;--primary2:#c084fc;--tint:rgba(244,114,182,.1);--ok:#ec4899;--ok-soft:rgba(236,72,153,.16);--bad:#a1417b;--bad-text:#f0a6cf;--bad-soft:rgba(161,65,123,.2);--loser:#5b2346;--blue:#e879f9;--gold:#fb923c;--shadow:0 2px 14px rgba(0,0,0,.5);color-scheme:dark}
+:root{--bg:#f5f2eb;--bg2:#f5f2eb;--card:#fff;--text:#1d2b2e;--muted:#6c7b80;--border:#e8e3d8;--primary:#0f766e;--primary2:#10948a;--tint:rgba(15,118,110,.08);--ok:#0f766e;--ok-soft:rgba(15,118,110,.12);--bad:#dc2626;--bad-text:#dc2626;--bad-soft:rgba(220,38,38,.1);--loser:#9f1239;--gold:#b45309;--blue:#2563eb;--shadow:0 1px 2px rgba(29,43,46,.05),0 6px 18px rgba(29,43,46,.05);color-scheme:light}
+body.dark-mode{--bg:#0d1416;--bg2:#0d1416;--card:#162024;--text:#eef3f4;--muted:#93a5ab;--border:#25353a;--primary:#0f8a7f;--primary2:#14a698;--tint:rgba(45,212,191,.09);--ok:#14a698;--ok-soft:rgba(20,166,152,.16);--bad-text:#fb7185;--gold:#d98a2b;--blue:#3b82f6;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.28);color-scheme:dark}
+body.pink-mode{--bg:#fff3f7;--bg2:#ffe3ee;--card:#fff;--text:#831843;--muted:#9d5a77;--border:#fbd5e6;--primary:#db2777;--primary2:#ec4899;--tint:rgba(219,39,119,.07);--ok:#db2777;--ok-soft:rgba(219,39,119,.12);--blue:#be185d;--gold:#c2410c;--shadow:0 1px 2px rgba(219,39,119,.06),0 6px 18px rgba(219,39,119,.1)}
+body.rose-dark{--bg:#170a13;--bg2:#2a0f22;--card:#26111f;--text:#fce7f3;--muted:#d6a3bf;--border:#4a2139;--primary:#f472b6;--primary2:#c084fc;--tint:rgba(244,114,182,.1);--ok:#ec4899;--ok-soft:rgba(236,72,153,.16);--bad:#a1417b;--bad-text:#f0a6cf;--bad-soft:rgba(161,65,123,.2);--loser:#5b2346;--blue:#e879f9;--gold:#fb923c;--shadow:0 2px 14px rgba(0,0,0,.5);color-scheme:dark}
 
 /* ---------- Base ---------- */
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent}
-.container{max-width:560px;margin:0 auto;background:var(--card);padding:14px;border-radius:18px;border:1px solid var(--border);box-shadow:var(--shadow)}
+body{margin:0;min-height:100vh;padding:max(8px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left));font-family:'Tajawal','Segoe UI',Tahoma,sans-serif;background:var(--bg);background-image:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);background-attachment:fixed;color:var(--text);transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent}
+.container{max-width:520px;margin:0 auto;padding:0 0 110px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);padding:18px}
+#login-screen{margin-top:8vh}
 .hidden{display:none!important}
 h2,h3{text-align:center;color:var(--primary);margin:6px 0}
 
-/* ---------- Controls (one size system for the whole app) ---------- */
+/* ---------- Controls ---------- */
 button{font:inherit;font-size:14px;font-weight:700;cursor:pointer;border:0;border-radius:10px;padding:10px 14px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:6px;line-height:1.25;text-align:center;touch-action:manipulation;background:var(--primary);color:#fff;transition:transform .1s,opacity .2s}
 button:active{transform:scale(.97)}
 button:disabled{background:#94a3b8!important;cursor:not-allowed;opacity:.8}
 body.rose-dark button:disabled{background:#4a2a3f!important;color:#d6a3bf}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--primary2);outline-offset:2px}
-select,input{width:100%;min-height:44px;padding:10px 14px;margin:8px 0;border:1px solid var(--border);border-radius:10px;font-size:16px;background:var(--card);color:var(--text)}
+select,input{width:100%;min-height:44px;padding:10px 14px;margin:8px 0;border:1px solid var(--border);border-radius:10px;font:inherit;font-size:16px;background:var(--card);color:var(--text)}
 .full{width:100%}
 .danger{background:var(--bad)}
+.sm{min-height:38px;padding:6px 12px;font-size:12px}
 
-/* ---------- Header, tabs, dashboard ---------- */
-.top-bar{display:flex;justify-content:space-between;align-items:center;min-height:52px;margin-bottom:10px;background:var(--tint);padding:6px 10px;border-radius:12px;border:1px solid var(--border);font-weight:700;font-size:13px}
-.theme-btn{width:40px;height:40px;min-height:40px;padding:0;font-size:18px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-inline-start:4px}
-.head-row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:8px}
-.head-row button{min-height:38px;padding:6px 12px;font-size:12px}
-.nav-tabs{display:flex;gap:4px;margin:12px 0}
-.nav-tab{flex:1;min-height:50px;padding:6px 4px;font-size:12px;line-height:1.3;background:var(--tint);color:var(--text);opacity:.75}
-.nav-tab.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;opacity:1}
-.dash{display:flex;gap:10px;margin-bottom:12px;align-items:stretch}
-.wheel-box{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;background:var(--tint);border:2px dashed var(--primary);padding:10px;border-radius:14px;text-align:center;cursor:pointer}
-.wheel-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--primary),var(--primary2));border-radius:50%;margin:4px auto;display:flex;align-items:center;justify-content:center;font-size:19px}
-.right-box{flex:1;display:flex;flex-direction:column;gap:6px;justify-content:space-between}
-.race{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;background:var(--tint);border:1px solid var(--border);padding:6px;border-radius:10px}
-.poke{background:linear-gradient(135deg,#ec4899,#db2777)}
-.progress{display:grid;gap:8px;background:var(--tint);border:1px solid var(--border);border-radius:14px;padding:10px 12px;margin-bottom:12px}
-.pg-row{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700}
-.pg-row span:first-child{width:44px}
-.pg-bar{flex:1;height:10px;background:var(--border);border-radius:99px;overflow:hidden}
-.pg-fill{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:99px;transition:width .5s}
-.pg-num{width:38px;text-align:end}
-.stk{width:52px;text-align:end;white-space:nowrap}
-.pg-info{font-size:11px;color:var(--muted);line-height:1.7}
+/* ---------- Header ---------- */
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 2px 16px}
+.hdr h1{margin:0;font-size:20px;font-weight:800;line-height:1.35}
+.hdr p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.hdr-a{display:flex;gap:8px;flex:none}
+.icon-btn{width:44px;height:44px;min-height:44px;padding:0;border-radius:14px;font-size:19px;background:var(--card);color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow)}
+.icon-btn.ready{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,119,6,.25)}
 
-/* ---------- Task cards & status badges ---------- */
-.task-card{display:flex;flex-direction:column;gap:8px;background:var(--card);border:1px solid var(--border);padding:10px 12px;border-radius:14px;margin-bottom:9px;box-shadow:var(--shadow)}
-.task-card.done{border-inline-start:4px solid var(--ok)}
-.task-card.next{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary2),var(--shadow)}
-.task-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;min-height:30px;font-size:14px;font-weight:700}
-.task-title{flex:1 1 150px;min-width:0}
-.pts{font-size:11px;color:var(--ok);white-space:nowrap}
-.task-bottom{display:flex;gap:10px;background:var(--tint);padding:6px 8px;border-radius:10px;border:1px solid var(--border)}
-.names{display:flex;flex-direction:column;justify-content:space-between;gap:4px;width:120px}
-.mini-badge{min-height:28px;display:flex;align-items:center;justify-content:center;padding:4px 6px;border-radius:7px;border:1px solid transparent;text-align:center;color:#fff;font-size:11px;font-weight:700}
-.bg-done{background:var(--ok)}
-.bg-not{background:var(--bad)}
-.bg-loser{background:var(--loser)}
-/* pink themes: done = bright pink, not done = soft dashed outline (no green / red) */
-body.pink-mode .bg-done,body.rose-dark .bg-done{background:linear-gradient(135deg,#ec4899,#c026d3);box-shadow:0 0 10px rgba(236,72,153,.35)}
-body.pink-mode .bg-not{background:#fde2ee;color:#a04b73;border:1px dashed #f3a6c8}
-body.rose-dark .bg-not{background:rgba(244,114,182,.07);color:#cf9ab9;border:1px dashed #7a3d62}
-body.pink-mode .bg-loser{background:#9d174d}
-body.rose-dark .bg-loser{background:#4a1d38;color:#e9a3c9}
-.action{flex:1;display:flex}
-.action button{flex:1;min-height:62px;font-size:12px}
-.pt-chip{flex:none;min-width:88px;text-align:center;font-size:11px;font-weight:700;padding:5px 8px;border-radius:999px;background:var(--tint);border:1px solid var(--border);color:var(--primary);font-variant-numeric:tabular-nums}
-
-/* ---------- Prayer times card ---------- */
-.pt-card{background:linear-gradient(135deg,var(--tint),transparent);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:12px}
-.pt-main{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.pt-next{font-weight:700;font-size:14px}
-.pt-count{font-size:22px;font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums}
-.pt-hijri{font-size:12px;color:var(--muted);margin-top:2px}
-.pt-gear{flex:none;width:44px;padding:0;background:var(--tint);color:var(--text);border:1px solid var(--border);font-size:18px}
-.pt-form{margin-top:10px;display:grid;gap:6px}
+/* ---------- Prayer hero ---------- */
+.pt-card{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border-radius:24px;padding:18px 20px;margin-bottom:12px;box-shadow:var(--shadow)}
+body.rose-dark .pt-card{color:#2b0a1d}
+.pt-main{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.pt-next{font-size:13px;font-weight:700;opacity:.92}
+.pt-count{font-size:34px;font-weight:800;line-height:1.25;font-variant-numeric:tabular-nums}
+.pt-hijri{font-size:12px;opacity:.85;margin-top:2px}
+.pt-gear{flex:none;width:40px;height:40px;min-height:40px;padding:0;background:rgba(255,255,255,.22);color:inherit;border:0;border-radius:12px;font-size:17px}
+.pt-form{display:grid;gap:6px;margin-top:14px;background:var(--card);color:var(--text);border-radius:16px;padding:10px}
 .pt-form input,.pt-form select{margin:0}
 
-/* ---------- Reader (adhkar / quran) ---------- */
+/* ---------- Progress ---------- */
+.progress{display:grid;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.pg-row{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
+.pg-row span:first-child{width:38px}
+.pg-bar{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden}
+.pg-fill{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:99px;transition:width .5s}
+.pg-num{width:34px;text-align:end;font-variant-numeric:tabular-nums}
+.stk{width:46px;text-align:end;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.pg-info{font-size:11px;color:var(--muted)}
+.mini-badge{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:3px 11px;border-radius:99px;font-size:11px;font-weight:700;color:#fff;border:1px solid transparent;text-align:center}
+.bg-done{background:var(--ok)}
+.bg-not{background:var(--tint);color:var(--muted);border-color:var(--border)}
+.bg-loser{background:var(--loser)}
+body.rose-dark .bg-loser{background:#4a1d38;color:#e9a3c9}
+button.wheel{background:var(--gold);color:#fff;min-height:26px;padding:3px 11px;font-size:11px;border-radius:99px}
+
+/* ---------- Bottom navigation ---------- */
+.bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:max(10px,env(safe-area-inset-bottom));width:min(calc(100% - 24px),496px);z-index:70;display:flex;gap:2px;padding:6px;background:var(--card);border:1px solid var(--border);box-shadow:0 10px 30px rgba(0,0,0,.16);border-radius:24px}
+.nav-tab{flex:1;min-height:52px;flex-direction:column;gap:2px;padding:4px 2px;font-size:11px;line-height:1.2;background:transparent;color:var(--muted);border-radius:18px;position:relative}
+.nav-tab .ni{font-size:20px;line-height:1}
+.nav-tab.active{background:var(--primary);color:#fff}
+body.rose-dark .nav-tab.active{color:#2b0a1d}
+.nav-badge{position:absolute;top:2px;inset-inline-end:10px;min-width:18px;height:18px;border-radius:99px;background:var(--bad);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* ---------- Task rows ---------- */
+.sec-title{margin:20px 6px 8px;font-size:12px;font-weight:800;color:var(--muted)}
+.task-card{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);padding:12px 14px;border-radius:18px;margin-bottom:8px;box-shadow:var(--shadow)}
+.task-card .tm{flex:1;min-width:0}
+.task-card.done{border-inline-start:4px solid var(--ok)}
+.task-card.next{border-color:var(--primary);box-shadow:0 0 0 3px var(--tint),var(--shadow)}
+.task-top{font-size:14px;font-weight:700;line-height:1.5}
+.task-title .num{color:var(--muted);font-weight:600}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:5px}
+.pts{font-size:11px;color:var(--ok);font-weight:700;white-space:nowrap}
+.pt-chip{font-size:11px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pills{display:flex;gap:4px}
+.pill{height:20px;display:flex;align-items:center;padding:0 8px;border-radius:99px;font-size:10px;font-weight:800;border:1px solid var(--border);white-space:nowrap}
+.pill.on{background:var(--ok);color:#fff;border-color:transparent}
+.pill.off{background:transparent;color:var(--muted)}
+.task-card>button{flex:none;min-height:38px;padding:6px 14px;border-radius:999px;font-size:12px}
+/* ---------- Reader ---------- */
 .sub-top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;background:var(--card);padding:8px 0 10px;margin-bottom:8px;border-bottom:1px solid var(--border)}
 .sub-top h2{flex:1;margin:0;font-size:15px}
 .back-btn{min-height:40px;padding:8px 12px;font-size:13px;white-space:nowrap;background:var(--tint);color:var(--primary);border:1px solid var(--border)}
@@ -114,11 +124,46 @@ body.rose-dark .bg-loser{background:#4a1d38;color:#e9a3c9}
 .player-row select{flex:1;min-width:0;margin:0;padding:0 8px;font-size:14px}
 .p-label{flex:2;text-align:center;font-size:12px;font-weight:700}
 
-/* ---------- Store ---------- */
-.coins{background:rgba(245,158,11,.12);border:1px solid #fcd34d;padding:12px;border-radius:12px;text-align:center;font-size:15px;font-weight:700;margin-bottom:12px}
-.history{background:var(--tint);border:1px solid var(--border);border-radius:10px;padding:10px;margin-top:8px;max-height:130px;overflow-y:auto;font-size:12px;line-height:1.8}
+/* ---------- Khatma ---------- */
+.kh-sheet{border-top-color:var(--primary);padding-bottom:6px}
+.kh-sheet .acc-head{color:var(--primary);margin-bottom:6px}
+.kh-row{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:12px;font-weight:700}
+.kh-name{width:46px}
+.kh-txt{min-width:84px;text-align:end;font-variant-numeric:tabular-nums}
+.kh-tools{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;align-items:end;margin-top:10px}
+.kh-tools label{font-size:11px;color:var(--muted);font-weight:700}
+.kh-tools select,.kh-tools input{margin:2px 0 0;min-height:40px;padding:6px 10px}
+.kh-tools button{grid-column:1/-1;min-height:40px}
 
-/* ---------- Toast, banners, modal, effects ---------- */
+/* ---------- Tasbih ---------- */
+.tsb{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px}
+.tsb select{margin:0}
+.tsb-phrase{font-size:26px;font-weight:800;color:var(--primary);direction:rtl;text-align:center;min-height:48px;line-height:1.8}
+.tsb-dots{display:flex;gap:8px}
+.tsb-dot{padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;background:var(--tint);border:1px solid var(--border);color:var(--muted)}
+.tsb-dot.on{background:var(--primary);color:#fff;border-color:transparent}
+.tsb-btn{width:210px;height:210px;border-radius:50%;min-height:0;padding:0;flex-direction:column;gap:0;background:linear-gradient(135deg,var(--primary),var(--primary2));font-size:64px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.25),inset 0 -6px 14px rgba(0,0,0,.18);user-select:none;-webkit-user-select:none}
+.tsb-btn:active{transform:scale(.94)}
+.tsb-btn small{font-size:16px;font-weight:700;opacity:.9}
+.tsb-row{display:flex;gap:8px;width:100%}
+.tsb-row button{flex:1}
+.tsb-total{font-size:12px;color:var(--muted);font-weight:700}
+
+/* ---------- Store & stats ---------- */
+.coins{background:rgba(245,158,11,.12);border:1px solid #fcd34d;padding:12px;border-radius:12px;text-align:center;font-size:15px;font-weight:700;margin-bottom:12px}
+.history{background:var(--tint);border:1px solid var(--border);border-radius:10px;padding:10px;margin-top:8px;max-height:150px;overflow-y:auto;font-size:12px;line-height:1.8}
+.row2{display:flex;gap:8px;margin-top:8px}
+.row2 button{flex:1;min-height:40px;font-size:12px}
+.add-form{display:grid;grid-template-columns:2fr 1fr;gap:6px;margin:8px 0}
+.add-form input{margin:0;min-height:42px}
+.add-form button{grid-column:1/-1}
+.sub{font-size:11px;opacity:.7}
+.stats{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:6px;align-items:center;background:var(--tint);border:1px solid var(--border);border-radius:12px;padding:10px;font-size:12px}
+.st-h,.st-v{text-align:center;font-weight:800}
+.st-v.lead{color:#fff;background:linear-gradient(135deg,#ec4899,#c026d3);border-radius:8px;padding:3px 0}
+.st-l{font-weight:700}
+
+/* ---------- Toast, banners, modal ---------- */
 .toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);width:min(92%,420px);z-index:1000;background:var(--ok);color:#fff;padding:11px;border-radius:12px;font-weight:700;text-align:center;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .banner{padding:12px;border-radius:12px;margin-bottom:10px;font-weight:700;text-align:center;font-size:13px;border:2px solid}
 .banner-success{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
@@ -126,11 +171,34 @@ body.rose-dark .bg-loser{background:#4a1d38;color:#e9a3c9}
 .banner-prize{background:rgba(245,158,11,.15);border-color:#f59e0b;color:var(--gold)}
 .banner button{margin-top:8px;background:var(--ok);padding:6px 12px;font-size:12px;min-height:38px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center;z-index:999}
-.modal-card{background:var(--card);border:1px solid var(--border);padding:20px;border-radius:16px;width:90%;max-width:400px;text-align:center}
+.modal-card{background:var(--card);border:1px solid var(--border);padding:20px;border-radius:16px;width:90%;max-width:400px;max-height:90vh;overflow-y:auto;text-align:center}
 .modal-card button{display:flex;width:100%;margin:6px 0;font-size:12px}
+.set-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.set-row.two{grid-template-columns:1fr 1fr}
+.set-row button{background:var(--tint);color:var(--text);border:1px solid var(--border);margin:0;font-size:18px}
+.set-row.two button{font-size:12px;min-height:46px;padding:6px 8px}
+.set-row button.sel{outline:3px solid var(--primary2);outline-offset:0}
+.set-title{font-size:12px;font-weight:800;color:var(--muted);margin:14px 0 6px;text-align:start}
 .burst{position:fixed;bottom:-30px;font-size:26px;z-index:1001;pointer-events:none;animation:rise 1.8s ease-out forwards}
 @keyframes rise{to{transform:translateY(-90vh) rotate(25deg);opacity:0}}
 @media(prefers-reduced-motion:reduce){.burst{display:none}*{transition:none!important}}
+/* ---------- Polish ---------- */
+.sub-top{background:var(--bg)}
+.sheet{border-top:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow)}
+.kh-sheet{border-top-color:var(--border)}
+.banner{border-radius:16px;border-width:1px}
+.coins{border-radius:18px}
+button{border-radius:12px}
+body.rose-dark .task-card>button:not(:disabled),body.rose-dark button.wheel{color:#2b0a1d}
+body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none}
+.tsb-phrase{display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center}
+.tsb-l{font-size:15px;font-weight:700;color:var(--muted);direction:ltr}
+.tsb-l.big{font-size:26px;font-weight:800;color:var(--primary)}
+.tsb-l.ar{direction:rtl}
+#tsb-of{direction:ltr}
+.pt-results{display:grid;gap:4px}
+.pt-results button{margin:0;background:var(--tint);color:var(--text);border:1px solid var(--border);justify-content:flex-start;text-align:start;min-height:42px;font-size:13px;font-weight:700;flex-direction:column;align-items:flex-start;gap:0}
+.pt-results small{font-size:11px;font-weight:500;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -138,16 +206,10 @@ body.rose-dark .bg-loser{background:#4a1d38;color:#e9a3c9}
 <div id="toast" class="toast hidden"></div>
 
 <div class="container">
-  <div class="top-bar">
-    <span>🕌 Shared Hub</span>
-    <div>
-      <button class="theme-btn" onclick="setTheme('light')" title="Light">☀️</button><button class="theme-btn" onclick="setTheme('dark')" title="Dark">🌙</button><button class="theme-btn" onclick="setTheme('pink')" title="Pink">🌸</button><button class="theme-btn" onclick="setTheme('rose-dark')" title="Dark Pink">💖</button>
-    </div>
-  </div>
-
   <!-- Login -->
-  <div id="login-screen">
-    <h2>System Login</h2>
+  <div id="login-screen" class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:36px">🕌</span><button class="icon-btn" onclick="toggleSettings(true)" aria-label="Settings">⚙️</button></div>
+    <h2>System Login | تسجيل الدخول</h2>
     <p style="font-size:13px;opacity:.8;text-align:center">Select your name | اختر اسمك</p>
     <select id="username-select"><option value="Mohamad">Mohamad</option><option value="Dima">Dima 🤍👸🏻</option></select>
     <input type="password" id="passcode-input" placeholder="Passcode | الرمز السري" onkeydown="if(event.key==='Enter')login()">
@@ -157,104 +219,105 @@ body.rose-dark .bg-loser{background:#4a1d38;color:#e9a3c9}
 
   <!-- Main -->
   <div id="main-screen" class="hidden">
-    <div class="head-row">
-      <h3 id="welcome-user" style="margin:0;font-size:16px"></h3>
-      <div style="display:flex;gap:6px">
-        <button id="admin-gear-btn" class="hidden" onclick="toggleAdmin(true)" style="background:var(--tint);color:var(--text)">⚙️ Admin</button>
-        <button class="danger" onclick="logout()">Log Out | خروج</button>
+    <header class="hdr">
+      <div><h1 id="welcome-user"></h1><p id="today-date"></p></div>
+      <div class="hdr-a">
+        <button class="icon-btn" onclick="openPoke()" aria-label="Poke">👉</button>
+        <button id="wheel-btn" class="icon-btn" onclick="openWheelPage()" aria-label="Wheel">🎡</button>
+        <button class="icon-btn" onclick="toggleSettings(true)" aria-label="Settings">⚙️</button>
       </div>
-    </div>
-    <hr style="border:0;border-top:1px solid var(--border);margin-bottom:10px">
+    </header>
 
-    <div class="dash">
-      <div class="wheel-box" onclick="openWheelPage()">
-        <div style="font-weight:700;font-size:11px;color:var(--primary)">Wheel of Fortune | عجلة الحظ 🎡</div>
-        <div class="wheel-icon">🎁</div>
-        <div id="wheel-status-text" style="font-size:10px;opacity:.85;min-height:26px;line-height:1.3;text-align:center">...</div>
-      </div>
-      <div class="right-box">
-        <div class="race">
-          <div id="banner-Mohamad" class="mini-badge bg-not">Mo: Racing ⏳</div>
-          <div id="banner-Dima" class="mini-badge bg-not">Di 🤍: Racing ⏳</div>
-        </div>
-        <button class="poke" onclick="sendPoke()">👉 Poke Partner | نكز ⚡</button>
-      </div>
-    </div>
-
-    <div id="persistent-banner" class="banner hidden"></div>
-    <div id="persistent-prize-banner" class="banner banner-prize hidden"></div>
-
-    <div class="progress">
-      <div class="pg-row"><span>Mo</span><div class="pg-bar"><div id="pg-Mohamad" class="pg-fill"></div></div><span id="pgn-Mohamad" class="pg-num">0/10</span><span id="stk-Mohamad" class="stk">🔥0</span></div>
-      <div class="pg-row"><span>Di 🤍</span><div class="pg-bar"><div id="pg-Dima" class="pg-fill"></div></div><span id="pgn-Dima" class="pg-num">0/10</span><span id="stk-Dima" class="stk">🔥0</span></div>
-      <div id="cycle-info" class="pg-info"></div>
-    </div>
-
-    <div class="nav-tabs">
-      <button class="nav-tab active" onclick="switchTab(1)">Tasks | المهام (10)</button>
-      <button class="nav-tab" onclick="switchTab(2)">Sunnah & Furas | السنن والفرص</button>
-      <button class="nav-tab" onclick="switchTab(3)">Store | المتجر</button>
-    </div>
-
+    <!-- Tab 1: Tasks -->
     <div class="tab" id="tab-1">
       <div class="pt-card">
-        <div class="pt-main"><div id="pt-info"></div><button class="pt-gear" onclick="togglePtLoc()" aria-label="Prayer location">📍</button></div>
-        <div id="pt-loc" class="pt-form hidden">
-          <input id="pt-city" list="city-list" placeholder="Type or pick a city | اكتب أو اختر مدينة" autocomplete="off">
-          <datalist id="city-list"></datalist>
-          <select id="pt-method" aria-label="Calculation method">
-            <option value="3">Muslim World League | رابطة العالم الإسلامي</option>
-            <option value="4">Umm al-Qura | أم القرى</option>
-            <option value="5">Egyptian | الهيئة المصرية</option>
-            <option value="2">ISNA | أمريكا الشمالية</option>
-            <option value="13">Diyanet | تركيا</option>
-          </select>
-          <button onclick="saveCity()" style="background:var(--blue)">Save city | حفظ المدينة</button>
-          <button onclick="useGps()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">📍 Try GPS | الموقع التلقائي</button>
-        </div>
+        <div class="pt-main"><div id="pt-info"></div></div>
       </div>
+      <div class="progress">
+        <div class="pg-row"><span>Mo</span><div class="pg-bar"><div id="pg-Mohamad" class="pg-fill"></div></div><span id="pgn-Mohamad" class="pg-num">0/10</span><span id="stk-Mohamad" class="stk">🔥0</span></div>
+        <div class="pg-row"><span>Di 🤍</span><div class="pg-bar"><div id="pg-Dima" class="pg-fill"></div></div><span id="pgn-Dima" class="pg-num">0/10</span><span id="stk-Dima" class="stk">🔥0</span></div>
+        <div class="chips">
+          <span id="banner-Mohamad" class="mini-badge bg-not">Mo</span>
+          <span id="banner-Dima" class="mini-badge bg-not">Di 🤍</span>
+          <button id="wheel-status-text" class="wheel" onclick="openWheelPage()">🎡</button>
+        </div>
+        <div id="cycle-info" class="pg-info"></div>
+      </div>
+      <div id="persistent-banner" class="banner hidden"></div>
+      <div id="persistent-prize-banner" class="banner banner-prize hidden"></div>
+      <div id="special-container"></div>
       <div id="tasks-container"></div>
     </div>
 
+    <!-- Tab 2: Sunnah & Furas -->
     <div class="tab hidden" id="tab-2">
+      <div class="sec-title" style="margin-top:4px">📖 Quran | القرآن</div>
+      <div id="khatma-box"></div>
+      <div class="sec-title">🌟 Sunnah | السنن</div>
       <div class="sheet" style="padding-bottom:5px">
         <div class="acc-head" onclick="toggleAcc(this)"><span>📖 Sunnah Prayers Hadith | حديث السنن</span><span class="arr">▼</span></div>
         <div class="acc-body">
-          <div class="arabic-block">"مَنْ صَلَّى فِي يَوْمٍ وَلَيْلَةٍ اثْنَتَيْ عَشْرَةَ رَكْعَةً بُنِيَ لَهُ بَيْتٌ فِي الْجَنَّةِ: أَرْبَعًا قَبْلَ الظُّهْرِ وَرَكْعَتَيْنِ بَعْدَهَا، وَرَكْعَتَيْنِ بَعْدَ الْمَغْرِبِ، وَرَكْعَتَيْنِ بَعْدَ الْعِشَاءِ، وَرَكْعَتَيْنِ قَبْلَ صَلَاةِ الْفَجْرِ."</div>
-          <div class="tbox tr"><b>Translit (for Dima 🤍):</b><br>Man salla fi yawmin wa laylatin ithnata 'ashrata rak'atan buniya lahu baytun fil-jannah: arba'an qabla adh-dhuhr wa rak'atayni ba'daha, wa rak'atayni ba'dal-maghrib, wa rak'atayni ba'dal-'isha', wa rak'atayni qabla salat-il-fajr.</div>
-          <div class="tbox"><b>EN:</b><br>Whoever prays twelve rak'ahs in a day and night, a house will be built for him in Paradise: four before Dhuhr and two after it, two after Maghrib, two after Isha, and two before Fajr.</div>
-          <div class="tbox de"><b>DE:</b><br>Wer Tag und Nacht zwölf Rak'a betet, dem wird dafür ein Haus im Paradies gebaut: vier vor dem Dhuhr-Gebet und zwei danach, zwei nach dem Maghrib-Gebet, zwei nach dem Isha-Gebet und zwei vor dem Fajr-Gebet.</div>
+          <div class="arabic-block L-ar">"مَنْ صَلَّى فِي يَوْمٍ وَلَيْلَةٍ اثْنَتَيْ عَشْرَةَ رَكْعَةً بُنِيَ لَهُ بَيْتٌ فِي الْجَنَّةِ: أَرْبَعًا قَبْلَ الظُّهْرِ وَرَكْعَتَيْنِ بَعْدَهَا، وَرَكْعَتَيْنِ بَعْدَ الْمَغْرِبِ، وَرَكْعَتَيْنِ بَعْدَ الْعِشَاءِ، وَرَكْعَتَيْنِ قَبْلَ صَلَاةِ الْفَجْرِ."</div>
+          <div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية 🤍:</b><br>Man salla fi yawmin wa laylatin ithnata 'ashrata rak'atan buniya lahu baytun fil-jannah: arba'an qabla adh-dhuhr wa rak'atayni ba'daha, wa rak'atayni ba'dal-maghrib, wa rak'atayni ba'dal-'isha', wa rak'atayni qabla salat-il-fajr.</div>
+          <div class="tbox L-en"><b>EN:</b><br>Whoever prays twelve rak'ahs in a day and night, a house will be built for him in Paradise: four before Dhuhr and two after it, two after Maghrib, two after Isha, and two before Fajr.</div>
+          <div class="tbox de L-de"><b>DE:</b><br>Wer Tag und Nacht zwölf Rak'a betet, dem wird dafür ein Haus im Paradies gebaut: vier vor dem Dhuhr-Gebet und zwei danach, zwei nach dem Maghrib-Gebet, zwei nach dem Isha-Gebet und zwei vor dem Fajr-Gebet.</div>
         </div>
       </div>
-
       <div id="sunnah-container"></div>
-
-      <div class="task-card" id="card-gold" style="border-color:var(--gold)">
-        <div class="task-top"><span style="color:var(--gold)">🌟 Golden Opportunities | الفرص الذهبية</span><span class="pts">+5 pts ✨</span></div>
-        <div class="task-bottom">
-          <div class="names"><div id="status-gold-Mohamad" class="mini-badge bg-not">Mo: ❌</div><div id="status-gold-Dima" class="mini-badge bg-not">Di 🤍: ❌</div></div>
-          <div class="action"><button id="btn-gold" style="background:var(--gold)" onclick="openFuras()">Open Furas 🌟</button></div>
-        </div>
-      </div>
-
-      <div class="task-card" id="card-postprayer" style="border-color:var(--blue)">
-        <div class="task-top"><span style="color:var(--blue)">📿 Post-Prayer Adhkar | أذكار بعد الصلاة</span><span class="pts">+5 pts ✨</span></div>
-        <div class="task-bottom">
-          <div class="names"><div id="status-postprayer-Mohamad" class="mini-badge bg-not">Mo: ❌</div><div id="status-postprayer-Dima" class="mini-badge bg-not">Di 🤍: ❌</div></div>
-          <div class="action"><button id="btn-postprayer" style="background:var(--blue)" onclick="openPostPrayer('post_prayer',5)">Open Adhkar 📿</button></div>
-        </div>
-      </div>
+      <div class="sec-title">✨ Extras | إضافات</div>
+      <div id="extra-container"></div>
     </div>
 
+    <!-- Tab 3: Tasbih -->
     <div class="tab hidden" id="tab-3">
-      <div class="coins">🪙 Balance | الرصيد: <span id="user-coins">0</span></div>
-      <div class="task-card" style="flex-direction:row;justify-content:space-between;align-items:center">
-        <div><strong style="font-size:13px">🍔 وجبة طعام شهية | Delicious Meal</strong><br><span style="font-size:11px;opacity:.7">Cost | التكلفة: 100 Points</span></div>
-        <button onclick="buyStoreItem(100,'Delicious Meal 🍔')" style="background:var(--gold);font-size:12px">Redeem 🎟️</button>
+      <div class="sheet tsb">
+        <select id="tsb-mode" onchange="tsbMode()" aria-label="Mode">
+          <option value="f">Tasbih Fatimah 33/33/34 | تسبيح فاطمة ٣٣/٣٣/٣٤</option>
+          <option value="free">Free counter | عدّاد حر</option>
+        </select>
+        <div id="tsb-phrase" class="tsb-phrase"></div>
+        <div id="tsb-dots" class="tsb-dots"></div>
+        <button id="tsb-btn" class="tsb-btn" onclick="tsbTap()" aria-label="Count"><span id="tsb-count">0</span><small id="tsb-of"></small></button>
+        <div id="tsb-total" class="tsb-total"></div>
+        <div class="tsb-row">
+          <button onclick="tsbUndo()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">↩️ Undo | تراجع</button>
+          <button class="danger" onclick="tsbReset()">Reset 🔄 | تصفير</button>
+        </div>
       </div>
-      <h4 style="margin:10px 0 4px;font-size:12px">🛒 Store History | سجل المشتريات:</h4>
-      <div id="store-history-list" class="history"></div>
     </div>
+
+    <!-- Tab 4: Store -->
+    <div class="tab hidden" id="tab-4">
+      <div class="coins">🪙 Balance | الرصيد: <span id="user-coins">0</span></div>
+      <p class="hint">🎁 +30 pts for every 7-day streak | مكافأة 30 نقطة لكل سلسلة 7 أيام</p>
+      <div id="store-requests"></div>
+
+      <h4 style="margin:10px 0 4px;font-size:12px">🛍️ Rewards | المكافآت:</h4>
+      <div id="store-items"></div>
+
+      <h4 style="margin:12px 0 0;font-size:12px">➕ Add a reward for your partner | أضف مكافأة لشريكك:</h4>
+      <div class="add-form">
+        <input id="ri-name" maxlength="40" placeholder="Reward name | اسم المكافأة">
+        <input id="ri-cost" type="number" min="1" max="9999" inputmode="numeric" placeholder="Points | نقاط">
+        <button onclick="addItem()" style="background:var(--blue)">Add 🎁 | إضافة</button>
+      </div>
+
+      <h4 style="margin:12px 0 4px;font-size:12px">🛒 Orders | الطلبات:</h4>
+      <div id="store-history-list" class="history"></div>
+
+      <h4 style="margin:14px 0 6px;font-size:12px">📊 This week | هذا الأسبوع:</h4>
+      <div id="week-stats" class="stats"></div>
+
+      <h4 style="margin:14px 0 4px;font-size:12px">🧾 Points log | سجل النقاط:</h4>
+      <div id="pts-log" class="history"></div>
+    </div>
+
+    <nav id="bottom-nav" class="bottom-nav">
+      <button class="nav-tab active" onclick="switchTab(1)"><span class="ni">✅</span><span>Tasks | المهام</span></button>
+      <button class="nav-tab" onclick="switchTab(2)"><span class="ni">🌟</span><span>Sunnah | السنن</span></button>
+      <button class="nav-tab" onclick="switchTab(3)"><span class="ni">📿</span><span>Tasbih | المسبحة</span></button>
+      <button class="nav-tab" onclick="switchTab(4)"><span class="ni">🛒</span><span>Store | المتجر</span><span id="nb-store" class="nav-badge hidden">0</span></button>
+    </nav>
   </div>
 
   <!-- Reader -->
@@ -283,16 +346,69 @@ body.rose-dark .bg-loser{background:#4a1d38;color:#e9a3c9}
     <button id="spin-btn" class="full" style="background:var(--gold)" onclick="spinWheel()">Spin 🎰 | دوران</button>
   </div>
 
-  <!-- Admin -->
-  <div id="admin-modal" class="modal hidden" onclick="if(event.target===this)toggleAdmin(false)">
+  <!-- Settings -->
+  <div id="settings-modal" class="modal hidden" onclick="if(event.target===this)toggleSettings(false)">
     <div class="modal-card">
-      <h3 style="color:var(--bad-text);margin-top:0">👑 Admin Panel | لوحة التحكم</h3>
-      <p style="font-size:12px;opacity:.8">Quick Reset Options | خيارات إعادة الضبط:</p>
-      <button onclick="adminResetQuran()" style="background:var(--gold)">📖 Reset Quran Pages</button>
-      <button onclick="adminResetPoints()" style="background:#f59e0b">🪙 Reset All Points</button>
-      <button class="danger" onclick="adminResetTasks()">🔄 Reset Daily Tasks</button>
-      <button onclick="adminResetStreaks()" style="background:#7c3aed">🔥 Reset Streaks & Wheel Cycle</button>
-      <button onclick="toggleAdmin(false)" style="background:#64748b;margin-top:12px">Close ❌ | إغلاق</button>
+      <h3 style="margin-top:0">⚙️ Settings | الإعدادات</h3>
+      <div class="set-title">🎨 Theme | المظهر</div>
+      <div class="set-row">
+        <button data-theme="light" onclick="setTheme('light')" title="Light">☀️</button>
+        <button data-theme="dark" onclick="setTheme('dark')" title="Dark">🌙</button>
+        <button data-theme="pink" onclick="setTheme('pink')" title="Pink">🌸</button>
+        <button data-theme="rose-dark" onclick="setTheme('rose-dark')" title="Dark Pink">💖</button>
+      </div>
+      <div class="set-title">🌐 Language | اللغة</div>
+      <div class="set-row two">
+        <button data-lang="ar" onclick="setLang('ar')">العربية</button>
+        <button data-lang="en" onclick="setLang('en')">English</button>
+      </div>
+      <div class="set-title">📖 Reading texts | لغة النصوص (القراءة والتسبيح)</div>
+      <div id="rl-row" class="set-row two"></div>
+      <div class="set-title">📍 Prayer times | مواقيت الصلاة</div>
+      <button onclick="toggleSettings(false);openLoc()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">📍 Change location | تغيير الموقع</button>
+      <div id="admin-section" class="hidden">
+        <div class="set-title" style="color:var(--bad-text)">👑 Admin | لوحة التحكم</div>
+        <button onclick="adminResetQuran()" style="background:var(--gold)">📖 Reset Quran Pages | تصفير القرآن</button>
+        <button onclick="adminResetPoints()" style="background:#f59e0b">🪙 Reset All Points | تصفير النقاط</button>
+        <button class="danger" onclick="adminResetTasks()">🔄 Reset Daily Tasks | تصفير مهام اليوم</button>
+        <button onclick="adminResetStreaks()" style="background:#7c3aed">🔥 Reset Streaks & Wheel Cycle | تصفير السلسلة والعجلة</button>
+      </div>
+      <button class="danger" onclick="toggleSettings(false);logout()" style="margin-top:14px">Log Out 🚪 | تسجيل الخروج</button>
+      <button onclick="toggleSettings(false)" style="background:#64748b">Close ❌ | إغلاق</button>
+    </div>
+  </div>
+
+  <!-- Location (first time, then via Settings) -->
+  <div id="loc-modal" class="modal hidden" onclick="if(event.target===this)closeLoc(true)">
+    <div class="modal-card">
+      <h3 style="margin-top:0">📍 Prayer location | موقع الصلاة</h3>
+      <p class="hint">Pick your city for accurate prayer times | اختر مدينتك لمواقيت دقيقة</p>
+      <div id="pt-loc" style="display:grid;gap:6px;text-align:start">
+          <button onclick="useGps()" style="background:var(--primary)">📍 Use my location | استخدم موقعي</button>
+        <p class="hint" style="margin:2px 0">or search a city | أو ابحث عن مدينتك</p>
+        <input id="pt-city" placeholder="City name (any language) | اسم المدينة (عربي أو English)" autocomplete="off" oninput="citySuggest()" onkeydown="if(event.key==='Enter')saveCity()">
+        <div id="pt-results" class="pt-results"></div>
+        <select id="pt-method" aria-label="Calculation method">
+          <option value="3">Muslim World League | رابطة العالم الإسلامي</option>
+          <option value="4">Umm al-Qura | أم القرى</option>
+          <option value="5">Egyptian | الهيئة المصرية</option>
+          <option value="2">ISNA | أمريكا الشمالية</option>
+          <option value="13">Diyanet | تركيا</option>
+        </select>
+        <button onclick="saveCity()" style="background:var(--blue)">Save city | حفظ المدينة</button>
+      </div>
+      <button onclick="closeLoc(true)" style="background:#64748b">Later | لاحقاً</button>
+    </div>
+  </div>
+
+  <!-- Poke -->
+  <div id="poke-modal" class="modal hidden" onclick="if(event.target===this)closePoke()">
+    <div class="modal-card">
+      <h3 style="margin-top:0">👉 Poke | نكزة</h3>
+      <div id="poke-list"></div>
+      <input id="poke-custom" maxlength="60" placeholder="Write your own... | اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendCustomPoke()">
+      <button onclick="sendCustomPoke()" style="background:var(--blue)">Send ✉️ | إرسال</button>
+      <button onclick="closePoke()" style="background:#64748b">Close ❌ | إغلاق</button>
     </div>
   </div>
 </div>
@@ -305,15 +421,64 @@ const store = {
   set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
   del: k => { try { localStorage.removeItem(k); } catch (e) {} }
 };
+function readJson(k, d) { try { const v = JSON.parse(store.get(k)); return v == null ? d : v; } catch (e) { return d; } }
 const USERS = ["Mohamad", "Dima"];
 const SHORT = { Mohamad: "Mo", Dima: "Di 🤍" };
+const PILL = { Mohamad: "Mo", Dima: "Di 🤍" };
 const DISPLAY = { Mohamad: "Mohamad", Dima: "Dima 🤍👸🏻" };
+const partnerOf = u => u === "Mohamad" ? "Dima" : "Mohamad";
 const passcodes = { Mohamad: "0723", Dima: "0915" };
-const rewards = ["📦 Buy Product", "🍔 Buy Meal", "💵 Give $5", "👑 Mandatory Order"];
-const taskNames = ["Morning Azkar", "Fajr Prayer", "Dhuhr Prayer", "Asr Prayer", "Maghrib Prayer", "Isha Prayer", "Evening Azkar", "Supplication (Duaa)", "Quran Daily (2 Pages)", "Studying"];
-const sunnahNames = ["1. Sunnah Fajr (2 Before)", "2. Sunnah Dhuhr (4 Before & 2 After)", "3. Sunnah Maghrib (2 After)", "4. Sunnah Isha (2 After)", "5. Witr Prayer (1 Rakaat)"];
+const rewards = ["📦 Buy Product | شراء منتج 📦", "🍔 Buy Meal | شراء وجبة 🍔", "💵 Give $5 | إعطاء 5 دولار 💵", "👑 Mandatory Order | طلب إجباري 👑"];
+const taskNames = [
+  "Morning Azkar | أذكار الصباح", "Fajr Prayer | صلاة الفجر", "Dhuhr Prayer | صلاة الظهر", "Asr Prayer | صلاة العصر",
+  "Maghrib Prayer | صلاة المغرب", "Isha Prayer | صلاة العشاء", "Evening Azkar | أذكار المساء", "Supplication (Duaa) | الدعاء",
+  "", "Studying | الدراسة"
+];
+const sunnahNames = [
+  "Sunnah Fajr (2 Before) | سنة الفجر (ركعتان قبل)", "Sunnah Dhuhr (4 Before & 2 After) | سنة الظهر (4 قبل و2 بعد)",
+  "Sunnah Maghrib (2 After) | سنة المغرب (ركعتان بعد)", "Sunnah Isha (2 After) | سنة العشاء (ركعتان بعد)", "Witr Prayer (1 Rakaat) | صلاة الوتر (ركعة)"
+];
 let currentUser = "";
-let toastTimer, readerToken = 0;
+let toastTimer, readerToken = 0, placedSig = null;
+
+/* ---------- Language ---------- */
+let LANG = store.get("site_lang") === "en" ? "en" : "ar";
+const T = (en, ar) => LANG === "ar" ? ar : en;
+const hasAr = s => /[\u0600-\u06FF]/.test(s);
+function pick(t) {
+  if (typeof t !== "string" || !/\s\|\s/.test(t)) return t;
+  const parts = t.split(/\s\|\s/), want = LANG === "ar";
+  const m = parts.filter(p => hasAr(p) === want);
+  return (m.length ? m[0] : parts[0]).trim();
+}
+const skin = t => document.body.classList.contains("rose-dark") ? t.replace(/✅/g, "💗").replace(/❌/g, "✖") : t;
+const tr = t => skin(pick(t));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function setBi(el, text) { if (!el) return; el.dataset.bi = text; el.textContent = tr(text); }
+function applyLang(root) {
+  (root || document.body).querySelectorAll("*").forEach(el => {
+    const ph = el.dataset.phbi || el.getAttribute("placeholder");
+    if (ph && /\s\|\s/.test(ph)) { el.dataset.phbi = ph; el.setAttribute("placeholder", pick(ph)); }
+    if (el.children.length) return;
+    let orig = el.dataset.bi;
+    if (orig === undefined) {
+      const t = el.textContent;
+      if (!/\s\|\s/.test(t)) return;
+      orig = t; el.dataset.bi = t;
+    }
+    el.textContent = tr(orig);
+  });
+}
+function setHtml(el, html) { el.innerHTML = skin(html); applyLang(el); }
+function setLang(l) {
+  LANG = l === "en" ? "en" : "ar";
+  store.set("site_lang", LANG);
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+  if (currentUser) { renderTasks(); renderPrayerTimes(); loadState(); tsbRender(); renderDate(); setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما 🤍" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد"); }
+  applyLang(document.body);
+  markSettings();
+}
 
 /* ---------- Data (each item: [title, arabic, translit, en, de]) ---------- */
 const KURSI = ["آية الكرسي (Ayat al-Kursi)", "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.", "Allahu la ilaha illa huwal hayyul qayyum, la ta'khuduhu sinatun wala nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfa'u 'indahu illa bi-idhnihi, ya'lamu ma baina aidihim wama khalfahum, wala yuhiytuna bishay'in min 'ilmihi illa bima sha'a, wasi'a kursiyyuhus-samawati wal-arda, wala ya'uduhu hifzuhuma wahuwal-aliyyul-'azim.", "Allah - there is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is presently before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.", "Allah - es gibt keinen Gott außer Ihm, dem Lebendigen, dem Beständigen. Ihn ergreift weder Schlummer noch Schlaf. Ihm gehört, was in den Himmeln und was auf der Erde ist. Wer ist es, der bei Ihm Fürsprache einlegen könnte außer mit Seiner Erlaubnis? Er weiß, was vor ihnen und was hinter ihnen liegt; sie aber begreifen nichts von Seinem Wissen, es sei denn das, was Er will. Sein Thronschemel umfasst die Himmel und die Erde, und ihre Bewahrung fällt Ihm nicht schwer. Und Er ist der Erhabene, der Allmächtige."];
@@ -381,7 +546,7 @@ const furasData = [
 /* ---------- Helpers ---------- */
 function showToast(msg) {
   const t = $("toast");
-  t.textContent = skin(msg);
+  t.textContent = tr(msg);
   t.classList.remove("hidden");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.add("hidden"), 3500);
@@ -395,25 +560,74 @@ function toggleAcc(head) {
   body.classList.toggle("open");
   head.querySelector(".arr").textContent = body.classList.contains("open") ? "▲" : "▼";
 }
-function getCoins(u) { return parseInt(store.get("coins_" + u) || "0", 10) || 0; }
-function addCoins(n) { store.set("coins_" + currentUser, String(getCoins(currentUser) + n)); }
+function num(k) { return parseInt(store.get(k) || "0", 10) || 0; }
+function getCoins(u) { return num("coins_" + u); }
+function logPts(u, n, r) {
+  const a = readJson("pts_log", []);
+  a.unshift({ u, n, r: r || "", t: Date.now() });
+  store.set("pts_log", JSON.stringify(a.slice(0, 300)));
+}
+function addCoins(n, reason, u) {
+  u = u || currentUser;
+  store.set("coins_" + u, String(getCoins(u) + n));
+  logPts(u, n, reason);
+}
 function isDone(key, u) { return store.get(key + "_" + (u || currentUser)) === "true"; }
 function buildItems(arr) {
-  return arr.map((x, i) => `<div class="item"><h4>${i + 1}. ${x[0]}</h4><div class="arabic-block">${x[1]}</div><div class="tbox tr"><b>Translit (for Dima 🤍):</b><br>${x[2]}</div><div class="tbox"><b>EN:</b><br>${x[3]}</div><div class="tbox de"><b>DE:</b><br>${x[4]}</div></div>`).join("");
+  return arr.map((x, i) => `<div class="item"><h4>${i + 1}. ${x[0]}</h4><div class="arabic-block L-ar">${x[1]}</div><div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية 🤍:</b><br>${x[2]}</div><div class="tbox L-en"><b>EN:</b><br>${x[3]}</div><div class="tbox de L-de"><b>DE:</b><br>${x[4]}</div></div>`).join("");
 }
+function vib(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
 
-/* ---------- Theme ---------- */
+/* ---------- Theme & settings ---------- */
 const THEME_CLASS = { dark: "dark-mode", pink: "pink-mode", "rose-dark": "rose-dark" };
 const THEME_COLOR = { light: "#4f46e5", dark: "#0b0f19", pink: "#db2777", "rose-dark": "#170a13" };
-/* In the dark-pink theme the green/red emoji are swapped for pink-friendly ones */
-const skin = t => document.body.classList.contains("rose-dark") ? t.replace(/✅/g, "💗").replace(/❌/g, "✖") : t;
 function setTheme(mode) {
   if (!THEME_COLOR[mode]) mode = "light";
   store.set("site_theme", mode);
-  document.body.className = THEME_CLASS[mode] || "";
+  document.body.classList.remove("dark-mode", "pink-mode", "rose-dark");
+  if (THEME_CLASS[mode]) document.body.classList.add(THEME_CLASS[mode]);
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.content = THEME_COLOR[mode];
   if (currentUser) { renderTasks(); renderPrayerTimes(); loadState(); }
+  markSettings();
+}
+const RL_MODES = {
+  all: ["ar", "tr", "en", "de"], ar: ["ar"], tr: ["tr"], en: ["en"], de: ["de"],
+  ar_tr: ["ar", "tr"], ar_en: ["ar", "en"], ar_de: ["ar", "de"]
+};
+function readMode() { const m = store.get("read_lang_" + (currentUser || "guest")); return RL_MODES[m] ? m : "all"; }
+function readLayers() { return RL_MODES[readMode()]; }
+function applyReadLang() {
+  const set = readLayers();
+  ["ar", "tr", "en", "de"].forEach(k => document.body.classList.toggle("no-" + k, set.indexOf(k) < 0));
+}
+function setReadLang(m) {
+  if (!RL_MODES[m]) return;
+  store.set("read_lang_" + (currentUser || "guest"), m);
+  applyReadLang();
+  if ($("tsb-phrase") && currentUser) tsbRender();
+  markSettings();
+}
+function renderReadButtons() {
+  const L = [
+    ["ar", "العربية", "Arabic"], ["tr", "عربي بحروف إنجليزية", "Arabic in English letters"],
+    ["en", "English", "English"], ["de", "Deutsch", "Deutsch"],
+    ["ar_tr", "عربي + بحروف إنجليزية", "Arabic + English letters"], ["ar_en", "عربي + English", "Arabic + English"],
+    ["ar_de", "عربي + Deutsch", "Arabic + Deutsch"], ["all", "الكل", "All"]
+  ];
+  const cur = readMode();
+  $("rl-row").innerHTML = L.map(x => `<button class="${x[0] === cur ? "sel" : ""}" onclick="setReadLang('${x[0]}')">${LANG === "ar" ? x[1] : x[2]}</button>`).join("");
+}
+function markSettings() {
+  renderReadButtons();
+  const th = store.get("site_theme") || "light";
+  document.querySelectorAll("[data-theme]").forEach(b => b.classList.toggle("sel", b.dataset.theme === th));
+  document.querySelectorAll("[data-lang]").forEach(b => b.classList.toggle("sel", b.dataset.lang === LANG));
+}
+function toggleSettings(open) {
+  $("admin-section").classList.toggle("hidden", currentUser !== "Mohamad");
+  $("settings-modal").classList.toggle("hidden", !open);
+  markSettings();
 }
 
 /* ---------- Auth ---------- */
@@ -426,59 +640,180 @@ function login() {
     $("passcode-input").value = "";
     initApp();
   } else {
-    $("login-error").textContent = "Wrong passcode! | الرمز السري خاطئ";
+    $("login-error").textContent = tr("Wrong passcode! | الرمز السري خاطئ");
   }
 }
 function logout() {
   store.del("active_session_user");
   currentUser = "";
+  applyReadLang();
   show("login-screen");
 }
 function initApp() {
-  $("welcome-user").textContent = currentUser === "Dima" ? "Welcome, Dima 🤍👸🏻 | أهلاً ديما" : "Welcome, Mohamad | أهلاً محمد";
-  $("admin-gear-btn").classList.toggle("hidden", currentUser !== "Mohamad");
+  setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما 🤍" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد");
+  renderDate();
   rollover();
   fillCities();
   renderTasks();
   renderPrayerTimes();
   loadPrayerTimes();
-  loadStoreHistory();
   loadState();
+  tsbLoad();
+  applyReadLang();
   show("main-screen");
+  applyLang($("main-screen"));
+  if (!store.get("pt_loc") && !store.get("pt_loc_skip")) openLoc();
+}
+function renderDate() {
+  const el = $("today-date");
+  if (!el) return;
+  let t = "";
+  try { t = new Date().toLocaleDateString(LANG === "ar" ? "ar-u-nu-latn" : "en-GB", { weekday: "long", day: "numeric", month: "long" }); } catch (e) {}
+  el.textContent = t;
 }
 function switchTab(id) {
   document.querySelectorAll(".nav-tab").forEach((t, i) => t.classList.toggle("active", i + 1 === id));
   document.querySelectorAll(".tab").forEach((c, i) => c.classList.toggle("hidden", i + 1 !== id));
+  window.scrollTo(0, 0);
+}
+
+/* ---------- Quran settings (per user) ---------- */
+const QPD_OPTIONS = [1, 2, 3, 4, 5, 10];
+function qpd(u) { const v = num("qpd_" + u); return QPD_OPTIONS.indexOf(v) >= 0 ? v : 2; }
+function qpage(u) { const p = num("quran_page_" + u); return p >= 1 && p <= 604 ? p : 1; }
+function taskName(n) {
+  if (n === 9) { const q = qpd(currentUser); return `Quran Daily (${q} Pages) | ورد القرآن اليومي (${q} صفحات)`; }
+  return taskNames[n - 1];
 }
 
 /* ---------- Rendering ---------- */
-function statusBoxes(id) {
-  return `<div class="names"><div id="status-${id}-Mohamad" class="mini-badge bg-not">Mo: ❌</div><div id="status-${id}-Dima" class="mini-badge bg-not">Di 🤍: ❌</div></div>`;
+const SECTIONS = [
+  ["sec-morning", "🌅 Morning | الصباح", [1]],
+  ["sec-prayers", "🕌 Prayers | الصلوات", [2, 3, 4, 5, 6]],
+  ["sec-evening", "🌙 Evening | المساء", [7]],
+  ["sec-other", "✨ Other | أخرى", [8, 9, 10]]
+];
+const SEC_OF = {};
+SECTIONS.forEach(s => s[2].forEach(n => { SEC_OF[n] = s[0]; }));
+
+function pillsHtml(id) {
+  return `<div class="pills">${USERS.map(u => `<span id="status-${id}-${u}" class="pill off">${PILL[u]} ·</span>`).join("")}</div>`;
+}
+function cardHtml(id, title, extra, btn, style) {
+  return `<div class="task-card" id="card-${id}" ${style || ""}><div class="tm"><div class="task-top">${title}</div><div class="meta">${extra || ""}${pillsHtml(id)}</div></div>${btn}</div>`;
+}
+function taskBtn(n) {
+  if (n === 1) return `<button id="btn-task-1" onclick="openAdhkar('Morning Adhkar | أذكار الصباح',morningAdhkar,'task_1')">Read 📜 | قراءة (+2)</button>`;
+  if (n === 7) return `<button id="btn-task-7" onclick="openAdhkar('Evening Adhkar | أذكار المساء',eveningAdhkar,'task_7')">Read 📜 | قراءة (+2)</button>`;
+  if (n >= 2 && n <= 6) return `<button id="btn-task-${n}" style="background:var(--blue)" onclick="openPostPrayer('task_${n}',3)">Adhkar ➡️ | الأذكار (+3)</button>`;
+  if (n === 8) return `<button id="btn-task-8" onclick="completeTask(8,3)">Done ✅ | تم (+3)</button>`;
+  if (n === 9) return `<button id="btn-task-9" style="background:var(--gold)" onclick="openQuran()">Open 📖 | فتح (+5)</button>`;
+  return `<button id="btn-task-${n}" onclick="completeTask(${n},0)">Done ✅ | تم</button>`;
+}
+function hijriDay() {
+  try { return parseInt(new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric" }).format(new Date()), 10) || 0; } catch (e) { return 0; }
+}
+function specialsToday() {
+  const d = new Date().getDay(), out = [];
+  if (d === 5) out.push({ id: "sp-kahf", key: "sp_kahf", title: "📖 Surah Al-Kahf (Friday) | سورة الكهف (الجمعة)" });
+  if (d === 1 || d === 4) out.push({ id: "sp-fast", key: "sp_fast", title: `🌙 Voluntary fast (${d === 1 ? "Monday" : "Thursday"}) | صيام ${d === 1 ? "الاثنين" : "الخميس"} (نافلة)` });
+  const hd = hijriDay();
+  if (hd >= 13 && hd <= 15) out.push({ id: "sp-white", key: "sp_white", title: `🌕 White days (${hd}) | الأيام البيض (${hd})` });
+  return out;
 }
 function renderTasks() {
-  $("tasks-container").innerHTML = taskNames.map((name, i) => {
-    const n = i + 1;
-    let btn = `<button id="btn-task-${n}" onclick="completeTask(${n},0)">Done ✅ | تم التنفيذ</button>`;
-    if (n === 1) btn = `<button id="btn-task-1" onclick="openAdhkar('Morning Adhkar | أذكار الصباح',morningAdhkar,'task_1')">Read Adhkar 📜 | قراءة الأذكار (+2)</button>`;
-    else if (n === 7) btn = `<button id="btn-task-7" onclick="openAdhkar('Evening Adhkar | أذكار المساء',eveningAdhkar,'task_7')">Read Adhkar 📜 | قراءة الأذكار (+2)</button>`;
-    else if (n >= 2 && n <= 6) btn = `<button id="btn-task-${n}" style="background:var(--blue)" onclick="openPostPrayer('task_${n}',3)">Adhkar & Points ➡️ | الأذكار (+3)</button>`;
-    else if (n === 8) btn = `<button id="btn-task-8" onclick="completeTask(8,3)">Done ✅ | تم التنفيذ (+3)</button>`;
-    else if (n === 9) btn = `<button id="btn-task-9" style="background:var(--gold)" onclick="openQuran()">Open Quran 📖 | فتح القرآن (+5)</button>`;
-    const chip = PRAYERS[n] ? `<span class="pt-chip" data-prayer="${PRAYERS[n]}">🕐 --:--</span>` : "";
-    return `<div class="task-card" id="card-task-${n}"><div class="task-top"><span class="task-title">${n}. ${name}</span>${chip}</div><div class="task-bottom">${statusBoxes("task-" + n)}<div class="action">${btn}</div></div></div>`;
-  }).join("");
+  placedSig = null;
 
-  $("sunnah-container").innerHTML = sunnahNames.map((s, i) => {
-    const n = i + 1;
-    return `<div class="task-card" id="card-side-${n}"><div class="task-top"><span class="task-title">${s}</span><span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">🕐 --:--</span><span class="pts">+5 pts ✨</span></div><div class="task-bottom">${statusBoxes("side-" + n)}<div class="action"><button id="btn-side-${n}" onclick="completeSide(${n},5)">Done ✅ | تم (+5)</button></div></div></div>`;
+  const sp = specialsToday();
+  setHtml($("special-container"), sp.length
+    ? `<div class="sec-title">⭐ Today's special | مميز اليوم</div>` + sp.map(s => cardHtml(s.id, `<span class="task-title">${s.title}</span>`, `<span class="pts">+5 pts ✨</span>`, `<button id="btn-${s.id}" style="background:var(--gold)" onclick="completeSpecial('${s.key}')">Done ✅ | تم (+5)</button>`, 'style="border-color:var(--gold)"')).join("")
+    : "");
+
+  const secHtml = SECTIONS.map(s => {
+    const cards = s[2].map(n => {
+      const chip = PRAYERS[n] ? `<span class="pt-chip" data-prayer="${PRAYERS[n]}">🕐 --:--</span>` : "";
+      return cardHtml("task-" + n, `<span class="task-title"><b class="num">${n}.</b> <span>${taskName(n)}</span></span>`, chip, taskBtn(n));
+    }).join("");
+    return `<div id="wrap-${s[0]}"><div class="sec-title">${s[1]}</div><div id="${s[0]}">${cards}</div></div>`;
   }).join("");
-  ["tasks-container", "sunnah-container"].forEach(id => { $(id).innerHTML = skin($(id).innerHTML); });
+  const doneSheet = `<div id="done-sheet" class="sheet hidden" style="padding-bottom:5px;border-top-color:#ec4899"><div class="acc-head" onclick="toggleAcc(this)"><span id="done-title"></span><span class="arr">▼</span></div><div class="acc-body" id="done-list"></div></div>`;
+  setHtml($("tasks-container"), secHtml + doneSheet);
+
+  setHtml($("sunnah-container"), sunnahNames.map((s, i) => {
+    const n = i + 1;
+    return cardHtml("side-" + n, `<span class="task-title"><b class="num">${n}.</b> <span>${s}</span></span>`,
+      `<span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">🕐 --:--</span><span class="pts">+5 pts ✨</span>`,
+      `<button id="btn-side-${n}" onclick="completeSide(${n},5)">Done ✅ | تم (+5)</button>`);
+  }).join(""));
+
+  setHtml($("extra-container"),
+    cardHtml("gold", `<span class="task-title" style="color:var(--gold)">🌟 Golden Opportunities | الفرص الذهبية</span>`, `<span class="pts">+5 pts ✨</span>`,
+      `<button id="btn-gold" style="background:var(--gold)" onclick="openFuras()">Open 🌟 | فتح</button>`, 'style="border-color:var(--gold)"') +
+    cardHtml("postprayer", `<span class="task-title" style="color:var(--blue)">📿 Post-Prayer Adhkar | أذكار بعد الصلاة</span>`, `<span class="pts">+5 pts ✨</span>`,
+      `<button id="btn-postprayer" style="background:var(--blue)" onclick="openPostPrayer('post_prayer',5)">Open 📿 | فتح</button>`, 'style="border-color:var(--blue)"'));
+
+  renderKhatma();
+  placeCards();
+}
+function placeCards() {
+  if (!currentUser || !$("done-list")) return;
+  const sig = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => isDone("task_" + n) ? 1 : 0).join("");
+  if (sig === placedSig) return;
+  placedSig = sig;
+  for (let n = 1; n <= 10; n++) {
+    const card = $("card-task-" + n);
+    const target = sig[n - 1] === "1" ? $("done-list") : $(SEC_OF[n]);
+    if (card && target) target.appendChild(card);
+  }
+  SECTIONS.forEach(s => $("wrap-" + s[0]).classList.toggle("hidden", !$(s[0]).children.length));
+  const cnt = sig.split("").filter(x => x === "1").length;
+  $("done-sheet").classList.toggle("hidden", !cnt);
+  setBi($("done-title"), `✅ Completed (${cnt}) | المنجزة (${cnt})`);
+}
+
+/* ---------- Khatma ---------- */
+function renderKhatma() {
+  const rows = USERS.map(u => `<div class="kh-row"><span class="kh-name">${PILL[u]}</span><div class="pg-bar"><div id="kh-bar-${u}" class="pg-fill"></div></div><span id="kh-txt-${u}" class="kh-txt"></span></div>`).join("");
+  const opts = QPD_OPTIONS.map(n => `<option value="${n}">${n}</option>`).join("");
+  setHtml($("khatma-box"), `<div class="sheet kh-sheet"><div class="acc-head" onclick="toggleAcc(this)"><span id="kh-head"></span><span class="arr">▼</span></div><div class="acc-body">${rows}<div class="kh-tools"><div><label>Pages per day | صفحات يومياً</label><select id="kh-qpd">${opts}</select></div><div><label>My bookmark (page) | علامتي (صفحة)</label><input id="kh-page" type="number" min="1" max="604" inputmode="numeric"></div><button onclick="saveKhatma()">Save 💾 | حفظ</button></div></div></div>`);
+  $("kh-qpd").value = String(qpd(currentUser));
+  $("kh-page").value = qpage(currentUser);
+  updateKhatma();
+}
+function updateKhatma() {
+  if (!$("kh-head")) return;
+  const pct = {};
+  USERS.forEach(u => {
+    const p = qpage(u), k = num("khatmas_" + u);
+    pct[u] = Math.round((p - 1) / 604 * 100);
+    $("kh-bar-" + u).style.width = Math.max(pct[u], 1) + "%";
+    $("kh-txt-" + u).textContent = `${p}/604${k ? " 🏅" + k : ""}`;
+  });
+  $("kh-head").textContent = `📖 ${T("Quran Khatma", "ختمة القرآن")} · Mo ${pct.Mohamad}% · Di 🤍 ${pct.Dima}%`;
+}
+function saveKhatma() {
+  let p = parseInt($("kh-page").value, 10);
+  if (!(p >= 1 && p <= 604)) { showToast("Page must be 1-604 | الصفحة من 1 إلى 604"); return; }
+  store.set("quran_page_" + currentUser, String(p));
+  store.set("qpd_" + currentUser, $("kh-qpd").value);
+  const open = $("khatma-box").querySelector(".acc-body").classList.contains("open");
+  renderTasks();
+  loadState();
+  if (open) { const h = $("khatma-box").querySelector(".acc-head"); if (h) toggleAcc(h); }
+  showToast("Saved ✅ | تم الحفظ");
 }
 
 /* ---------- Completing things ---------- */
+function reasonFor(key) {
+  const m = /^task_(\d+)$/.exec(key);
+  if (m) return taskName(+m[1]);
+  if (key === "gold_opp") return "Golden Opportunities | الفرص الذهبية";
+  if (key === "post_prayer") return "Post-Prayer Adhkar | أذكار بعد الصلاة";
+  return key;
+}
 function completeTask(n, pts) {
   if (isDone("task_" + n)) return;
-  if (pts) addCoins(pts);
+  if (pts) addCoins(pts, taskName(n));
   store.set("task_" + n + "_" + currentUser, "true");
   loadState();
   showToast(pts ? `Task Completed! +${pts} Points ✨ | تم الإنجاز!` : "Task Completed ✅ | تم الإنجاز");
@@ -486,10 +821,19 @@ function completeTask(n, pts) {
 }
 function completeSide(n, pts) {
   if (isDone("side_task_" + n)) return;
-  addCoins(pts);
+  addCoins(pts, sunnahNames[n - 1]);
   store.set("side_task_" + n + "_" + currentUser, "true");
   loadState();
   showToast(`Sunnah Completed! +${pts} Points ✨ | تم إنجاز السنة!`);
+  buzz();
+}
+function completeSpecial(key) {
+  if (isDone(key)) return;
+  const s = specialsToday().find(x => x.key === key);
+  addCoins(5, s ? s.title : key);
+  store.set(key + "_" + currentUser, "true");
+  loadState();
+  showToast("Done! +5 Points ✨ | تم الإنجاز!");
   buzz();
 }
 
@@ -498,17 +842,16 @@ function openReaderPage(title, html, btnLabel, onFinish) {
   readerToken++;
   qStop();
   $("qplayer").classList.add("hidden");
-  $("reader-title").textContent = title;
-  $("reader-content").innerHTML = html;
-  const fb = $("reader-finish-btn");
-  fb.textContent = skin(btnLabel);
-  fb.onclick = onFinish;
+  setBi($("reader-title"), title);
+  setHtml($("reader-content"), html);
+  setBi($("reader-finish-btn"), btnLabel);
+  $("reader-finish-btn").onclick = onFinish;
   show("reader-page");
 }
 function finishWith(key, pts, extra) {
   return function () {
     if (!isDone(key)) {
-      addCoins(pts);
+      addCoins(pts, reasonFor(key));
       store.set(key + "_" + currentUser, "true");
       if (extra) extra();
       afterComplete(key);
@@ -576,16 +919,15 @@ async function qLoadUrls() {
 function quranPageHtml(p, d, start) {
   const join = arr => arr.map(a => `${a.n}. ${a.t}`).join(" ");
   const ar = d[0].map((a, k) => `<span class="ay" data-i="${start + k}" onclick="qPlay(${start + k})">${a.t} ﴿${a.n}﴾</span>`).join(" ");
-  return `<div class="sheet"><div style="font-weight:700;color:var(--primary);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px">Page ${p} | صفحة</div><div class="arabic-block">${ar}</div><div class="tbox tr"><b>Translit (for Dima 🤍):</b><br>${join(d[1])}</div><div class="tbox"><b>EN:</b><br>${join(d[2])}</div><div class="tbox de"><b>DE:</b><br>${join(d[3])}</div></div>`;
+  return `<div class="sheet"><div style="font-weight:700;color:var(--primary);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px">${T("Page", "صفحة")} ${p}</div><div class="arabic-block L-ar">${ar}</div><div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية 🤍:</b><br>${join(d[1])}</div><div class="tbox L-en"><b>EN:</b><br>${join(d[2])}</div><div class="tbox de L-de"><b>DE:</b><br>${join(d[3])}</div></div>`;
 }
 
-/* player */
 function qUi(scroll) {
   document.querySelectorAll(".ay.playing").forEach(e => e.classList.remove("playing"));
   const cur = Q.i >= 0 ? document.querySelector(`.ay[data-i="${Q.i}"]`) : null;
   if (cur) { cur.classList.add("playing"); if (scroll) cur.scrollIntoView({ block: "center", behavior: "smooth" }); }
   $("q-play").textContent = Q.audio.paused ? "▶" : "⏸";
-  $("q-label").textContent = Q.i >= 0 ? `🎧 ${Q.i + 1} / ${Q.urls.length}` : `🎧 ${Q.urls.length} ayat`;
+  $("q-label").textContent = Q.i >= 0 ? `🎧 ${Q.i + 1} / ${Q.urls.length}` : `🎧 ${Q.urls.length} ${T("ayat", "آية")}`;
 }
 function qPlay(i) {
   if (i < 0 || i >= Q.urls.length) return;
@@ -630,26 +972,34 @@ Q.audio.onended = () => {
 Q.audio.onerror = () => { if (Q.i >= 0) showToast("🔇 Audio error, try another reciter | خطأ في الصوت، جرّب قارئ آخر"); };
 
 function openQuran() {
-  let p1 = parseInt(store.get("quran_page_" + currentUser) || "1", 10);
-  if (!(p1 >= 1 && p1 <= 603)) p1 = 1;
-  const p2 = p1 + 1;
+  const n = qpd(currentUser), p1 = qpage(currentUser), pages = [];
+  for (let i = 0; i < n && p1 + i <= 604; i++) pages.push(p1 + i);
+  const last = pages[pages.length - 1];
+  const keep = pages.map(p => "qcache2_" + p);
   try {
-    Object.keys(localStorage).forEach(k => {
-      if (k.indexOf("qcache") === 0 && k !== "qcache2_" + p1 && k !== "qcache2_" + p2) localStorage.removeItem(k);
-    });
+    Object.keys(localStorage).forEach(k => { if (k.indexOf("qcache") === 0 && keep.indexOf(k) < 0) localStorage.removeItem(k); });
   } catch (e) {}
-  openReaderPage(`Quran (Pages ${p1} & ${p2}) | القرآن`,
+  openReaderPage(`Quran (Pages ${p1}-${last}) | القرآن (${p1}-${last})`,
     "<div style='text-align:center;padding:20px;font-weight:700'>Loading Quran Pages... ⏳ | جاري التحميل...</div>",
     "Done Reading ✅ | تم الإنجاز (+5 Points)",
-    finishWith("task_9", 5, () => store.set("quran_page_" + currentUser, String(p1 + 2 > 603 ? 1 : p1 + 2))));
+    finishWith("task_9", 5, () => {
+      const next = last + 1;
+      if (next > 604) {
+        store.set("quran_page_" + currentUser, "1");
+        store.set("khatmas_" + currentUser, String(num("khatmas_" + currentUser) + 1));
+        setTimeout(() => { showToast("🎉 Khatma completed! | ختمتم القرآن، ماشاء الله 🤍"); burst(); }, 1600);
+      } else store.set("quran_page_" + currentUser, String(next));
+    }));
   const token = readerToken;
-  Promise.all([fetchQuranPage(p1), fetchQuranPage(p2)])
-    .then(async ([a, b]) => {
+  Promise.all(pages.map(p => fetchQuranPage(p)))
+    .then(async res => {
       if (token !== readerToken) return;
-      Q.pages = [{ p: p1, d: a }, { p: p2, d: b }];
+      Q.pages = pages.map((p, i) => ({ p, d: res[i] }));
       Q.reciter = store.get("quran_reciter") || "ar.alafasy";
       if (!RECITERS.some(r => r[0] === Q.reciter)) Q.reciter = "ar.alafasy";
-      $("reader-content").innerHTML = `<p class="hint">🎧 Tap any ayah to listen from it | اضغط على أي آية للاستماع منها</p>` + quranPageHtml(p1, a, 0) + quranPageHtml(p2, b, a[0].length);
+      let html = `<p class="hint">🎧 Tap any ayah to listen from it | اضغط على أي آية للاستماع منها</p>`, start = 0;
+      Q.pages.forEach(pg => { html += quranPageHtml(pg.p, pg.d, start); start += pg.d[0].length; });
+      setHtml($("reader-content"), html);
       $("q-reciter").innerHTML = RECITERS.map(r => `<option value="${r[0]}">${r[1]}</option>`).join("");
       try { await qLoadUrls(); }
       catch (e) { Q.reciter = "ar.alafasy"; await qLoadUrls(); }
@@ -660,13 +1010,13 @@ function openQuran() {
     })
     .catch(() => {
       if (token !== readerToken) return;
-      $("reader-content").innerHTML = "<div style='text-align:center;padding:20px'><div style='color:var(--bad-text);font-weight:700;margin-bottom:12px'>Failed to load Quran. Check your internet. | فشل تحميل القرآن، تأكد من الإنترنت.</div><button onclick='openQuran()'>Retry 🔄 | إعادة المحاولة</button></div>";
+      setHtml($("reader-content"), "<div style='text-align:center;padding:20px'><div style='color:var(--bad-text);font-weight:700;margin-bottom:12px'>Failed to load Quran. Check your internet. | فشل تحميل القرآن، تأكد من الإنترنت.</div><button onclick='openQuran()'>Retry 🔄 | إعادة المحاولة</button></div>");
     });
 }
 
 /* ---------- Daily reset, streaks & 5-day wheel ---------- */
-const WEEK_BONUS = 30;   // points for every 7-day streak
-const CYCLE_DAYS = 5;    // wheel opens for the leader every 5 days
+const WEEK_BONUS = 30;
+const CYCLE_DAYS = 5;
 function dayKey(d) {
   d = d || new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -675,7 +1025,6 @@ function daysBetween(a, b) {
   const pa = a.split("-").map(Number), pb = b.split("-").map(Number);
   return Math.round((new Date(pb[0], pb[1] - 1, pb[2]) - new Date(pa[0], pa[1] - 1, pa[2])) / 86400000);
 }
-function num(k) { return parseInt(store.get(k) || "0", 10) || 0; }
 function userAllDone(u) {
   for (let i = 1; i <= 10; i++) if (!isDone("task_" + i, u)) return false;
   return true;
@@ -684,7 +1033,7 @@ function resetTasksState() {
   USERS.forEach(u => {
     for (let i = 1; i <= 10; i++) store.del("task_" + i + "_" + u);
     for (let n = 1; n <= 5; n++) store.del("side_task_" + n + "_" + u);
-    ["gold_opp_", "post_prayer_"].forEach(k => store.del(k + u));
+    ["gold_opp_", "post_prayer_", "sp_kahf_", "sp_fast_", "sp_white_"].forEach(k => store.del(k + u));
   });
   store.del("game_winner");
 }
@@ -696,13 +1045,13 @@ function rollover() {
   const gap = Math.max(1, daysBetween(last, today));
   const msgs = { Mohamad: [], Dima: [] };
 
-  // streaks (+ weekly bonus)
   USERS.forEach(u => {
     let st = num("streak_" + u);
     if (userAllDone(u)) {
       st++;
+      if (st > num("best_" + u)) store.set("best_" + u, String(st));
       if (st % 7 === 0) {
-        store.set("coins_" + u, String(getCoins(u) + WEEK_BONUS));
+        addCoins(WEEK_BONUS, "7-day streak 🔥 | سلسلة 7 أيام", u);
         msgs[u].push(`🔥 ${st}-day streak! +${WEEK_BONUS} points | مكافأة السلسلة`);
       }
     } else st = 0;
@@ -710,9 +1059,13 @@ function rollover() {
     store.set("streak_" + u, String(st));
   });
 
-  // race wins -> 5-day cycle
   const winner = store.get("game_winner");
-  if (winner) store.set("wins_" + winner, String(num("wins_" + winner) + 1));
+  if (winner) {
+    store.set("wins_" + winner, String(num("wins_" + winner) + 1));
+    const rl = readJson("race_log", []);
+    rl.push({ d: last, w: winner });
+    store.set("race_log", JSON.stringify(rl.slice(-60)));
+  }
   let cd = num("cycle_days") + gap;
   if (cd >= CYCLE_DAYS) {
     const m = num("wins_Mohamad"), d = num("wins_Dima");
@@ -733,7 +1086,8 @@ function rollover() {
 
 /* ---------- Wheel & prizes ---------- */
 function getPrizes() {
-  try { const a = JSON.parse(store.get("prizes") || "[]"); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+  const a = readJson("prizes", []);
+  return Array.isArray(a) ? a : [];
 }
 function addPrize(w, prize) {
   const a = getPrizes();
@@ -750,7 +1104,7 @@ function openWheelPage() {
     showToast(`🔒 The wheel opens every ${CYCLE_DAYS} days for the one ahead. | العجلة بتفتح كل ${CYCLE_DAYS} أيام للمتقدم.`);
     return;
   }
-  $("wheel-display").textContent = "Tap to spin! | اضغط للف العجلة 🎁";
+  setBi($("wheel-display"), "Tap to spin! | اضغط للف العجلة 🎁");
   $("spin-btn").disabled = false;
   show("wheel-page");
 }
@@ -758,14 +1112,13 @@ function spinWheel() {
   if (store.get("wheel_token_" + currentUser) !== "true") return;
   $("spin-btn").disabled = true;
   store.del("wheel_token_" + currentUser);
-  $("wheel-display").textContent = "🎡 ...";
+  setBi($("wheel-display"), "🎡 ...");
   const me = currentUser;
   setTimeout(() => {
     const w = rewards[Math.floor(Math.random() * rewards.length)];
     addPrize(me, w);
-    const partner = me === "Mohamad" ? "Dima" : "Mohamad";
-    store.set("store_alert_" + partner, `👑 ${DISPLAY[me]} spun the wheel! Prize: ${w} | لف العجلة!`);
-    $("wheel-display").textContent = "🎉 You Won | لقد ربحت: " + w;
+    store.set("store_alert_" + partnerOf(me), `👑 ${DISPLAY[me]} spun the wheel! Prize: ${tr(w)} | لف العجلة! ${tr(w)}`);
+    setBi($("wheel-display"), "🎉 You Won | لقد ربحت: " + w);
     buzz();
     burst();
   }, 1000);
@@ -776,24 +1129,24 @@ const PRAYERS = { 2: "Fajr", 3: "Dhuhr", 4: "Asr", 5: "Maghrib", 6: "Isha" };
 const SUNNAH_PRAYER = { 1: "Fajr", 2: "Dhuhr", 3: "Maghrib", 4: "Isha", 5: "Isha" };
 const PRAYER_AR = { Fajr: "الفجر", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" };
 const CITIES = [
-  ["Damascus", 33.513, 36.292], ["Aleppo", 36.202, 37.134], ["Homs", 34.730, 36.709], ["Latakia", 35.519, 35.790],
-  ["Beirut", 33.894, 35.502], ["Amman", 31.954, 35.910], ["Jerusalem", 31.768, 35.214], ["Gaza", 31.502, 34.467],
-  ["Cairo", 30.044, 31.236], ["Baghdad", 33.315, 44.366], ["Riyadh", 24.714, 46.675], ["Jeddah", 21.543, 39.173],
-  ["Mecca", 21.389, 39.858], ["Medina", 24.468, 39.614], ["Dubai", 25.205, 55.271], ["Abu Dhabi", 24.453, 54.377],
-  ["Doha", 25.286, 51.533], ["Kuwait City", 29.376, 47.977], ["Manama", 26.228, 50.586], ["Muscat", 23.588, 58.383],
-  ["Casablanca", 33.573, -7.590], ["Tunis", 36.806, 10.182], ["Algiers", 36.754, 3.059], ["Tripoli", 32.887, 13.191],
-  ["Khartoum", 15.500, 32.560], ["Istanbul", 41.008, 28.978], ["Ankara", 39.933, 32.860], ["Gaziantep", 37.066, 37.383],
-  ["Berlin", 52.520, 13.405], ["Hamburg", 53.551, 9.994], ["Munich", 48.137, 11.576], ["Cologne", 50.938, 6.960],
-  ["Frankfurt", 50.110, 8.682], ["Stuttgart", 48.775, 9.182], ["Düsseldorf", 51.228, 6.774], ["Dortmund", 51.514, 7.468],
-  ["Vienna", 48.208, 16.374], ["Zurich", 47.377, 8.541], ["Stockholm", 59.329, 18.069], ["Copenhagen", 55.676, 12.568],
-  ["Amsterdam", 52.370, 4.895], ["Brussels", 50.850, 4.352], ["Paris", 48.857, 2.352], ["London", 51.507, -0.128],
-  ["Toronto", 43.653, -79.383], ["New York", 40.713, -74.006]
+  ["Damascus", 33.513, 36.292, "دمشق"], ["Aleppo", 36.202, 37.134, "حلب"], ["Homs", 34.730, 36.709, "حمص"], ["Latakia", 35.519, 35.790, "اللاذقية"],
+  ["Beirut", 33.894, 35.502, "بيروت"], ["Amman", 31.954, 35.910, "عمان"], ["Jerusalem", 31.768, 35.214, "القدس"], ["Gaza", 31.502, 34.467, "غزة"],
+  ["Cairo", 30.044, 31.236, "القاهرة"], ["Baghdad", 33.315, 44.366, "بغداد"], ["Riyadh", 24.714, 46.675, "الرياض"], ["Jeddah", 21.543, 39.173, "جدة"],
+  ["Mecca", 21.389, 39.858, "مكة المكرمة"], ["Medina", 24.468, 39.614, "المدينة المنورة"], ["Dubai", 25.205, 55.271, "دبي"], ["Abu Dhabi", 24.453, 54.377, "أبوظبي"],
+  ["Doha", 25.286, 51.533, "الدوحة"], ["Kuwait City", 29.376, 47.977, "الكويت"], ["Manama", 26.228, 50.586, "المنامة"], ["Muscat", 23.588, 58.383, "مسقط"],
+  ["Casablanca", 33.573, -7.590, "الدار البيضاء"], ["Tunis", 36.806, 10.182, "تونس"], ["Algiers", 36.754, 3.059, "الجزائر"], ["Tripoli", 32.887, 13.191, "طرابلس"],
+  ["Khartoum", 15.500, 32.560, "الخرطوم"], ["Istanbul", 41.008, 28.978, "إسطنبول"], ["Ankara", 39.933, 32.860, "أنقرة"], ["Gaziantep", 37.066, 37.383, "غازي عنتاب"],
+  ["Berlin", 52.520, 13.405, "برلين"], ["Hamburg", 53.551, 9.994, "هامبورغ"], ["Munich", 48.137, 11.576, "ميونخ"], ["Cologne", 50.938, 6.960, "كولونيا"],
+  ["Frankfurt", 50.110, 8.682, "فرانكفورت"], ["Stuttgart", 48.775, 9.182, "شتوتغارت"], ["Düsseldorf", 51.228, 6.774, "دوسلدورف"], ["Dortmund", 51.514, 7.468, "دورتموند"],
+  ["Vienna", 48.208, 16.374, "فيينا"], ["Zurich", 47.377, 8.541, "زيورخ"], ["Stockholm", 59.329, 18.069, "ستوكهولم"], ["Copenhagen", 55.676, 12.568, "كوبنهاغن"],
+  ["Amsterdam", 52.370, 4.895, "أمستردام"], ["Brussels", 50.850, 4.352, "بروكسل"], ["Paris", 48.857, 2.352, "باريس"], ["London", 51.507, -0.128, "لندن"],
+  ["Toronto", 43.653, -79.383, "تورونتو"], ["New York", 40.713, -74.006, "نيويورك"]
 ];
 const METHOD_ANGLES = { 2: { f: 15, i: 15 }, 3: { f: 18, i: 17 }, 4: { f: 18.5, i: "90min" }, 5: { f: 19.5, i: 17.5 }, 13: { f: 18, i: 17 } };
 const firedPrayers = new Set();
 let prayerData = null;
 
-function fillCities() { $("city-list").innerHTML = CITIES.map(c => `<option value="${c[0]}">`).join(""); }
+function fillCities() {}
 function todayKey() {
   const d = new Date();
   return `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
@@ -815,7 +1168,6 @@ function toDate(t, nextDay) {
   return d;
 }
 
-/* Offline fallback: standard astronomical calculation (uses the device time zone) */
 function calcLocal(lat, lng, method) {
   const M = METHOD_ANGLES[method] || METHOD_ANGLES[3];
   const R = Math.PI / 180;
@@ -836,10 +1188,10 @@ function calcLocal(lat, lng, method) {
   const RA = fix(atan2(cos(e) * sin(L), cos(L)) / 15, 24);
   const decl = asin(sin(e) * sin(L));
   const noon = fix(12 - (q / 15 - RA), 24) + tz - lng / 15;
-  const T = ang => acos((-sin(ang) - sin(decl) * sin(lat)) / (cos(decl) * cos(lat))) / 15;
+  const T2 = ang => acos((-sin(ang) - sin(decl) * sin(lat)) / (cos(decl) * cos(lat))) / 15;
   const asrAng = -Math.atan(1 / (1 + tan(Math.abs(lat - decl)))) / R;
-  const sunset = noon + T(0.833);
-  const raw = { Fajr: noon - T(M.f), Dhuhr: noon, Asr: noon + T(asrAng), Maghrib: sunset, Isha: M.i === "90min" ? sunset + 1.5 : noon + T(M.i) };
+  const sunset = noon + T2(0.833);
+  const raw = { Fajr: noon - T2(M.f), Dhuhr: noon, Asr: noon + T2(asrAng), Maghrib: sunset, Isha: M.i === "90min" ? sunset + 1.5 : noon + T2(M.i) };
   const out = {};
   Object.keys(raw).forEach(k => {
     const h = fix(raw[k], 24);
@@ -889,13 +1241,16 @@ function renderPrayerTimes() {
   document.querySelectorAll("[data-prayer]").forEach(el => { el.textContent = "🕐 " + (t ? fmt12(t[el.dataset.prayer]) : "--:--"); });
   tickPrayer();
 }
+function locLabel() {
+  try { const l = JSON.parse(store.get("pt_loc") || "null"); return esc(l ? (l.label || l.name) : ""); } catch (e) { return ""; }
+}
 function tickPrayer() {
   const info = $("pt-info");
   if (!info) return;
   document.querySelectorAll(".task-card.next").forEach(c => c.classList.remove("next"));
   const t = prayerData && prayerData.timings;
   if (!t) {
-    info.innerHTML = `<div class="pt-next">🕌 Prayer times | مواقيت الصلاة</div><div class="pt-hijri">${store.get("pt_loc") ? "Loading... ⏳ | جاري التحميل" : "Tap 📍 and pick your city | اضغط 📍 واختر مدينتك"}</div>`;
+    info.innerHTML = `<div class="pt-next">🕌 ${T("Prayer times", "مواقيت الصلاة")}</div><div class="pt-hijri">${store.get("pt_loc") ? T("Loading... ⏳", "جاري التحميل ⏳") : T("Set your city from Settings ⚙️", "حدّد مدينتك من الإعدادات ⚙️")}</div>`;
     return;
   }
   const now = new Date();
@@ -913,42 +1268,90 @@ function tickPrayer() {
   const nextDate = next ? toDate(t[next]) : toDate(t.Fajr, true);
   if (!next) next = "Fajr";
   const mins = nextDate ? Math.max(0, Math.round((nextDate - now) / 60000)) : 0;
-  const left = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
-  info.innerHTML = `<div class="pt-next">🕌 Next: ${next} | ${PRAYER_AR[next]} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline calc" : ""}</div>`;
+  const left = mins >= 60 ? `${Math.floor(mins / 60)}${T("h", "س")} ${mins % 60}${T("m", "د")}` : `${mins}${T("m", "د")}`;
+  info.innerHTML = `<div class="pt-next">🕌 ${T("Next: " + next, "القادمة: " + PRAYER_AR[next])} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline" : ""}</div><div class="pt-hijri">📍 ${locLabel()}</div>`;
   const idx = Object.keys(PRAYERS).find(k => PRAYERS[k] === next);
   const card = $("card-task-" + idx);
   if (card) card.classList.add("next");
 }
-function togglePtLoc() { $("pt-loc").classList.toggle("hidden"); }
+function openLoc() {
+  let l = null;
+  try { l = JSON.parse(store.get("pt_loc") || "null"); } catch (e) {}
+  $("pt-city").value = "";
+  renderResults([]);
+  if (l && l.method) $("pt-method").value = String(l.method);
+  $("loc-modal").classList.remove("hidden");
+}
+function closeLoc(later) {
+  $("loc-modal").classList.add("hidden");
+  if (later && !store.get("pt_loc")) store.set("pt_loc_skip", "1");
+}
+let cityList = [], cityTimer = null, citySeq = 0;
+function localMatches(q) {
+  q = q.trim().toLowerCase();
+  if (!q) return [];
+  return CITIES.filter(c => c[0].toLowerCase().includes(q) || c[3].includes(q)).slice(0, 5)
+    .map(c => ({ name: c[0], label: LANG === "ar" ? c[3] : c[0], sub: "", lat: c[1], lng: c[2] }));
+}
+async function onlineMatches(q) {
+  const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 6000);
+  try {
+    const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&format=json&language=${LANG === "ar" ? "ar" : "en"}`, { signal: ctrl.signal });
+    const j = await r.json();
+    return (j.results || []).map(x => ({ name: x.name, label: x.name, sub: [x.admin1, x.country].filter(Boolean).join(" · "), lat: +(+x.latitude).toFixed(3), lng: +(+x.longitude).toFixed(3) }));
+  } catch (e) { return []; }
+  finally { clearTimeout(timer); }
+}
+function renderResults(list) {
+  cityList = list;
+  $("pt-results").innerHTML = list.map((c, i) => `<button onclick="pickCity(${i})">📍 ${esc(c.label)}${c.sub ? `<small>${esc(c.sub)}</small>` : ""}</button>`).join("");
+}
+function citySuggest() {
+  clearTimeout(cityTimer);
+  const q = $("pt-city").value, seq = ++citySeq, loc = localMatches(q);
+  renderResults(loc);
+  if (q.trim().length < 2) return;
+  cityTimer = setTimeout(async () => {
+    const on = await onlineMatches(q.trim());
+    if (seq !== citySeq) return;
+    const have = new Set(on.map(x => Math.round(x.lat) + "," + Math.round(x.lng)));
+    renderResults(on.concat(loc.filter(x => !have.has(Math.round(x.lat) + "," + Math.round(x.lng)))).slice(0, 6));
+  }, 350);
+}
+function saveLoc(c) {
+  store.set("pt_loc", JSON.stringify({ name: c.name, label: c.label || c.name, lat: c.lat, lng: c.lng, method: +$("pt-method").value }));
+  closeLoc(false);
+  showToast(`✅ Location saved: ${c.label || c.name} | تم حفظ الموقع: ${c.label || c.name}`);
+  loadPrayerTimes(true);
+}
+function pickCity(i) { if (cityList[i]) saveLoc(cityList[i]); }
+async function saveCity() {
+  const q = $("pt-city").value.trim();
+  if (!q) { showToast("Type your city or use your location | اكتب مدينتك أو استخدم موقعك"); return; }
+  let list = cityList.length ? cityList : localMatches(q);
+  if (!list.length) { showToast("🔎 Searching... | جاري البحث"); list = await onlineMatches(q); }
+  if (!list.length) { showToast("City not found, check the spelling or your internet | لم أجد المدينة، تأكد من الاسم أو الإنترنت"); return; }
+  saveLoc(list[0]);
+}
 function useGps() {
-  if (!navigator.geolocation) { showToast("GPS not supported, pick a city | الموقع غير مدعوم، اختر مدينة"); $("pt-loc").classList.remove("hidden"); return; }
+  if (!navigator.geolocation) { showToast("Location isn't supported here, search for your city | الموقع غير مدعوم، ابحث عن مدينتك"); return; }
   showToast("📍 Locating... | جاري تحديد الموقع");
   navigator.geolocation.getCurrentPosition(pos => {
-    store.set("pt_loc", JSON.stringify({ name: "GPS", lat: +pos.coords.latitude.toFixed(3), lng: +pos.coords.longitude.toFixed(3), method: +$("pt-method").value }));
-    $("pt-loc").classList.add("hidden");
-    loadPrayerTimes(true);
-  }, () => {
-    showToast("GPS blocked by the browser, pick your city from the list | الموقع محظور، اختر مدينتك من القائمة");
-    $("pt-loc").classList.remove("hidden");
-  }, { timeout: 10000 });
-}
-function saveCity() {
-  const q = $("pt-city").value.trim().toLowerCase();
-  let c = CITIES.find(x => x[0].toLowerCase() === q);
-  if (!c && q) { const m = CITIES.filter(x => x[0].toLowerCase().includes(q)); if (m.length === 1) c = m[0]; }
-  if (!c) { showToast("Pick a city from the list | اختر مدينة من القائمة"); return; }
-  store.set("pt_loc", JSON.stringify({ name: c[0], lat: c[1], lng: c[2], method: +$("pt-method").value }));
-  $("pt-loc").classList.add("hidden");
-  loadPrayerTimes(true);
+    saveLoc({ name: "GPS", label: T("My location", "موقعي"), lat: +pos.coords.latitude.toFixed(3), lng: +pos.coords.longitude.toFixed(3) });
+  }, err => {
+    showToast(err && err.code === 1
+      ? "Location permission denied. Allow it in the browser settings, or search for your city | تم رفض إذن الموقع، فعّله من إعدادات المتصفح أو ابحث عن مدينتك"
+      : "Couldn't get your location, search for your city | تعذّر تحديد موقعك، ابحث عن مدينتك");
+  }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 });
 }
 setInterval(() => {
   if (!currentUser) return;
-  if (store.get("last_day") !== dayKey()) { rollover(); loadState(); }
+  if (store.get("last_day") !== dayKey()) { rollover(); renderTasks(); loadState(); }
   if (prayerData && prayerData.date !== todayKey()) loadPrayerTimes(); else tickPrayer();
 }, 30000);
 
 /* ---------- Feedback & celebration ---------- */
-function buzz() { try { if (navigator.vibrate) navigator.vibrate(25); } catch (e) {} }
+function buzz() { vib(25); }
 function allTasksDone() {
   for (let i = 1; i <= 10; i++) if (!isDone("task_" + i)) return false;
   return true;
@@ -970,164 +1373,8 @@ function afterComplete(key) {
   if (key.indexOf("task_") === 0 && allTasksDone()) burst();
 }
 
-/* ---------- Store ---------- */
-function buyStoreItem(cost, name) {
-  const coins = getCoins(currentUser);
-  if (coins < cost) { showToast("❌ Not enough points! | الرصيد غير كافٍ!"); return; }
-  store.set("coins_" + currentUser, String(coins - cost));
-  let h = [];
-  try { h = JSON.parse(store.get("store_history") || "[]"); } catch (e) {}
-  h.unshift({ user: DISPLAY[currentUser], item: name, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
-  store.set("store_history", JSON.stringify(h.slice(0, 50)));
-  loadState();
-  loadStoreHistory();
-  showToast(`🎉 Redeemed | تم الشراء: ${name}`);
-}
-function loadStoreHistory() {
-  let h = [];
-  try { h = JSON.parse(store.get("store_history") || "[]"); } catch (e) {}
-  $("store-history-list").innerHTML = h.length
-    ? h.map(x => `<div>✨ <b>${x.user}</b> got <b>${x.item}</b> at ${x.time}</div>`).join("")
-    : `<div style="color:var(--muted);font-style:italic">No items redeemed yet... | لا توجد مشتريات بعد...</div>`;
-}
-
-/* ---------- Poke & alerts ---------- */
-function sendPoke() {
-  const target = currentUser === "Mohamad" ? "Dima" : "Mohamad";
-  store.set("poke_alert_" + target, "⚡ Your partner poked you! Wake up! | شريكك ينكزك!");
-  showToast("Poke Sent! ⚡ | تم إرسال النكزة!");
-}
-function checkAlerts() {
-  if (!currentUser) return;
-  const p = store.get("poke_alert_" + currentUser);
-  if (p) { showToast(p); store.del("poke_alert_" + currentUser); }
-  const s = store.get("store_alert_" + currentUser);
-  if (s) { showToast(s); store.del("store_alert_" + currentUser); loadStoreHistory(); loadState(); }
-}
-setInterval(checkAlerts, 2000);
-window.addEventListener("storage", () => { if (currentUser) { loadState(); loadStoreHistory(); } });
-
-/* ---------- Admin ---------- */
-function toggleAdmin(open) { $("admin-modal").classList.toggle("hidden", !open); }
-function adminResetTasks() {
-  resetTasksState();
-  loadState();
-  showToast("Tasks Reset! | تمت إعادة تعيين المهام");
-  toggleAdmin(false);
-}
-function adminResetStreaks() {
-  USERS.forEach(u => { ["streak_", "wins_", "wheel_token_"].forEach(k => store.del(k + u)); });
-  store.set("cycle_days", "0");
-  loadState();
-  showToast("Streaks & wheel cycle reset | تم تصفير السلسلة والعجلة");
-  toggleAdmin(false);
-}
-function adminResetPoints() {
-  USERS.forEach(u => store.set("coins_" + u, "0"));
-  loadState();
-  showToast("Points Reset! | تم تصفير النقاط");
-  toggleAdmin(false);
-}
-function adminResetQuran() {
-  USERS.forEach(u => store.del("quran_page_" + u));
-  showToast("Quran Reset to page 1 | تم تصفير القرآن");
-  toggleAdmin(false);
-}
-
-/* ---------- State ---------- */
-function setBadge(id, u, done) {
-  const el = $(`status-${id}-${u}`);
-  if (!el) return;
-  el.className = "mini-badge " + (done ? "bg-done" : "bg-not");
-  el.textContent = skin(`${SHORT[u]}: ${done ? "✅" : "❌"}`);
-}
-function setButton(btnId, key) {
-  const b = $(btnId);
-  if (b && isDone(key)) { b.disabled = true; b.textContent = skin("Done ✅ | تم"); }
-}
-function loadState() {
-  if (!currentUser) return;
-  const all = { Mohamad: true, Dima: true };
-  const count = { Mohamad: 0, Dima: 0 };
-  const rows = [];
-  for (let i = 1; i <= 10; i++) rows.push({ id: "task-" + i, key: "task_" + i, race: true });
-  for (let i = 1; i <= 5; i++) rows.push({ id: "side-" + i, key: "side_task_" + i });
-  rows.push({ id: "gold", key: "gold_opp" }, { id: "postprayer", key: "post_prayer" });
-
-  rows.forEach(r => {
-    USERS.forEach(u => {
-      const d = isDone(r.key, u);
-      setBadge(r.id, u, d);
-      if (r.race) { if (d) count[u]++; else all[u] = false; }
-    });
-    setButton("btn-" + r.id, r.key);
-    const card = $("card-" + r.id);
-    if (card) card.classList.toggle("done", isDone(r.key));
-  });
-
-  USERS.forEach(u => { $("pg-" + u).style.width = count[u] * 10 + "%"; $("pgn-" + u).textContent = count[u] + "/10"; });
-  $("user-coins").textContent = getCoins(currentUser);
-
-  let w = store.get("game_winner");
-  if (!w && all.Mohamad !== all.Dima) {
-    w = all.Mohamad ? "Mohamad" : "Dima";
-    store.set("game_winner", w);
-  }
-
-  const banner = $("persistent-banner");
-  USERS.forEach(u => {
-    const el = $("banner-" + u);
-    if (w) {
-      el.className = "mini-badge " + (w === u ? "bg-done" : "bg-loser");
-      el.textContent = skin(`${u === "Dima" ? "Dima 🤍" : u}: ${w === u ? "Winner 🏆" : "Loser ❌"}`);
-    } else {
-      el.className = "mini-badge bg-not";
-      el.textContent = `${SHORT[u]}: ${all[u] ? "Finished 🏆" : "Racing ⏳"}`;
-    }
-  });
-
-  if (w) {
-    if (w === currentUser) {
-      banner.textContent = "🏆 You won today's race! +1 win toward the wheel | فزت بسباق اليوم! نقطة نحو العجلة";
-      banner.className = "banner banner-success";
-    } else {
-      banner.textContent = skin(`❌ You lost the race today! ${DISPLAY[w]} finished first. | خسرت السباق اليوم! ${DISPLAY[w]} أنهى المهام أولاً.`);
-      banner.className = "banner banner-error";
-    }
-  } else {
-    banner.className = "banner hidden";
-  }
-
-  const token = store.get("wheel_token_" + currentUser) === "true";
-  const left = Math.max(1, CYCLE_DAYS - num("cycle_days"));
-  const wins = { Mohamad: num("wins_Mohamad"), Dima: num("wins_Dima") };
-  if (w) wins[w]++;
-  $("wheel-status-text").textContent = token ? "🎁 Ready to spin! | جاهزة للف!" : `Opens in ${left}d | بعد ${left} أيام`;
-  USERS.forEach(u => { $("stk-" + u).textContent = "🔥" + (num("streak_" + u) + (userAllDone(u) ? 1 : 0)); });
-  $("cycle-info").innerHTML = `🎡 Wheel in ${left}d for the leader · Wins: Mo ${wins.Mohamad} – Di ${wins.Dima}<br>🎁 +${WEEK_BONUS} pts bonus for every 7-day streak`;
-
-  const pb = $("persistent-prize-banner");
-  const prizes = getPrizes();
-  if (prizes.length) {
-    pb.innerHTML = prizes.map(p => {
-      const msg = p.w === currentUser
-        ? `🎁 Your Prize | جائزتك: <b>${p.prize}</b>`
-        : `👑 ${DISPLAY[p.w]} won: <b>${p.prize}</b>. You must fulfill it! | يجب عليك تنفيذها!`;
-      return `<div style="margin-bottom:8px">${msg}<br><button onclick="fulfillPrize(${p.id})">Mark as Done ✅ | تم التنفيذ</button></div>`;
-    }).join("");
-    pb.innerHTML = skin(pb.innerHTML);
-    pb.className = "banner banner-prize";
-  } else {
-    pb.className = "banner banner-prize hidden";
-  }
-}
-
-/* ---------- Start ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  setTheme(store.get("site_theme") || "light");
-  const saved = store.get("active_session_user");
-  if (saved && passcodes[saved]) { currentUser = saved; initApp(); }
-});
-</script>
-</body>
-</html>
+/* ---------- Tasbih ---------- */
+const TSB_PH = [
+  [["سُبْحَانَ اللَّهِ", "Subhanallah", "Glory be to Allah", "Preis sei Allah"], 33],
+  [["الْحَمْدُ لِلَّهِ", "Alhamdulillah", "Praise be to Allah", "Lob sei Allah"], 33],
+  [["اللَّهُ أَكْبَرُ", "Allahu Akbar", "Allah is the Greatest", "Alla
