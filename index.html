@@ -202,6 +202,8 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 .pt-results button{margin:0;background:var(--tint);color:var(--text);border:1px solid var(--border);justify-content:flex-start;text-align:start;min-height:42px;font-size:13px;font-weight:700;flex-direction:column;align-items:flex-start;gap:0}
 .pt-results small{font-size:11px;font-weight:500;color:var(--muted)}
 #poke-langs button{font-size:13px;padding:6px 4px;min-height:42px}
+.sync{font-size:12px;margin-inline-start:6px;opacity:.85}
+.set-row.two button:last-child:nth-child(odd){grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -223,7 +225,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
   <!-- Main -->
   <div id="main-screen" class="hidden">
     <header class="hdr">
-      <div><h1 id="welcome-user"></h1><p id="today-date"></p></div>
+      <div><h1 id="welcome-user"></h1><p><span id="today-date"></span> <span id="sync-state" class="sync" aria-label="sync"></span></p></div>
       <div class="hdr-a">
         <button class="icon-btn" onclick="openPoke()" aria-label="Poke">👉</button>
         <button id="wheel-btn" class="icon-btn" onclick="openWheelPage()" aria-label="Wheel">🎡</button>
@@ -376,6 +378,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
         <button onclick="adminResetPoints()" style="background:#f59e0b">🪙 Reset All Points | تصفير النقاط</button>
         <button class="danger" onclick="adminResetTasks()">🔄 Reset Daily Tasks | تصفير مهام اليوم</button>
         <button onclick="adminResetStreaks()" style="background:#7c3aed">🔥 Reset Streaks & Wheel Cycle | تصفير السلسلة والعجلة</button>
+        <button class="danger" onclick="adminWipeAll()">🧹 Reset EVERYTHING (both phones) | تصفير كل شي (عند الطرفين)</button>
       </div>
       <button class="danger" onclick="toggleSettings(false);logout()" style="margin-top:14px">Log Out 🚪 | تسجيل الخروج</button>
       <button onclick="toggleSettings(false)" style="background:#64748b">Close ❌ | إغلاق</button>
@@ -421,12 +424,153 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 <script>
 /* ---------- Setup ---------- */
 const $ = id => document.getElementById(id);
+/* ---------- Cloud sync (Firebase Firestore) ---------- */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAeN39sQy4ZVm_stU7W-R0YSWr9ZX0Yzjc",
+  authDomain: "remindus-41bde.firebaseapp.com",
+  projectId: "remindus-41bde",
+  storageBucket: "remindus-41bde.firebasestorage.app",
+  messagingSenderId: "110581896670",
+  appId: "1:110581896670:web:199e7f69b10c439e30b94f"
+};
+const ROOM_ID = "rm-5783d64d0aa68bc909b3";
+/* only our own shared keys travel to the cloud (the github.io origin is shared with other sites) */
+const SHARED_RE = /^((coins|streak|best|wins|wheel_token|quran_page|qpd|khatmas|gold_opp|post_prayer|sp_kahf|sp_fast|sp_white|store_alert|poke_alert)_|(task|side_task)_\d+_)(Mohamad|Dima)$|^(pts_log|race_log|prizes|store_items|store_requests|cycle_days|last_day|game_winner)$/;
+const cloud = {
+  status: "off", started: false, synced: false, timedOut: false, pending: {}, timer: null,
+  ref: null, fs: null, readyP: null, onFirst: null, warned: false,
+  queue(k, v) { if (this.started && SHARED_RE.test(k)) { this.pending[k] = v; this.flushSoon(300); } },
+  flushSoon(ms) { if (!this.timer) this.timer = setTimeout(() => this.flush(), ms); },
+  setStatus(st, err) {
+    this.status = st;
+    const el = document.getElementById("sync-state");
+    if (el) { el.textContent = st === "ok" ? "☁️" : st === "connecting" ? "☁️…" : st === "err" ? "⚠️" : "☁️✕"; el.title = "sync: " + st; }
+    if (err) {
+      try { console.warn("cloud:", err); } catch (e) {}
+      if (!this.warned && err.code === "permission-denied") {
+        this.warned = true;
+        try { showToast("⚠️ Cloud sync blocked: publish the Firestore rules | المزامنة محظورة: انشر قواعد Firestore"); } catch (e) {}
+      }
+    }
+  },
+  async flush() {
+    this.timer = null;
+    if (!this.synced || !this.ref) return;
+    const keys = Object.keys(this.pending);
+    if (!keys.length) return;
+    const data = {}, sent = {};
+    keys.forEach(k => { sent[k] = this.pending[k]; data[k] = sent[k] === null ? this.fs.deleteField() : sent[k]; });
+    this.pending = {};
+    try { await this.fs.setDoc(this.ref, { kv: data }, { merge: true }); this.setStatus("ok"); }
+    catch (e) {
+      keys.forEach(k => { if (!(k in this.pending)) this.pending[k] = sent[k]; });
+      this.setStatus("err", e);
+      this.flushSoon(5000);
+    }
+  },
+  start() {
+    if (this.readyP) return this.readyP;
+    this.started = true;
+    this.setStatus("connecting");
+    this.readyP = new Promise(resolve => {
+      let done = false;
+      const fin = () => { if (!done) { done = true; resolve(); } };
+      this.onFirst = fin;
+      setTimeout(() => { if (!this.synced) { this.timedOut = true; fin(); } }, 5000);
+      this.load().catch(e => { this.setStatus("off", e); fin(); });
+    });
+    return this.readyP;
+  },
+  async load() {
+    const base = "https://www.gstatic.com/firebasejs/12.19.0/";
+    const mods = await Promise.all([import(base + "firebase-app.js"), import(base + "firebase-firestore.js")]);
+    this.fs = mods[1];
+    const db = this.fs.getFirestore(mods[0].initializeApp(FIREBASE_CONFIG));
+    this.ref = this.fs.doc(db, "rooms", ROOM_ID);
+    this.fs.onSnapshot(this.ref, { includeMetadataChanges: true }, snap => this.apply(snap), err => { this.setStatus("err", err); if (this.onFirst) this.onFirst(); });
+  },
+  localKeys() {
+    const out = [];
+    try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (SHARED_RE.test(k)) out.push(k); } } catch (e) {}
+    return out;
+  },
+  apply(snap) {
+    if (snap.metadata && snap.metadata.hasPendingWrites) return;
+    if (snap.metadata && snap.metadata.fromCache && !this.synced) return;
+    const d = snap.exists() ? snap.data() : null;
+    const kv = (d && d.kv) || {};
+    const first = !this.synced, changed = [], locals = this.localKeys();
+    if (first && !Object.keys(kv).length) {
+      locals.forEach(k => { if (!(k in this.pending)) this.pending[k] = localStorage.getItem(k); });
+    } else {
+      locals.forEach(k => { if (!(k in kv) && !(k in this.pending)) { store.delRaw(k); changed.push({ k: k, v: null }); } });
+    }
+    Object.keys(kv).forEach(k => {
+      if (!SHARED_RE.test(k) || (k in this.pending)) return;
+      const v = String(kv[k]);
+      if (store.get(k) !== v) { store.setRaw(k, v); changed.push({ k: k, v: v }); }
+    });
+    this.synced = true;
+    this.setStatus("ok");
+    if (Object.keys(this.pending).length) this.flushSoon(0);
+    if (first) { if (this.timedOut) afterSync(); else if (this.onFirst) this.onFirst(); }
+    else if (changed.length) this.onRemote(changed);
+  },
+  onRemote(changed) {
+    if (!currentUser) return;
+    try {
+      if (changed.some(c => c.v === null && /^(task_|side_task_|gold_opp_|post_prayer_|sp_)/.test(c.k))) renderTasks();
+      loadState();
+      checkAlerts();
+    } catch (e) { showFatal("sync: " + (e && e.message)); }
+  },
+  wipe() {
+    this.localKeys().forEach(k => store.del(k));
+  }
+};
 const store = {
   get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
-  set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
-  del: k => { try { localStorage.removeItem(k); } catch (e) {} }
+  set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} cloud.queue(k, String(v)); },
+  del: k => { try { localStorage.removeItem(k); } catch (e) {} cloud.queue(k, null); },
+  setRaw: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+  delRaw: k => { try { localStorage.removeItem(k); } catch (e) {} }
 };
-function readJson(k, d) { try { const v = JSON.parse(store.get(k)); return v == null ? d : v; } catch (e) { return d; } }
+function afterSync() {
+  if (!currentUser) return;
+  try { rollover(); renderTasks(); renderPrayerTimes(); loadState(); checkAlerts(); } catch (e) { showFatal("afterSync: " + (e && e.message)); }
+}
+function readJson(k, d) {
+  try {
+    const v = JSON.parse(store.get(k));
+    if (v == null) return d;
+    if (Array.isArray(d) && !Array.isArray(v)) return d;
+    if (d && typeof d === "object" && !Array.isArray(d) && (typeof v !== "object" || Array.isArray(v))) return d;
+    return v;
+  } catch (e) { return d; }
+}
+function readList(k) { return readJson(k, []).filter(x => x && typeof x === "object"); }
+/* on-screen error report so a failure is never silent */
+function showFatal(msg) {
+  try {
+    let b = document.getElementById("fatal");
+    if (!b) {
+      b = document.createElement("div");
+      b.id = "fatal";
+      b.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:3000;background:#7f1d1d;color:#fff;padding:10px 12px;border-radius:12px;font:12px/1.6 monospace;direction:ltr;text-align:left";
+      document.body.appendChild(b);
+    }
+    b.innerHTML = "";
+    const t = document.createElement("div");
+    t.textContent = "⚠️ " + msg;
+    const btn = document.createElement("button");
+    btn.textContent = "Reset app data | مسح بيانات التطبيق";
+    btn.style.cssText = "margin-top:6px;min-height:36px;background:#fff;color:#7f1d1d;font-size:12px";
+    btn.onclick = () => { try { localStorage.clear(); } catch (e) {} location.reload(); };
+    b.appendChild(t); b.appendChild(btn);
+  } catch (e) {}
+}
+window.addEventListener("error", e => showFatal((e.message || "error") + (e.lineno ? " (line " + e.lineno + ")" : "")));
+window.addEventListener("unhandledrejection", e => showFatal("promise: " + (e.reason && e.reason.message || e.reason)));
 const USERS = ["Mohamad", "Dima"];
 const SHORT = { Mohamad: "Mo", Dima: "Di 🤍" };
 const PILL = { Mohamad: "Mo", Dima: "Di 🤍" };
@@ -449,6 +593,9 @@ let toastTimer, readerToken = 0, placedSig = null;
 /* ---------- Language ---------- */
 let LANG = ["en", "de"].indexOf(store.get("site_lang")) >= 0 ? store.get("site_lang") : "ar";
 const DE = {
+"🧹 Reset EVERYTHING (both phones)": "🧹 ALLES zurücksetzen (beide Handys)",
+"Everything reset": "Alles zurückgesetzt",
+"⚠️ Cloud sync blocked: publish the Firestore rules": "⚠️ Cloud-Sync blockiert: Firestore-Regeln veröffentlichen",
 "1️⃣ Full Adhkar": "1️⃣ Vollständige Adhkar",
 "2️⃣ Short Adhkar": "2️⃣ Kurze Adhkar",
 "7-day streak 🔥": "7-Tage-Serie 🔥",
@@ -773,7 +920,7 @@ function toggleAcc(head) {
 function num(k) { return parseInt(store.get(k) || "0", 10) || 0; }
 function getCoins(u) { return num("coins_" + u); }
 function logPts(u, n, r) {
-  const a = readJson("pts_log", []);
+  const a = readList("pts_log");
   a.unshift({ u, n, r: r || "", t: Date.now() });
   store.set("pts_log", JSON.stringify(a.slice(0, 300)));
 }
@@ -803,7 +950,7 @@ function setTheme(mode) {
 }
 const RL_MODES = {
   all: ["ar", "tr", "en", "de"], ar: ["ar"], tr: ["tr"], en: ["en"], de: ["de"],
-  ar_tr: ["ar", "tr"], ar_en: ["ar", "en"], ar_de: ["ar", "de"]
+  ar_tr: ["ar", "tr"], ar_en: ["ar", "en"], ar_de: ["ar", "de"], tr_de: ["tr", "de"]
 };
 function readMode() { const m = store.get("read_lang_" + (currentUser || "guest")); return RL_MODES[m] ? m : "all"; }
 function readLayers() { return RL_MODES[readMode()]; }
@@ -823,7 +970,8 @@ function renderReadButtons() {
     ["ar", "العربية", "Arabic", "Arabisch"], ["tr", "عربي بحروف إنجليزية", "Arabic in English letters", "Arabisch in lateinischen Buchstaben"],
     ["en", "English", "English", "English"], ["de", "Deutsch", "Deutsch", "Deutsch"],
     ["ar_tr", "عربي + بحروف إنجليزية", "Arabic + English letters", "Arabisch + lateinische Buchstaben"], ["ar_en", "عربي + English", "Arabic + English", "Arabisch + English"],
-    ["ar_de", "عربي + Deutsch", "Arabic + Deutsch", "Arabisch + Deutsch"], ["all", "الكل", "All", "Alle"]
+    ["ar_de", "عربي + Deutsch", "Arabic + Deutsch", "Arabisch + Deutsch"],
+    ["tr_de", "عربي بحروف إنجليزية + Deutsch", "Arabic (English letters) + Deutsch", "Arabisch (lateinisch) + Deutsch"], ["all", "الكل", "All", "Alle"]
   ];
   const cur = readMode();
   $("rl-row").innerHTML = L.map(x => `<button class="${x[0] === cur ? "sel" : ""}" onclick="setReadLang('${x[0]}')">${LANG === "ar" ? x[1] : LANG === "de" ? x[3] : x[2]}</button>`).join("");
@@ -860,9 +1008,14 @@ function logout() {
   show("login-screen");
 }
 function initApp() {
+  try { initAppInner(); } catch (e) { showFatal("initApp: " + (e && e.message)); }
+  show("main-screen");
+  try { applyLang(document.body); } catch (e) {}
+  cloud.start().then(afterSync);
+}
+function initAppInner() {
   setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما 🤍" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد");
   renderDate();
-  rollover();
   fillCities();
   renderTasks();
   renderPrayerTimes();
@@ -870,8 +1023,6 @@ function initApp() {
   loadState();
   tsbLoad();
   applyReadLang();
-  show("main-screen");
-  applyLang($("main-screen"));
   if (!store.get("pt_loc") && !store.get("pt_loc_skip")) openLoc();
 }
 function renderDate() {
@@ -1272,7 +1423,7 @@ function rollover() {
   const winner = store.get("game_winner");
   if (winner) {
     store.set("wins_" + winner, String(num("wins_" + winner) + 1));
-    const rl = readJson("race_log", []);
+    const rl = readList("race_log");
     rl.push({ d: last, w: winner });
     store.set("race_log", JSON.stringify(rl.slice(-60)));
   }
@@ -1296,8 +1447,7 @@ function rollover() {
 
 /* ---------- Wheel & prizes ---------- */
 function getPrizes() {
-  const a = readJson("prizes", []);
-  return Array.isArray(a) ? a : [];
+  return readList("prizes");
 }
 function addPrize(w, prize) {
   const a = getPrizes();
@@ -1659,9 +1809,9 @@ function tsbMode() {
 
 /* ---------- Store: rewards, requests, stats, log ---------- */
 const DEFAULT_ITEM = { id: "meal", name: "Delicious Meal 🍔 | وجبة طعام شهية 🍔", cost: 100, by: "*" };
-function getItems() { const a = readJson("store_items", null); return Array.isArray(a) ? a : [DEFAULT_ITEM]; }
+function getItems() { const a = readJson("store_items", null); return Array.isArray(a) ? a.filter(i => i && typeof i === "object" && i.name) : [DEFAULT_ITEM]; }
 function saveItems(a) { store.set("store_items", JSON.stringify(a)); }
-function getReqs() { const a = readJson("store_requests", []); return Array.isArray(a) ? a : []; }
+function getReqs() { const a = readJson("store_requests", []); return Array.isArray(a) ? a.filter(r => r && typeof r === "object") : []; }
 function saveReqs(a) { store.set("store_requests", JSON.stringify(a.slice(0, 80))); }
 function timeStr(t) { return new Date(t).toLocaleString([], { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); }
 
@@ -1715,9 +1865,9 @@ function declineReq(id) {
 }
 function renderStats() {
   const since = Date.now() - 7 * 864e5, pts = { Mohamad: 0, Dima: 0 };
-  readJson("pts_log", []).forEach(e => { if (e.t >= since && e.n > 0 && pts[e.u] != null) pts[e.u] += e.n; });
+  readList("pts_log").forEach(e => { if (e.t >= since && e.n > 0 && pts[e.u] != null) pts[e.u] += e.n; });
   const minDay = dayKey(new Date(Date.now() - 6 * 864e5)), wins = { Mohamad: 0, Dima: 0 };
-  readJson("race_log", []).forEach(e => { if (e.d >= minDay && wins[e.w] != null) wins[e.w]++; });
+  readList("race_log").forEach(e => { if (e.d >= minDay && wins[e.w] != null) wins[e.w]++; });
   const w = store.get("game_winner");
   if (w) wins[w]++;
   const cur = {}, best = {};
@@ -1756,7 +1906,7 @@ function renderStore() {
 
   renderStats();
 
-  const log = readJson("pts_log", []);
+  const log = readList("pts_log");
   setHtml($("pts-log"), log.length
     ? log.slice(0, 30).map(e => `<div>${e.n > 0 ? "🟢 +" : "🔴 "}${e.n} · <b>${PILL[e.u] || e.u}</b> · ${esc(tr(e.r))} <span class="sub">${timeStr(e.t)}</span></div>`).join("")
     : `<div style="color:var(--muted);font-style:italic">${T("No points yet...", "لا توجد نقاط بعد...")}</div>`);
@@ -1817,6 +1967,14 @@ function adminResetTasks() {
   resetTasksState();
   loadState();
   showToast("Tasks Reset! | تمت إعادة تعيين المهام");
+  toggleSettings(false);
+}
+function adminWipeAll() {
+  if (!confirm(T("Delete ALL shared data on both phones?", "حذف كل البيانات المشتركة عند الطرفين؟", "ALLE gemeinsamen Daten auf beiden Handys löschen?"))) return;
+  cloud.wipe();
+  renderTasks();
+  loadState();
+  showToast("Everything reset | تم تصفير كل شي");
   toggleSettings(false);
 }
 function adminResetStreaks() {
@@ -1934,14 +2092,15 @@ function loadState() {
 
 /* ---------- Start ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  setTheme(store.get("site_theme") || "light");
-  applyReadLang();
-  document.documentElement.lang = LANG;
-  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
-  const saved = store.get("active_session_user");
-  if (saved && passcodes[saved]) { currentUser = saved; initApp(); }
-  applyLang(document.body);
-  markSettings();
+  try {
+    setTheme(store.get("site_theme") || "light");
+    applyReadLang();
+    document.documentElement.lang = LANG;
+    document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+    const saved = store.get("active_session_user");
+    if (saved && passcodes[saved]) { currentUser = saved; initApp(); }
+  } catch (e) { showFatal("start: " + (e && e.message)); }
+  try { applyLang(document.body); markSettings(); } catch (e) { showFatal("lang: " + (e && e.message)); }
 });
 </script>
 </body>
