@@ -6,7 +6,7 @@
 <title>Shared Tasks & Hub</title>
 <meta name="theme-color" content="#4f46e5">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🕌%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -116,7 +116,16 @@ body.rose-dark .nav-tab.active{color:#2b0a1d}
 .hint{font-size:12px;color:var(--muted);text-align:center;margin:0 0 10px}
 
 /* ---------- Quran audio player ---------- */
-.ay{cursor:pointer;border-radius:8px;padding:2px 4px;transition:background .2s}
+.ay{cursor:pointer;border-radius:8px;padding:2px 4px;transition:background .2s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.rtl{direction:rtl;text-align:right}
+#taf-tabs{display:flex;flex-wrap:wrap;gap:6px}
+#taf-tabs button{width:auto;flex:1 1 28%;margin:0;font-size:12px;padding:7px 4px;min-height:38px;justify-content:center}
+.link-btn{display:block;padding:10px 12px;margin:6px 0;border-radius:10px;background:var(--tint);border:1px solid var(--border);color:var(--primary);font-size:13px;font-weight:700;text-decoration:none;text-align:start}
+.taf-text{white-space:pre-wrap;line-height:1.9;font-size:14px;max-height:38vh;overflow-y:auto}
+.info-blk{position:relative;margin-bottom:10px}
+.info-blk .lab{font-size:10px;font-weight:800;color:var(--muted);display:block;margin-bottom:4px}
+.info-blk ol{margin:6px 0;padding-inline-start:20px}
+.info-blk li{margin-bottom:6px}
 .ay.playing{background:var(--tint);box-shadow:0 0 0 2px var(--primary2) inset}
 .player{position:sticky;bottom:8px;z-index:60;display:grid;gap:8px;margin-top:10px;padding:10px;background:var(--card);border:1px solid var(--primary);border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .player-row{display:flex;gap:8px;align-items:center}
@@ -244,10 +253,11 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
         <div class="chips">
           <span id="banner-Mohamad" class="mini-badge bg-not">Mo</span>
           <span id="banner-Dima" class="mini-badge bg-not">Di 🤍</span>
-          <button id="wheel-status-text" class="wheel" onclick="openWheelPage()">🎡</button>
+          <button id="wheel-status-text" class="wheel" onclick="openWheelPage()"></button>
         </div>
         <div id="cycle-info" class="pg-info"></div>
       </div>
+      <div id="bonus-banner" class="banner banner-prize hidden"></div>
       <div id="persistent-banner" class="banner hidden"></div>
       <div id="persistent-prize-banner" class="banner banner-prize hidden"></div>
       <div id="special-container"></div>
@@ -256,20 +266,20 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 
     <!-- Tab 2: Sunnah & Furas -->
     <div class="tab hidden" id="tab-2">
-      <div class="sec-title" style="margin-top:4px">📖 Quran | القرآن</div>
+      <div class="sec-title" style="margin-top:4px">Quran | القرآن</div>
       <div id="khatma-box"></div>
-      <div class="sec-title">🌟 Sunnah | السنن</div>
+      <div class="sec-title">Sunnah | السنن</div>
       <div class="sheet" style="padding-bottom:5px">
-        <div class="acc-head" onclick="toggleAcc(this)"><span>📖 Sunnah Prayers Hadith | حديث السنن</span><span class="arr">▼</span></div>
+        <div class="acc-head" onclick="toggleAcc(this)"><span>Sunnah Prayers Hadith | حديث السنن</span><span class="arr">▼</span></div>
         <div class="acc-body">
           <div class="arabic-block L-ar">"مَنْ صَلَّى فِي يَوْمٍ وَلَيْلَةٍ اثْنَتَيْ عَشْرَةَ رَكْعَةً بُنِيَ لَهُ بَيْتٌ فِي الْجَنَّةِ: أَرْبَعًا قَبْلَ الظُّهْرِ وَرَكْعَتَيْنِ بَعْدَهَا، وَرَكْعَتَيْنِ بَعْدَ الْمَغْرِبِ، وَرَكْعَتَيْنِ بَعْدَ الْعِشَاءِ، وَرَكْعَتَيْنِ قَبْلَ صَلَاةِ الْفَجْرِ."</div>
-          <div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية 🤍:</b><br>Man salla fi yawmin wa laylatin ithnata 'ashrata rak'atan buniya lahu baytun fil-jannah: arba'an qabla adh-dhuhr wa rak'atayni ba'daha, wa rak'atayni ba'dal-maghrib, wa rak'atayni ba'dal-'isha', wa rak'atayni qabla salat-il-fajr.</div>
+          <div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية:</b><br>Man salla fi yawmin wa laylatin ithnata 'ashrata rak'atan buniya lahu baytun fil-jannah: arba'an qabla adh-dhuhr wa rak'atayni ba'daha, wa rak'atayni ba'dal-maghrib, wa rak'atayni ba'dal-'isha', wa rak'atayni qabla salat-il-fajr.</div>
           <div class="tbox L-en"><b>EN:</b><br>Whoever prays twelve rak'ahs in a day and night, a house will be built for him in Paradise: four before Dhuhr and two after it, two after Maghrib, two after Isha, and two before Fajr.</div>
           <div class="tbox de L-de"><b>DE:</b><br>Wer Tag und Nacht zwölf Rak'a betet, dem wird dafür ein Haus im Paradies gebaut: vier vor dem Dhuhr-Gebet und zwei danach, zwei nach dem Maghrib-Gebet, zwei nach dem Isha-Gebet und zwei vor dem Fajr-Gebet.</div>
         </div>
       </div>
       <div id="sunnah-container"></div>
-      <div class="sec-title">✨ Extras | إضافات</div>
+      <div class="sec-title">Extras | إضافات</div>
       <div id="extra-container"></div>
     </div>
 
@@ -285,35 +295,35 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
         <button id="tsb-btn" class="tsb-btn" onclick="tsbTap()" aria-label="Count"><span id="tsb-count">0</span><small id="tsb-of"></small></button>
         <div id="tsb-total" class="tsb-total"></div>
         <div class="tsb-row">
-          <button onclick="tsbUndo()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">↩️ Undo | تراجع</button>
-          <button class="danger" onclick="tsbReset()">Reset 🔄 | تصفير</button>
+          <button onclick="tsbUndo()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">Undo | تراجع</button>
+          <button class="danger" onclick="tsbReset()">Reset | تصفير</button>
         </div>
       </div>
     </div>
 
     <!-- Tab 4: Store -->
     <div class="tab hidden" id="tab-4">
-      <div class="coins"><span>🪙 Balance | الرصيد:</span> <span id="user-coins">0</span></div>
-      <p class="hint">🎁 +30 pts for every 7-day streak | مكافأة 30 نقطة لكل سلسلة 7 أيام</p>
+      <div class="coins"><span>Balance | الرصيد:</span> <span id="user-coins">0</span></div>
+      <p class="hint">+30 pts for every 7-day streak | مكافأة 30 نقطة لكل سلسلة 7 أيام</p>
       <div id="store-requests"></div>
 
-      <h4 style="margin:10px 0 4px;font-size:12px">🛍️ Rewards | المكافآت:</h4>
+      <h4 style="margin:10px 0 4px;font-size:12px">Rewards | المكافآت:</h4>
       <div id="store-items"></div>
 
-      <h4 style="margin:12px 0 0;font-size:12px">➕ Add a reward for your partner | أضف مكافأة لشريكك:</h4>
+      <h4 style="margin:12px 0 0;font-size:12px">Add a reward for your partner | أضف مكافأة لشريكك:</h4>
       <div class="add-form">
         <input id="ri-name" maxlength="40" placeholder="Reward name | اسم المكافأة">
         <input id="ri-cost" type="number" min="1" max="9999" inputmode="numeric" placeholder="Points | نقاط">
-        <button onclick="addItem()" style="background:var(--blue)">Add 🎁 | إضافة</button>
+        <button onclick="addItem()" style="background:var(--blue)">Add | إضافة</button>
       </div>
 
-      <h4 style="margin:12px 0 4px;font-size:12px">🛒 Orders | الطلبات:</h4>
+      <h4 style="margin:12px 0 4px;font-size:12px">Orders | الطلبات:</h4>
       <div id="store-history-list" class="history"></div>
 
-      <h4 style="margin:14px 0 6px;font-size:12px">📊 This week | هذا الأسبوع:</h4>
+      <h4 style="margin:14px 0 6px;font-size:12px">This week | هذا الأسبوع:</h4>
       <div id="week-stats" class="stats"></div>
 
-      <h4 style="margin:14px 0 4px;font-size:12px">🧾 Points log | سجل النقاط:</h4>
+      <h4 style="margin:14px 0 4px;font-size:12px">Points log | سجل النقاط:</h4>
       <div id="pts-log" class="history"></div>
     </div>
 
@@ -327,14 +337,15 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 
   <!-- Reader -->
   <div id="reader-page" class="hidden">
-    <div class="sub-top"><button class="back-btn" onclick="closeReader()">🔙 Back | رجوع</button><h2 id="reader-title"></h2></div>
+    <div class="sub-top"><button class="back-btn" onclick="closeReader()">Back | رجوع</button><h2 id="reader-title"></h2></div>
     <div id="reader-content"></div>
     <div id="qplayer" class="player hidden">
       <div class="player-row">
         <button onclick="qStep(-1)" aria-label="Previous ayah">⏮</button>
         <button id="q-play" onclick="qToggle()" aria-label="Play or pause">▶</button>
         <button onclick="qStep(1)" aria-label="Next ayah">⏭</button>
-        <div id="q-label" class="p-label">🎧</div>
+        <button onclick="tafCurrent()" aria-label="Tafsir">📖</button>
+        <div id="q-label" class="p-label"></div>
       </div>
       <div class="player-row">
         <select id="q-reciter" onchange="qReciterChange()" aria-label="Reciter"></select>
@@ -346,52 +357,52 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 
   <!-- Wheel -->
   <div id="wheel-page" class="hidden">
-    <div class="sub-top"><button class="back-btn" onclick="closeReader()">🔙 Back | رجوع</button><h2>Wheel of Fortune | عجلة الحظ 🎡</h2></div>
-    <div id="wheel-display" class="sheet" style="text-align:center;font-size:15px;font-weight:700;padding:24px">Tap to spin! | اضغط للف العجلة 🎁</div>
-    <button id="spin-btn" class="full" style="background:var(--gold)" onclick="spinWheel()">Spin 🎰 | دوران</button>
+    <div class="sub-top"><button class="back-btn" onclick="closeReader()">Back | رجوع</button><h2>Wheel of Fortune | عجلة الحظ</h2></div>
+    <div id="wheel-display" class="sheet" style="text-align:center;font-size:15px;font-weight:700;padding:24px">Tap to spin! | اضغط للف العجلة</div>
+    <button id="spin-btn" class="full" style="background:var(--gold)" onclick="spinWheel()">Spin | دوران</button>
   </div>
 
   <!-- Settings -->
   <div id="settings-modal" class="modal hidden" onclick="if(event.target===this)toggleSettings(false)">
     <div class="modal-card">
-      <h3 style="margin-top:0">⚙️ Settings | الإعدادات</h3>
-      <div class="set-title">🎨 Theme | المظهر</div>
+      <h3 style="margin-top:0">Settings | الإعدادات</h3>
+      <div class="set-title">Theme | المظهر</div>
       <div class="set-row">
         <button data-theme="light" onclick="setTheme('light')" title="Light">☀️</button>
         <button data-theme="dark" onclick="setTheme('dark')" title="Dark">🌙</button>
         <button data-theme="pink" onclick="setTheme('pink')" title="Pink">🌸</button>
         <button data-theme="rose-dark" onclick="setTheme('rose-dark')" title="Dark Pink">💖</button>
       </div>
-      <div class="set-title">🌐 Language | اللغة</div>
+      <div class="set-title">Language | اللغة</div>
       <div class="set-row three">
         <button data-lang="ar" onclick="setLang('ar')">العربية</button>
         <button data-lang="en" onclick="setLang('en')">English</button>
         <button data-lang="de" onclick="setLang('de')">Deutsch</button>
       </div>
-      <div class="set-title">📖 Reading texts | لغة النصوص (القراءة والتسبيح)</div>
+      <div class="set-title">Reading texts | لغة النصوص (القراءة والتسبيح)</div>
       <div id="rl-row" class="set-row two"></div>
-      <div class="set-title">📍 Prayer times | مواقيت الصلاة</div>
-      <button onclick="toggleSettings(false);openLoc()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">📍 Change location | تغيير الموقع</button>
+      <div class="set-title">Prayer times | مواقيت الصلاة</div>
+      <button onclick="toggleSettings(false);openLoc()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">Change location | تغيير الموقع</button>
       <div id="admin-section" class="hidden">
-        <div class="set-title" style="color:var(--bad-text)">👑 Admin | لوحة التحكم</div>
-        <button onclick="adminResetQuran()" style="background:var(--gold)">📖 Reset Quran Pages | تصفير القرآن</button>
-        <button onclick="adminResetPoints()" style="background:#f59e0b">🪙 Reset All Points | تصفير النقاط</button>
-        <button class="danger" onclick="adminResetTasks()">🔄 Reset Daily Tasks | تصفير مهام اليوم</button>
-        <button onclick="adminResetStreaks()" style="background:#7c3aed">🔥 Reset Streaks & Wheel Cycle | تصفير السلسلة والعجلة</button>
-        <button class="danger" onclick="adminWipeAll()">🧹 Reset EVERYTHING (both phones) | تصفير كل شي (عند الطرفين)</button>
+        <div class="set-title" style="color:var(--bad-text)">Admin | لوحة التحكم</div>
+        <button onclick="adminResetQuran()" style="background:var(--gold)">Reset Quran Pages | تصفير القرآن</button>
+        <button onclick="adminResetPoints()" style="background:#f59e0b">Reset All Points | تصفير النقاط</button>
+        <button class="danger" onclick="adminResetTasks()">Reset Daily Tasks | تصفير مهام اليوم</button>
+        <button onclick="adminResetStreaks()" style="background:#7c3aed">Reset Streaks & Wheel Cycle | تصفير السلسلة والعجلة</button>
+        <button class="danger" onclick="adminWipeAll()">Reset EVERYTHING (both phones) | تصفير كل شي (عند الطرفين)</button>
       </div>
-      <button class="danger" onclick="toggleSettings(false);logout()" style="margin-top:14px">Log Out 🚪 | تسجيل الخروج</button>
-      <button onclick="toggleSettings(false)" style="background:#64748b">Close ❌ | إغلاق</button>
+      <button class="danger" onclick="toggleSettings(false);logout()" style="margin-top:14px">Log Out | تسجيل الخروج</button>
+      <button onclick="toggleSettings(false)" style="background:#64748b">Close | إغلاق</button>
     </div>
   </div>
 
   <!-- Location (first time, then via Settings) -->
   <div id="loc-modal" class="modal hidden" onclick="if(event.target===this)closeLoc(true)">
     <div class="modal-card">
-      <h3 style="margin-top:0">📍 Prayer location | موقع الصلاة</h3>
+      <h3 style="margin-top:0">Prayer location | موقع الصلاة</h3>
       <p class="hint">Pick your city for accurate prayer times | اختر مدينتك لمواقيت دقيقة</p>
       <div id="pt-loc" style="display:grid;gap:6px;text-align:start">
-          <button onclick="useGps()" style="background:var(--primary)">📍 Use my location | استخدم موقعي</button>
+          <button onclick="useGps()" style="background:var(--primary)">Use my location | استخدم موقعي</button>
         <p class="hint" style="margin:2px 0">or search a city | أو ابحث عن مدينتك</p>
         <input id="pt-city" placeholder="City name (any language) | اسم المدينة (عربي أو English)" autocomplete="off" oninput="citySuggest()" onkeydown="if(event.key==='Enter')saveCity()">
         <div id="pt-results" class="pt-results"></div>
@@ -408,15 +419,37 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
     </div>
   </div>
 
+  <!-- Sunnah info -->
+  <div id="info-modal" class="modal hidden" onclick="if(event.target===this)closeInfo()">
+    <div class="modal-card" style="text-align:start;max-width:520px">
+      <h3 id="info-title" style="margin:0 0 10px"></h3>
+      <div id="info-body"></div>
+      <button onclick="closeInfo()" style="background:#64748b">Close | إغلاق</button>
+    </div>
+  </div>
+
+  <!-- Tafsir -->
+  <div id="tafsir-modal" class="modal hidden" onclick="if(event.target===this)closeTafsir()">
+    <div class="modal-card" style="text-align:start;max-width:520px">
+      <h3 id="taf-title" style="margin:0 0 8px"></h3>
+      <div id="taf-ayah"></div>
+      <div id="taf-tabs" class="set-row" style="margin:8px 0"></div>
+      <div id="taf-body" class="tbox taf-text"></div>
+      <div id="taf-links"></div>
+      <button onclick="tafListen()" style="background:var(--blue)">Listen from this ayah | استمع من هذه الآية</button>
+      <button onclick="closeTafsir()" style="background:#64748b">Close | إغلاق</button>
+    </div>
+  </div>
+
   <!-- Poke -->
   <div id="poke-modal" class="modal hidden" onclick="if(event.target===this)closePoke()">
     <div class="modal-card">
-      <h3 style="margin-top:0">👉 Poke | نكزة</h3>
+      <h3 style="margin-top:0">Poke | نكزة</h3>
       <div id="poke-langs" class="set-row" style="margin-bottom:10px"></div>
       <div id="poke-list"></div>
       <input id="poke-custom" maxlength="60" placeholder="Write your own... | اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendCustomPoke()">
-      <button onclick="sendCustomPoke()" style="background:var(--blue)">Send ✉️ | إرسال</button>
-      <button onclick="closePoke()" style="background:#64748b">Close ❌ | إغلاق</button>
+      <button onclick="sendCustomPoke()" style="background:var(--blue)">Send | إرسال</button>
+      <button onclick="closePoke()" style="background:#64748b">Close | إغلاق</button>
     </div>
   </div>
 </div>
@@ -435,7 +468,7 @@ const FIREBASE_CONFIG = {
 };
 const ROOM_ID = "rm-5783d64d0aa68bc909b3";
 /* only our own shared keys travel to the cloud (the github.io origin is shared with other sites) */
-const SHARED_RE = /^((coins|streak|best|wins|wheel_token|quran_page|qpd|khatmas|gold_opp|post_prayer|sp_kahf|sp_fast|sp_white|store_alert|poke_alert)_|(task|side_task)_\d+_)(Mohamad|Dima)$|^(pts_log|race_log|prizes|store_items|store_requests|cycle_days|last_day|game_winner)$/;
+const SHARED_RE = /^((coins|streak|best|wins|wheel_token|quran_page|qpd|khatmas|gold_opp|post_prayer|sp_kahf|sp_fast|sp_white|sp_event|store_alert|poke_alert)_|(task|side_task)_\d+_)(Mohamad|Dima)$|^(pts_log|race_log|prizes|store_items|store_requests|cycle_days|last_day|game_winner)$/;
 const cloud = {
   status: "off", started: false, synced: false, timedOut: false, pending: {}, timer: null,
   ref: null, fs: null, readyP: null, onFirst: null, warned: false,
@@ -444,12 +477,12 @@ const cloud = {
   setStatus(st, err) {
     this.status = st;
     const el = document.getElementById("sync-state");
-    if (el) { el.textContent = st === "ok" ? "☁️" : st === "connecting" ? "☁️…" : st === "err" ? "⚠️" : "☁️✕"; el.title = "sync: " + st; }
+    if (el) { el.textContent = st === "ok" ? "☁️" : st === "connecting" ? "☁️…" : st === "err" ? "!" : "☁️✕"; el.title = "sync: " + st; }
     if (err) {
       try { console.warn("cloud:", err); } catch (e) {}
       if (!this.warned && err.code === "permission-denied") {
         this.warned = true;
-        try { showToast("⚠️ Cloud sync blocked: publish the Firestore rules | المزامنة محظورة: انشر قواعد Firestore"); } catch (e) {}
+        try { showToast("Cloud sync blocked: publish the Firestore rules | المزامنة محظورة: انشر قواعد Firestore"); } catch (e) {}
       }
     }
   },
@@ -561,7 +594,7 @@ function showFatal(msg) {
     }
     b.innerHTML = "";
     const t = document.createElement("div");
-    t.textContent = "⚠️ " + msg;
+    t.textContent = "" + msg;
     const btn = document.createElement("button");
     btn.textContent = "Reset app data | مسح بيانات التطبيق";
     btn.style.cssText = "margin-top:6px;min-height:36px;background:#fff;color:#7f1d1d;font-size:12px";
@@ -577,7 +610,7 @@ const PILL = { Mohamad: "Mo", Dima: "Di 🤍" };
 const DISPLAY = { Mohamad: "Mohamad", Dima: "Dima 🤍👸🏻" };
 const partnerOf = u => u === "Mohamad" ? "Dima" : "Mohamad";
 const passcodes = { Mohamad: "0723", Dima: "0915" };
-const rewards = ["📦 Buy Product | شراء منتج 📦", "🍔 Buy Meal | شراء وجبة 🍔", "💵 Give $5 | إعطاء 5 دولار 💵", "👑 Mandatory Order | طلب إجباري 👑"];
+const rewards = ["Buy Product | شراء منتج", "Buy Meal | شراء وجبة", "Give $5 | إعطاء 5 دولار", "Mandatory Order | طلب إجباري"];
 const taskNames = [
   "Morning Azkar | أذكار الصباح", "Fajr Prayer | صلاة الفجر", "Dhuhr Prayer | صلاة الظهر", "Asr Prayer | صلاة العصر",
   "Maghrib Prayer | صلاة المغرب", "Isha Prayer | صلاة العشاء", "Evening Azkar | أذكار المساء", "Supplication (Duaa) | الدعاء",
@@ -593,31 +626,33 @@ let toastTimer, readerToken = 0, placedSig = null;
 /* ---------- Language ---------- */
 let LANG = ["en", "de"].indexOf(store.get("site_lang")) >= 0 ? store.get("site_lang") : "ar";
 const DE = {
-"🧹 Reset EVERYTHING (both phones)": "🧹 ALLES zurücksetzen (beide Handys)",
+"Listen from this ayah": "Ab diesem Vers anhören",
+"Listen from this ayah": "Ab diesem Vers anhören",
+"Reset EVERYTHING (both phones)": "ALLES zurücksetzen (beide Handys)",
 "Everything reset": "Alles zurückgesetzt",
-"⚠️ Cloud sync blocked: publish the Firestore rules": "⚠️ Cloud-Sync blockiert: Firestore-Regeln veröffentlichen",
+"Cloud sync blocked: publish the Firestore rules": "Cloud-Sync blockiert: Firestore-Regeln veröffentlichen",
 "1️⃣ Full Adhkar": "1️⃣ Vollständige Adhkar",
 "2️⃣ Short Adhkar": "2️⃣ Kurze Adhkar",
-"7-day streak 🔥": "7-Tage-Serie 🔥",
-"Add 🎁": "Hinzufügen 🎁",
-"Adhkar ➡️": "Adhkar ➡️",
-"Approve ✅": "Zustimmen ✅",
-"Approved ✅": "Zugestimmt ✅",
+"7-day streak": "7-Tage-Serie",
+"Add": "Hinzufügen",
+"Adhkar": "Adhkar",
+"Approve": "Zustimmen",
+"Approved": "Zugestimmt",
 "Arabic in English letters": "Arabisch in lateinischen Buchstaben",
 "Asr Prayer": "Asr-Gebet",
 "Assalamu alaykum, Dima 🤍": "Assalamu alaykum, Dima 🤍",
 "Assalamu alaykum, Mohamad": "Assalamu alaykum, Mohamad",
 "City name (any language)": "Stadtname (beliebige Sprache)",
 "City not found, check the spelling or your internet": "Stadt nicht gefunden, prüfe die Schreibweise oder dein Internet",
-"Close ❌": "Schließen ❌",
-"Decline ❌": "Ablehnen ❌",
+"Close": "Schließen",
+"Decline": "Ablehnen",
 "Declined, points refunded": "Abgelehnt, Punkte erstattet",
-"Delicious Meal 🍔": "Leckeres Essen 🍔",
+"Delicious Meal": "Leckeres Essen",
 "Dhuhr Prayer": "Dhuhr-Gebet",
 "Diyanet": "Diyanet",
-"Done Reading ✅": "Gelesen ✅",
-"Done ✅": "Erledigt ✅",
-"Done! +5 Points ✨": "Erledigt! +5 Punkte ✨",
+"Done Reading": "Gelesen",
+"Done": "Erledigt",
+"Done! +5 Points": "Erledigt! +5 Punkte",
 "Egyptian": "Ägyptisch",
 "Enter a name and points": "Gib einen Namen und Punkte ein",
 "Evening Adhkar": "Abend-Adhkar",
@@ -629,47 +664,47 @@ const DE = {
 "ISNA": "ISNA",
 "Isha Prayer": "Isha-Gebet",
 "Later": "Später",
-"Loading Quran Pages... ⏳": "Koranseiten werden geladen... ⏳",
+"Loading Quran Pages...": "Koranseiten werden geladen...",
 "Location permission denied. Allow it in the browser settings, or search for your city": "Standortzugriff verweigert. Erlaube ihn in den Browsereinstellungen oder suche deine Stadt",
 "Log In": "Anmelden",
-"Log Out 🚪": "Abmelden 🚪",
+"Log Out": "Abmelden",
 "Maghrib Prayer": "Maghrib-Gebet",
 "Morning Adhkar": "Morgen-Adhkar",
 "Morning Azkar": "Morgen-Adhkar",
 "Muslim World League": "Muslimische Weltliga",
 "My bookmark (page)": "Mein Lesezeichen (Seite)",
-"Open 🌟": "Öffnen 🌟",
-"Open 📖": "Öffnen 📖",
-"Open 📿": "Öffnen 📿",
+"Open": "Öffnen",
+"Open": "Öffnen",
+"Open": "Öffnen",
 "Page must be 1-604": "Seite muss 1-604 sein",
 "Pages per day": "Seiten pro Tag",
 "Passcode": "Passcode",
 "Pick your city for accurate prayer times": "Wähle deine Stadt für genaue Gebetszeiten",
 "Points": "Punkte",
 "Points Reset!": "Punkte zurückgesetzt!",
-"Poke Sent! ⚡": "Stups gesendet! ⚡",
+"Poke Sent!": "Stups gesendet!",
 "Post-Prayer Adhkar": "Adhkar nach dem Gebet",
-"Prize Fulfilled ✅": "Preis eingelöst ✅",
+"Prize Fulfilled": "Preis eingelöst",
 "Quran (Pages #-#)": "Koran (Seiten #-#)",
 "Quran Daily (# Pages)": "Täglicher Koran (# Seiten)",
 "Quran Reset to page 1": "Koran auf Seite 1 zurückgesetzt",
-"Read 📜": "Lesen 📜",
-"Redeem 🎟️": "Einlösen 🎟️",
-"Reset 🔄": "Zurücksetzen 🔄",
-"Retry 🔄": "Erneut versuchen 🔄",
-"Reward added ✅": "Belohnung hinzugefügt ✅",
+"Read": "Lesen",
+"Redeem": "Einlösen",
+"Reset": "Zurücksetzen",
+"Retry": "Erneut versuchen",
+"Reward added": "Belohnung hinzugefügt",
 "Reward name": "Name der Belohnung",
 "Save city": "Stadt speichern",
-"Save 💾": "Speichern 💾",
-"Saved ✅": "Gespeichert ✅",
+"Save": "Speichern",
+"Saved": "Gespeichert",
 "Select your name": "Wähle deinen Namen",
-"Send ✉️": "Senden ✉️",
-"Spin 🎰": "Drehen 🎰",
+"Send": "Senden",
+"Spin": "Drehen",
 "Store": "Shop",
 "Streaks & wheel cycle reset": "Serien und Glücksrad zurückgesetzt",
 "Studying": "Lernen",
 "Sunnah": "Sunna",
-"Sunnah Completed! +# Points ✨": "Sunna erledigt! +# Punkte ✨",
+"Sunnah Completed! +# Points": "Sunna erledigt! +# Punkte",
 "Sunnah Dhuhr (4 Before & 2 After)": "Sunna Dhuhr (4 davor & 2 danach)",
 "Sunnah Fajr (2 Before)": "Sunna Fajr (2 davor)",
 "Sunnah Isha (2 After)": "Sunna Isha (2 danach)",
@@ -679,8 +714,8 @@ const DE = {
 "Tap to spin!": "Tippe zum Drehen!",
 "Tasbih": "Tasbih",
 "Tasbih Fatimah 33/33/34": "Tasbih Fatima 33/33/34",
-"Task Completed ✅": "Aufgabe erledigt ✅",
-"Task Completed! +# Points ✨": "Aufgabe erledigt! +# Punkte ✨",
+"Task Completed": "Aufgabe erledigt",
+"Task Completed! +# Points": "Aufgabe erledigt! +# Punkte",
 "Tasks": "Aufgaben",
 "Tasks Reset!": "Aufgaben zurückgesetzt!",
 "Type your city or use your location": "Gib deine Stadt ein oder nutze deinen Standort",
@@ -690,73 +725,73 @@ const DE = {
 "Write your own...": "Schreibe selbst...",
 "Wrong passcode!": "Falscher Passcode!",
 "or search a city": "oder suche eine Stadt",
-"↩️ Undo": "↩️ Rückgängig",
-"⚙️ Settings": "⚙️ Einstellungen",
-"⚠️ Reciter unavailable": "⚠️ Rezitator nicht verfügbar",
-"✅ Completed (#)": "✅ Erledigt (#)",
-"✅ Listening finished": "✅ Zuhören beendet",
-"✨ Extras": "✨ Extras",
-"✨ Other": "✨ Weitere",
-"❌ Not enough points!": "❌ Nicht genug Punkte!",
-"➕ Add a reward for your partner": "➕ Belohnung für deinen Partner hinzufügen",
-"🌅 Morning": "🌅 Morgen",
-"🌐 Language": "🌐 Sprache",
-"🌕 White days (#)": "🌕 Weiße Tage (#)",
-"🌙 Evening": "🌙 Abend",
-"🌟 Golden Opportunities": "🌟 Goldene Gelegenheiten",
-"🌟 Sunnah": "🌟 Sunna",
-"🍔 Buy Meal": "🍔 Essen kaufen",
-"🎁 +30 pts for every 7-day streak": "🎁 +30 Punkte für jede 7-Tage-Serie",
-"🎉 Khatma completed!": "🎉 Khatma abgeschlossen!",
-"🎉 Tasbih complete!": "🎉 Tasbih abgeschlossen!",
-"🎉 You Won": "🎉 Du hast gewonnen",
-"🎟️ Request sent, waiting for approval": "🎟️ Anfrage gesendet, wartet auf Zustimmung",
-"🎡 Your wheel is ready!": "🎡 Dein Glücksrad ist bereit!",
-"🎧 Tap any ayah to listen from it": "🎧 Tippe auf einen Vers, um ab dort zuzuhören",
-"🎨 Theme": "🎨 Design",
-"👉 Poke": "👉 Stups",
-"👑 Admin": "👑 Admin",
-"👑 Mandatory Order": "👑 Pflichtauftrag",
-"💵 Give $5": "💵 5 $ geben",
-"📊 This week": "📊 Diese Woche",
-"📍 Change location": "📍 Standort ändern",
-"📍 Locating...": "📍 Standort wird ermittelt...",
-"📍 Prayer location": "📍 Gebetsort",
-"📍 Prayer times": "📍 Gebetszeiten",
-"📍 Use my location": "📍 Meinen Standort nutzen",
-"📖 Quran": "📖 Koran",
-"📖 Reading texts": "📖 Lesetexte",
-"📖 Reset Quran Pages": "📖 Koranseiten zurücksetzen",
-"📖 Sunnah Prayers Hadith": "📖 Hadith zu den Sunna-Gebeten",
-"📖 Surah Al-Kahf (Friday)": "📖 Sure Al-Kahf (Freitag)",
-"📦 Buy Product": "📦 Produkt kaufen",
-"📿 Post-Prayer Adhkar": "📿 Adhkar nach dem Gebet",
-"🔄 Reset Daily Tasks": "🔄 Tagesaufgaben zurücksetzen",
-"🔇 Audio error, try another reciter": "🔇 Audiofehler, versuche einen anderen Rezitator",
-"🔎 Searching...": "🔎 Suche...",
-"🔒 The wheel opens every # days for the one ahead.": "🔒 Das Glücksrad öffnet alle # Tage für den Führenden.",
-"🔙 Back": "🔙 Zurück",
-"🔥 #-day streak! +# points": "🔥 #-Tage-Serie! +# Punkte",
-"🔥 Reset Streaks & Wheel Cycle": "🔥 Serien & Glücksrad zurücksetzen",
-"🕌 Prayers": "🕌 Gebete",
-"🛍️ Rewards": "🛍️ Belohnungen",
-"🛒 Orders": "🛒 Bestellungen",
-"🧾 Points log": "🧾 Punkteprotokoll",
-"🪙 Balance": "🪙 Guthaben",
-"🪙 Reset All Points": "🪙 Alle Punkte zurücksetzen",
-"⭐ Today's special": "⭐ Heute besonders",
-"🏆 You won today's race! +1 win toward the wheel": "🏆 Du hast das heutige Rennen gewonnen! +1 Sieg fürs Glücksrad",
-"🔇 Couldn't play audio, check your internet": "🔇 Audio konnte nicht abgespielt werden, prüfe dein Internet",
+"Undo": "Rückgängig",
+"Settings": "Einstellungen",
+"Reciter unavailable": "Rezitator nicht verfügbar",
+"Completed (#)": "Erledigt (#)",
+"Listening finished": "Zuhören beendet",
+"Extras": "Extras",
+"Other": "Weitere",
+"Not enough points!": "Nicht genug Punkte!",
+"Add a reward for your partner": "Belohnung für deinen Partner hinzufügen",
+"Morning": "Morgen",
+"Language": "Sprache",
+"White days (#)": "Weiße Tage (#)",
+"Evening": "Abend",
+"Golden Opportunities": "Goldene Gelegenheiten",
+"Sunnah": "Sunna",
+"Buy Meal": "Essen kaufen",
+"+30 pts for every 7-day streak": "+30 Punkte für jede 7-Tage-Serie",
+"Khatma completed!": "Khatma abgeschlossen!",
+"Tasbih complete!": "Tasbih abgeschlossen!",
+"You Won": "Du hast gewonnen",
+"Request sent, waiting for approval": "Anfrage gesendet, wartet auf Zustimmung",
+"Your wheel is ready!": "Dein Glücksrad ist bereit!",
+"Tap any ayah to listen from it": "Tippe auf einen Vers, um ab dort zuzuhören",
+"Theme": "Design",
+"Poke": "Stups",
+"Admin": "Admin",
+"Mandatory Order": "Pflichtauftrag",
+"Give $5": "5 $ geben",
+"This week": "Diese Woche",
+"Change location": "Standort ändern",
+"Locating...": "Standort wird ermittelt...",
+"Prayer location": "Gebetsort",
+"Prayer times": "Gebetszeiten",
+"Use my location": "Meinen Standort nutzen",
+"Quran": "Koran",
+"Reading texts": "Lesetexte",
+"Reset Quran Pages": "Koranseiten zurücksetzen",
+"Sunnah Prayers Hadith": "Hadith zu den Sunna-Gebeten",
+"Surah Al-Kahf (Friday)": "Sure Al-Kahf (Freitag)",
+"Buy Product": "Produkt kaufen",
+"Post-Prayer Adhkar": "Adhkar nach dem Gebet",
+"Reset Daily Tasks": "Tagesaufgaben zurücksetzen",
+"Audio error, try another reciter": "Audiofehler, versuche einen anderen Rezitator",
+"Searching...": "Suche...",
+"The wheel opens every # days for the one ahead.": "Das Glücksrad öffnet alle # Tage für den Führenden.",
+"Back": "Zurück",
+"#-day streak! +# points": "#-Tage-Serie! +# Punkte",
+"Reset Streaks & Wheel Cycle": "Serien & Glücksrad zurücksetzen",
+"Prayers": "Gebete",
+"Rewards": "Belohnungen",
+"Orders": "Bestellungen",
+"Points log": "Punkteprotokoll",
+"Balance": "Guthaben",
+"Reset All Points": "Alle Punkte zurücksetzen",
+"Today's special": "Heute besonders",
+"You won today's race! +1 win toward the wheel": "Du hast das heutige Rennen gewonnen! +1 Sieg fürs Glücksrad",
+"Couldn't play audio, check your internet": "Audio konnte nicht abgespielt werden, prüfe dein Internet",
 "Couldn't get your location, search for your city": "Standort nicht ermittelbar, suche deine Stadt",
 "Location isn't supported here, search for your city": "Standort wird hier nicht unterstützt, suche deine Stadt",
-"🌙 Voluntary fast (Monday)": "🌙 Freiwilliges Fasten (Montag)",
-"🌙 Voluntary fast (Thursday)": "🌙 Freiwilliges Fasten (Donnerstag)",
+"Voluntary fast (Monday)": "Freiwilliges Fasten (Montag)",
+"Voluntary fast (Thursday)": "Freiwilliges Fasten (Donnerstag)",
 "Quran Khatma": "Koran-Khatma",
 "Page": "Seite",
 "ayat": "Verse",
 "Prayer times": "Gebetszeiten",
-"Loading... ⏳": "Lädt... ⏳",
-"Set your city from Settings ⚙️": "Wähle deine Stadt in den Einstellungen ⚙️",
+"Loading...": "Lädt...",
+"Set your city from Settings": "Wähle deine Stadt in den Einstellungen",
 "My location": "Mein Standort",
 "Completed rounds today": "Abgeschlossene Runden heute",
 "Points earned": "Verdiente Punkte",
@@ -779,10 +814,14 @@ const DE = {
 "Your Prize": "Dein Preis",
 "won": "gewann",
 "You must fulfill it!": "Du musst ihn einlösen!",
-"Mark as Done ✅": "Als erledigt markieren ✅"
+"Mark as Done": "Als erledigt markieren"
 };
+const EMO_RE = /[\u{1F000}-\u{1FAFF}\u2300-\u23FF\u2600-\u27BF\u2B00-\u2BFF\uFE0F\u200D]/gu;
+const noEmoji = t => t.replace(EMO_RE, "").replace(/ {2,}/g, " ").trim();
 function deLookup(en) {
   if (DE[en] !== undefined) return DE[en];
+  const ne = noEmoji(en);
+  if (ne !== en) return deLookup(ne);
   const m = /^(Store|Refund): (.*)$/.exec(en);
   if (m) return (m[1] === "Store" ? "Shop: " : "Erstattung: ") + deLookup(m[2]);
   const nums = en.match(/\d+/g);
@@ -808,7 +847,7 @@ function pick(t) {
   if (LANG === "de") return (lat[1] !== undefined ? lat[1] : deLookup(lat[0].trim())).trim();
   return lat[0].trim();
 }
-const skin = t => document.body.classList.contains("rose-dark") ? t.replace(/✅/g, "💗").replace(/❌/g, "✖") : t;
+const skin = t => t;
 const tr = t => skin(pick(t));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 function setBi(el, text) { if (!el) return; el.dataset.bi = text; el.textContent = tr(text); }
@@ -832,7 +871,7 @@ function setLang(l) {
   store.set("site_lang", LANG);
   document.documentElement.lang = LANG;
   document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
-  if (currentUser) { renderTasks(); renderPrayerTimes(); loadState(); tsbRender(); renderDate(); setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما 🤍" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد"); }
+  if (currentUser) { renderTasks(); renderPrayerTimes(); loadState(); tsbRender(); renderDate(); setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد"); }
   applyLang(document.body);
   markSettings();
 }
@@ -924,14 +963,23 @@ function logPts(u, n, r) {
   a.unshift({ u, n, r: r || "", t: Date.now() });
   store.set("pts_log", JSON.stringify(a.slice(0, 300)));
 }
-function addCoins(n, reason, u) {
+function hashStr(x) { let h = 2166136261; for (let i = 0; i < x.length; i++) { h ^= x.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function weekStart(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return dayKey(x); }
+/* one random (but identical on both phones) bonus day per week; all points x2 */
+function isBonusDay(d) {
+  d = d || new Date();
+  return (d.getDay() + 6) % 7 === hashStr(ROOM_ID + weekStart(d)) % 7;
+}
+function mulPts(n) { return isBonusDay() ? n * 2 : n; }
+function addCoins(n, reason, u, raw) {
   u = u || currentUser;
+  if (n > 0 && !raw && isBonusDay()) { n *= 2; reason = (reason || "") + " ×2"; }
   store.set("coins_" + u, String(getCoins(u) + n));
   logPts(u, n, reason);
 }
 function isDone(key, u) { return store.get(key + "_" + (u || currentUser)) === "true"; }
 function buildItems(arr) {
-  return arr.map((x, i) => `<div class="item"><h4>${i + 1}. ${x[0]}</h4><div class="arabic-block L-ar">${x[1]}</div><div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية 🤍:</b><br>${x[2]}</div><div class="tbox L-en"><b>EN:</b><br>${x[3]}</div><div class="tbox de L-de"><b>DE:</b><br>${x[4]}</div></div>`).join("");
+  return arr.map((x, i) => `<div class="item"><h4>${i + 1}. ${x[0]}</h4><div class="arabic-block L-ar">${x[1]}</div><div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية:</b><br>${x[2]}</div><div class="tbox L-en"><b>EN:</b><br>${x[3]}</div><div class="tbox de L-de"><b>DE:</b><br>${x[4]}</div></div>`).join("");
 }
 function vib(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
 
@@ -1014,7 +1062,7 @@ function initApp() {
   cloud.start().then(afterSync);
 }
 function initAppInner() {
-  setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما 🤍" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد");
+  setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد");
   renderDate();
   fillCities();
   renderTasks();
@@ -1049,10 +1097,10 @@ function taskName(n) {
 
 /* ---------- Rendering ---------- */
 const SECTIONS = [
-  ["sec-morning", "🌅 Morning | الصباح", [1]],
-  ["sec-prayers", "🕌 Prayers | الصلوات", [2, 3, 4, 5, 6]],
-  ["sec-evening", "🌙 Evening | المساء", [7]],
-  ["sec-other", "✨ Other | أخرى", [8, 9, 10]]
+  ["sec-morning", "Morning | الصباح", [1]],
+  ["sec-prayers", "Prayers | الصلوات", [2, 3, 4, 5, 6]],
+  ["sec-evening", "Evening | المساء", [7]],
+  ["sec-other", "Other | أخرى", [8, 9, 10]]
 ];
 const SEC_OF = {};
 SECTIONS.forEach(s => s[2].forEach(n => { SEC_OF[n] = s[0]; }));
@@ -1064,22 +1112,32 @@ function cardHtml(id, title, extra, btn, style) {
   return `<div class="task-card" id="card-${id}" ${style || ""}><div class="tm"><div class="task-top">${title}</div><div class="meta">${extra || ""}${pillsHtml(id)}</div></div>${btn}</div>`;
 }
 function taskBtn(n) {
-  if (n === 1) return `<button id="btn-task-1" onclick="openAdhkar('Morning Adhkar | أذكار الصباح',morningAdhkar,'task_1')">Read 📜 | قراءة (+2)</button>`;
-  if (n === 7) return `<button id="btn-task-7" onclick="openAdhkar('Evening Adhkar | أذكار المساء',eveningAdhkar,'task_7')">Read 📜 | قراءة (+2)</button>`;
-  if (n >= 2 && n <= 6) return `<button id="btn-task-${n}" style="background:var(--blue)" onclick="openPostPrayer('task_${n}',3)">Adhkar ➡️ | الأذكار (+3)</button>`;
-  if (n === 8) return `<button id="btn-task-8" onclick="completeTask(8,3)">Done ✅ | تم (+3)</button>`;
-  if (n === 9) return `<button id="btn-task-9" style="background:var(--gold)" onclick="openQuran()">Open 📖 | فتح (+5)</button>`;
-  return `<button id="btn-task-${n}" onclick="completeTask(${n},0)">Done ✅ | تم</button>`;
+  if (n === 1) return `<button id="btn-task-1" onclick="openAdhkar('Morning Adhkar | أذكار الصباح',morningAdhkar,'task_1')">Read | قراءة (+2)</button>`;
+  if (n === 7) return `<button id="btn-task-7" onclick="openAdhkar('Evening Adhkar | أذكار المساء',eveningAdhkar,'task_7')">Read | قراءة (+2)</button>`;
+  if (n >= 2 && n <= 6) return `<button id="btn-task-${n}" style="background:var(--blue)" onclick="openPostPrayer('task_${n}',3)">Adhkar | الأذكار (+3)</button>`;
+  if (n === 8) return `<button id="btn-task-8" onclick="completeTask(8,3)">Done | تم (+3)</button>`;
+  if (n === 9) return `<button id="btn-task-9" style="background:var(--gold)" onclick="openQuran()">Open | فتح (+5)</button>`;
+  return `<button id="btn-task-${n}" onclick="completeTask(${n},0)">Done | تم</button>`;
 }
 function hijriDay() {
   try { return parseInt(new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric" }).format(new Date()), 10) || 0; } catch (e) { return 0; }
 }
+const FAST_PTS = 20;
+function hijriMD() {
+  try {
+    const p = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric", month: "numeric" }).formatToParts(new Date());
+    const g = t => parseInt((p.find(x => x.type === t) || {}).value, 10) || 0;
+    return [g("month"), g("day")];
+  } catch (e) { return [0, 0]; }
+}
 function specialsToday() {
   const d = new Date().getDay(), out = [];
-  if (d === 5) out.push({ id: "sp-kahf", key: "sp_kahf", title: "📖 Surah Al-Kahf (Friday) | سورة الكهف (الجمعة)" });
-  if (d === 1 || d === 4) out.push({ id: "sp-fast", key: "sp_fast", title: `🌙 Voluntary fast (${d === 1 ? "Monday" : "Thursday"}) | صيام ${d === 1 ? "الاثنين" : "الخميس"} (نافلة)` });
-  const hd = hijriDay();
-  if (hd >= 13 && hd <= 15) out.push({ id: "sp-white", key: "sp_white", title: `🌕 White days (${hd}) | الأيام البيض (${hd})` });
+  if (d === 5) out.push({ id: "sp-kahf", key: "sp_kahf", info: "kahf", pts: 10, title: "Surah Al-Kahf (Friday) | سورة الكهف (الجمعة) | Sure Al-Kahf (Freitag)" });
+  if (d === 1 || d === 4) out.push({ id: "sp-fast", key: "sp_fast", info: "fast", pts: FAST_PTS, title: `Voluntary fast (${d === 1 ? "Monday" : "Thursday"}) | صيام ${d === 1 ? "الاثنين" : "الخميس"} (نافلة) | Freiwilliges Fasten (${d === 1 ? "Montag" : "Donnerstag"})` });
+  const hm = hijriMD(), hd = hm[1];
+  if (hd >= 13 && hd <= 15) out.push({ id: "sp-white", key: "sp_white", info: "white", pts: FAST_PTS, title: `White days (${hd}) fast | صيام الأيام البيض (${hd}) | Weiße Tage (${hd}) fasten` });
+  if (hm[0] === 12 && hd === 9) out.push({ id: "sp-event", key: "sp_event", info: "arafah", pts: FAST_PTS, title: "Day of Arafah fast | صيام يوم عرفة | Fasten am Tag von Arafa" });
+  if (hm[0] === 1 && (hd === 9 || hd === 10)) out.push({ id: "sp-event", key: "sp_event", info: "ashura", pts: FAST_PTS, title: `Ashura fast (${hd} Muharram) | صيام عاشوراء (${hd} محرم) | Aschura-Fasten (${hd}. Muharram)` });
   return out;
 }
 function renderTasks() {
@@ -1087,12 +1145,12 @@ function renderTasks() {
 
   const sp = specialsToday();
   setHtml($("special-container"), sp.length
-    ? `<div class="sec-title">⭐ Today's special | مميز اليوم</div>` + sp.map(s => cardHtml(s.id, `<span class="task-title">${s.title}</span>`, `<span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`, `<button id="btn-${s.id}" style="background:var(--gold)" onclick="completeSpecial('${s.key}')">Done ✅ | تم (+5)</button>`, 'style="border-color:var(--gold)"')).join("")
+    ? `<div class="sec-title">Today's special | مميز اليوم</div>` + sp.map(s => cardHtml(s.id, `<span class="task-title">${s.title}</span>`, `<span class="pts">+${mulPts(s.pts)} ${T("pts", "نقطة")}</span>`, `<button id="btn-${s.id}" style="background:var(--gold)" onclick="completeSpecial('${s.key}')">Done | تم (+${mulPts(s.pts)})</button>`, 'style="border-color:var(--gold)"').replace('<div class="tm">', `<div class="tm" style="cursor:pointer" onclick="openSpecialInfo('${s.info}')">`).replace('<span class="task-title">', '<span class="task-title">ℹ️ ')).join("")
     : "");
 
   const secHtml = SECTIONS.map(s => {
     const cards = s[2].map(n => {
-      const chip = PRAYERS[n] ? `<span class="pt-chip" data-prayer="${PRAYERS[n]}">🕐 --:--</span>` : "";
+      const chip = PRAYERS[n] ? `<span class="pt-chip" data-prayer="${PRAYERS[n]}">--:--</span>` : "";
       return cardHtml("task-" + n, `<span class="task-title"><b class="num">${n}.</b> <span>${taskName(n)}</span></span>`, chip, taskBtn(n));
     }).join("");
     return `<div id="wrap-${s[0]}"><div class="sec-title">${s[1]}</div><div id="${s[0]}">${cards}</div></div>`;
@@ -1103,15 +1161,17 @@ function renderTasks() {
   setHtml($("sunnah-container"), sunnahNames.map((s, i) => {
     const n = i + 1;
     return cardHtml("side-" + n, `<span class="task-title"><b class="num">${n}.</b> <span>${s}</span></span>`,
-      `<span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">🕐 --:--</span><span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`,
-      `<button id="btn-side-${n}" onclick="completeSide(${n},5)">Done ✅ | تم (+5)</button>`);
+      `<span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">--:--</span><span class="pts">+${mulPts(5)} ${T("pts", "نقطة")}</span>`,
+      `<button id="btn-side-${n}" onclick="completeSide(${n},5)">Done | تم (+${mulPts(5)})</button>`)
+      .replace('<div class="tm">', `<div class="tm" style="cursor:pointer" onclick="openSunnahInfo(${n})">`)
+      .replace('<span class="task-title">', '<span class="task-title">ℹ️ ');
   }).join(""));
 
   setHtml($("extra-container"),
-    cardHtml("gold", `<span class="task-title" style="color:var(--gold)">🌟 Golden Opportunities | الفرص الذهبية</span>`, `<span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`,
-      `<button id="btn-gold" style="background:var(--gold)" onclick="openFuras()">Open 🌟 | فتح</button>`, 'style="border-color:var(--gold)"') +
-    cardHtml("postprayer", `<span class="task-title" style="color:var(--blue)">📿 Post-Prayer Adhkar | أذكار بعد الصلاة</span>`, `<span class="pts">+5 ${T("pts", "نقطة")} ✨</span>`,
-      `<button id="btn-postprayer" style="background:var(--blue)" onclick="openPostPrayer('post_prayer',5)">Open 📿 | فتح</button>`, 'style="border-color:var(--blue)"'));
+    cardHtml("gold", `<span class="task-title" style="color:var(--gold)">Golden Opportunities | الفرص الذهبية</span>`, `<span class="pts">+5 ${T("pts", "نقطة")}</span>`,
+      `<button id="btn-gold" style="background:var(--gold)" onclick="openFuras()">Open | فتح</button>`, 'style="border-color:var(--gold)"') +
+    cardHtml("postprayer", `<span class="task-title" style="color:var(--blue)">Post-Prayer Adhkar | أذكار بعد الصلاة</span>`, `<span class="pts">+5 ${T("pts", "نقطة")}</span>`,
+      `<button id="btn-postprayer" style="background:var(--blue)" onclick="openPostPrayer('post_prayer',5)">Open | فتح</button>`, 'style="border-color:var(--blue)"'));
 
   renderKhatma();
   placeCards();
@@ -1129,14 +1189,14 @@ function placeCards() {
   SECTIONS.forEach(s => $("wrap-" + s[0]).classList.toggle("hidden", !$(s[0]).children.length));
   const cnt = sig.split("").filter(x => x === "1").length;
   $("done-sheet").classList.toggle("hidden", !cnt);
-  setBi($("done-title"), `✅ Completed (${cnt}) | المنجزة (${cnt})`);
+  setBi($("done-title"), `Completed (${cnt}) | المنجزة (${cnt})`);
 }
 
 /* ---------- Khatma ---------- */
 function renderKhatma() {
   const rows = USERS.map(u => `<div class="kh-row"><span class="kh-name">${PILL[u]}</span><div class="pg-bar"><div id="kh-bar-${u}" class="pg-fill"></div></div><span id="kh-txt-${u}" class="kh-txt"></span></div>`).join("");
   const opts = QPD_OPTIONS.map(n => `<option value="${n}">${n}</option>`).join("");
-  setHtml($("khatma-box"), `<div class="sheet kh-sheet"><div class="acc-head" onclick="toggleAcc(this)"><span id="kh-head"></span><span class="arr">▼</span></div><div class="acc-body">${rows}<div class="kh-tools"><div><label>Pages per day | صفحات يومياً</label><select id="kh-qpd">${opts}</select></div><div><label>My bookmark (page) | علامتي (صفحة)</label><input id="kh-page" type="number" min="1" max="604" inputmode="numeric"></div><button onclick="saveKhatma()">Save 💾 | حفظ</button></div></div></div>`);
+  setHtml($("khatma-box"), `<div class="sheet kh-sheet"><div class="acc-head" onclick="toggleAcc(this)"><span id="kh-head"></span><span class="arr">▼</span></div><div class="acc-body">${rows}<div class="kh-tools"><div><label>Pages per day | صفحات يومياً</label><select id="kh-qpd">${opts}</select></div><div><label>My bookmark (page) | علامتي (صفحة)</label><input id="kh-page" type="number" min="1" max="604" inputmode="numeric"></div><button onclick="saveKhatma()">Save | حفظ</button></div></div></div>`);
   $("kh-qpd").value = String(qpd(currentUser));
   $("kh-page").value = qpage(currentUser);
   updateKhatma();
@@ -1148,9 +1208,9 @@ function updateKhatma() {
     const p = qpage(u), k = num("khatmas_" + u);
     pct[u] = Math.round((p - 1) / 604 * 100);
     $("kh-bar-" + u).style.width = Math.max(pct[u], 1) + "%";
-    $("kh-txt-" + u).textContent = `${p}/604${k ? " 🏅" + k : ""}`;
+    $("kh-txt-" + u).textContent = `${p}/604${k ? " x" + k : ""}`;
   });
-  $("kh-head").textContent = `📖 ${T("Quran Khatma", "ختمة القرآن")} · Mo ${pct.Mohamad}% · Di 🤍 ${pct.Dima}%`;
+  $("kh-head").textContent = `${T("Quran Khatma", "ختمة القرآن")} · Mo ${pct.Mohamad}% · Di 🤍 ${pct.Dima}%`;
 }
 function saveKhatma() {
   let p = parseInt($("kh-page").value, 10);
@@ -1161,7 +1221,7 @@ function saveKhatma() {
   renderTasks();
   loadState();
   if (open) { const h = $("khatma-box").querySelector(".acc-head"); if (h) toggleAcc(h); }
-  showToast("Saved ✅ | تم الحفظ");
+  showToast("Saved | تم الحفظ");
 }
 
 /* ---------- Completing things ---------- */
@@ -1177,7 +1237,7 @@ function completeTask(n, pts) {
   if (pts) addCoins(pts, taskName(n));
   store.set("task_" + n + "_" + currentUser, "true");
   loadState();
-  showToast(pts ? `Task Completed! +${pts} Points ✨ | تم الإنجاز!` : "Task Completed ✅ | تم الإنجاز");
+  showToast(pts ? `Task Completed! +${mulPts(pts)} Points | تم الإنجاز!` : "Task Completed | تم الإنجاز");
   afterComplete("task_" + n);
 }
 function completeSide(n, pts) {
@@ -1185,16 +1245,17 @@ function completeSide(n, pts) {
   addCoins(pts, sunnahNames[n - 1]);
   store.set("side_task_" + n + "_" + currentUser, "true");
   loadState();
-  showToast(`Sunnah Completed! +${pts} Points ✨ | تم إنجاز السنة!`);
+  showToast(`Sunnah Completed! +${mulPts(pts)} Points | تم إنجاز السنة!`);
   buzz();
 }
 function completeSpecial(key) {
   if (isDone(key)) return;
   const s = specialsToday().find(x => x.key === key);
-  addCoins(5, s ? s.title : key);
+  const pts = s ? s.pts : 5;
+  addCoins(pts, s ? s.title : key);
   store.set(key + "_" + currentUser, "true");
   loadState();
-  showToast("Done! +5 Points ✨ | تم الإنجاز!");
+  showToast(`Done! +${mulPts(pts)} Points | تم الإنجاز!`);
   buzz();
 }
 
@@ -1216,22 +1277,22 @@ function finishWith(key, pts, extra) {
       store.set(key + "_" + currentUser, "true");
       if (extra) extra();
       afterComplete(key);
-      showToast(`Task Completed! +${pts} Points ✨ | تم الإنجاز!`);
+      showToast(`Task Completed! +${mulPts(pts)} Points | تم الإنجاز!`);
     }
     closeReader();
   };
 }
 function openAdhkar(title, data, key) {
-  openReaderPage(title, `<div class="sheet">${buildItems(data)}</div>`, "Done ✅ | تم الإنجاز (+2 Points)", finishWith(key, 2));
+  openReaderPage(title, `<div class="sheet">${buildItems(data)}</div>`, "Done | تم الإنجاز (+2 Points)", finishWith(key, 2));
 }
 function openFuras() {
-  openReaderPage("🌟 Golden Opportunities | الفرص الذهبية", `<div class="sheet">${buildItems(furasData)}</div>`, "Done ✅ | تم الإنجاز (+5 Points)", finishWith("gold_opp", 5));
+  openReaderPage("Golden Opportunities | الفرص الذهبية", `<div class="sheet">${buildItems(furasData)}</div>`, "Done | تم الإنجاز (+5 Points)", finishWith("gold_opp", 5));
 }
 function openPostPrayer(key, pts) {
   const acc = (title, data) => `<div class="sheet" style="padding-bottom:5px"><div class="acc-head" onclick="toggleAcc(this)"><span>${title}</span><span class="arr">▼</span></div><div class="acc-body">${buildItems(data)}</div></div>`;
-  openReaderPage("📿 Post-Prayer Adhkar | أذكار ما بعد الصلاة",
+  openReaderPage("Post-Prayer Adhkar | أذكار ما بعد الصلاة",
     acc("1️⃣ Full Adhkar | القسم الأول: الأذكار الشاملة", postPrayer1) + acc("2️⃣ Short Adhkar | القسم الثاني: التسبيح وآية الكرسي", postPrayer2),
-    `Done ✅ | تم الإنجاز (+${pts} Points)`, finishWith(key, pts));
+    `Done | تم الإنجاز (+${pts} Points)`, finishWith(key, pts));
 }
 function closeReader() {
   qStop();
@@ -1279,23 +1340,163 @@ async function qLoadUrls() {
 }
 function quranPageHtml(p, d, start) {
   const join = arr => arr.map(a => `${a.n}. ${a.t}`).join(" ");
-  const ar = d[0].map((a, k) => `<span class="ay" data-i="${start + k}" onclick="qPlay(${start + k})">${a.t} ﴿${a.n}﴾</span>`).join(" ");
-  return `<div class="sheet"><div style="font-weight:700;color:var(--primary);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px">${T("Page", "صفحة")} ${p}</div><div class="arabic-block L-ar">${ar}</div><div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية 🤍:</b><br>${join(d[1])}</div><div class="tbox L-en"><b>EN:</b><br>${join(d[2])}</div><div class="tbox de L-de"><b>DE:</b><br>${join(d[3])}</div></div>`;
+  const ar = d[0].map((a, k) => `<span class="ay" data-i="${start + k}" onclick="ayClick(${start + k})">${a.t} ﴿${a.n}﴾</span>`).join(" ");
+  return `<div class="sheet"><div style="font-weight:700;color:var(--primary);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px">${T("Page", "صفحة")} ${p}</div><div class="arabic-block L-ar">${ar}</div><div class="tbox tr L-tr"><b>Arabic in English letters | عربي بحروف إنجليزية:</b><br>${join(d[1])}</div><div class="tbox L-en"><b>EN:</b><br>${join(d[2])}</div><div class="tbox de L-de"><b>DE:</b><br>${join(d[3])}</div></div>`;
 }
+
+/* ---------- Tafsir (long-press on an ayah, or the button in the player) ---------- */
+const SURAH_LEN = [7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+const SURAH_AR = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+const SURAH_EN = ["Al-Fatihah","Al-Baqarah","Ali 'Imran","An-Nisa","Al-Ma'idah","Al-An'am","Al-A'raf","Al-Anfal","At-Tawbah","Yunus","Hud","Yusuf","Ar-Ra'd","Ibrahim","Al-Hijr","An-Nahl","Al-Isra","Al-Kahf","Maryam","Ta-Ha","Al-Anbiya","Al-Hajj","Al-Mu'minun","An-Nur","Al-Furqan","Ash-Shu'ara","An-Naml","Al-Qasas","Al-'Ankabut","Ar-Rum","Luqman","As-Sajdah","Al-Ahzab","Saba","Fatir","Ya-Sin","As-Saffat","Sad","Az-Zumar","Ghafir","Fussilat","Ash-Shura","Az-Zukhruf","Ad-Dukhan","Al-Jathiyah","Al-Ahqaf","Muhammad","Al-Fath","Al-Hujurat","Qaf","Adh-Dhariyat","At-Tur","An-Najm","Al-Qamar","Ar-Rahman","Al-Waqi'ah","Al-Hadid","Al-Mujadila","Al-Hashr","Al-Mumtahanah","As-Saff","Al-Jumu'ah","Al-Munafiqun","At-Taghabun","At-Talaq","At-Tahrim","Al-Mulk","Al-Qalam","Al-Haqqah","Al-Ma'arij","Nuh","Al-Jinn","Al-Muzzammil","Al-Muddaththir","Al-Qiyamah","Al-Insan","Al-Mursalat","An-Naba","An-Nazi'at","'Abasa","At-Takwir","Al-Infitar","Al-Mutaffifin","Al-Inshiqaq","Al-Buruj","At-Tariq","Al-A'la","Al-Ghashiyah","Al-Fajr","Al-Balad","Ash-Shams","Al-Layl","Ad-Duha","Ash-Sharh","At-Tin","Al-'Alaq","Al-Qadr","Al-Bayyinah","Az-Zalzalah","Al-'Adiyat","Al-Qari'ah","At-Takathur","Al-'Asr","Al-Humazah","Al-Fil","Quraysh","Al-Ma'un","Al-Kawthar","Al-Kafirun","An-Nasr","Al-Masad","Al-Ikhlas","Al-Falaq","An-Nas"];
+function surahAyah(g) {
+  let r = g;
+  for (let i = 0; i < SURAH_LEN.length; i++) { if (r <= SURAH_LEN[i]) return { s: i + 1, a: r }; r -= SURAH_LEN[i]; }
+  return null;
+}
+const TAF = { tok: 0, tab: "mu", i: -1, a: null, sa: null };
+const TAF_TABS = [
+  { k: "mu", slug: "ar-tafsir-muyassar", lang: "ar", n: ["الميسّر", "Al-Muyassar", "Al-Muyassar"] },
+  { k: "sa", slug: "ar-tafseer-al-saddi", lang: "ar", n: ["السعدي", "As-Sa'di", "As-Sa'di"] },
+  { k: "jl", slug: "ar-tafsir-al-jalalayn", lang: "ar", n: ["الجلالين", "Al-Jalalayn", "Al-Dschalalain"] },
+  { k: "ib", slug: "en-tafisr-ibn-kathir", lang: "en", n: ["ابن كثير", "Ibn Kathir", "Ibn Kathir"] },
+  { k: "jle", slug: "en-al-jalalayn", lang: "en", n: ["الجلالين", "Al-Jalalayn", "Al-Dschalalain"] },
+  { k: "mk", slug: "en-tafsir-al-mukhtasar", lang: "en", n: ["المختصر", "Al-Mukhtasar", "Al-Mukhtasar"] },
+  { k: "de", slug: "", lang: "de", n: ["ألماني", "Deutsch", "Deutsch"] }
+];
+const lp = { t: null, x: 0, y: 0, fired: false };
+function ayClick(i) { if (lp.fired) { lp.fired = false; return; } qPlay(i); }
+function lpOpen(i) { lp.fired = true; clearTimeout(lp.t); vib(30); openTafsir(i); setTimeout(() => { lp.fired = false; }, 700); }
+document.addEventListener("pointerdown", e => {
+  const a = e.target.closest && e.target.closest(".ay");
+  if (!a) return;
+  lp.fired = false; lp.x = e.clientX; lp.y = e.clientY;
+  clearTimeout(lp.t);
+  lp.t = setTimeout(() => lpOpen(+a.dataset.i), 500);
+});
+["pointerup", "pointercancel"].forEach(ev => document.addEventListener(ev, () => clearTimeout(lp.t)));
+document.addEventListener("pointermove", e => { if (lp.t && (Math.abs(e.clientX - lp.x) > 12 || Math.abs(e.clientY - lp.y) > 12)) clearTimeout(lp.t); });
+/* phones fire "contextmenu" on a long-press: use it as a second trigger (and block the native menu) */
+document.addEventListener("contextmenu", e => {
+  const a = e.target.closest && e.target.closest(".ay");
+  if (!a) return;
+  e.preventDefault();
+  if (!lp.fired) lpOpen(+a.dataset.i);
+});
+
+function qAyahAt(i) {
+  let s = 0;
+  for (const pg of Q.pages) {
+    const len = pg.d[0].length;
+    if (i < s + len) { const k = i - s, z = { t: "" }; return { ar: pg.d[0][k], tr: pg.d[1][k] || z, en: pg.d[2][k] || z, de: pg.d[3][k] || z }; }
+    s += len;
+  }
+  return null;
+}
+function tafCurrent() {
+  if (Q.i >= 0) openTafsir(Q.i);
+  else showToast("Tap an ayah first | اضغط على آية أولاً | Tippe zuerst auf einen Vers");
+}
+function tafName(sa) { return LANG === "ar" ? "سورة " + SURAH_AR[sa.s - 1] : "Surah " + SURAH_EN[sa.s - 1]; }
+function openTafsir(i) {
+  const a = qAyahAt(i);
+  if (!a) return;
+  const sa = surahAyah(a.ar.g) || { s: 0, a: a.ar.n };
+  TAF.i = i; TAF.a = a; TAF.sa = sa;
+  TAF.tab = LANG === "ar" ? "mu" : LANG === "de" ? "de" : "ib";
+  $("taf-title").textContent = `${sa.s ? tafName(sa) : ""} · ${T("Ayah", "آية", "Vers")} ${sa.a}`;
+  $("taf-ayah").innerHTML = `<div class="arabic-block L-ar" style="font-size:20px;margin-bottom:6px">${esc(a.ar.t)} ﴿${a.ar.n}﴾</div><div class="tbox tr L-tr">${esc(a.tr.t)}</div><div class="tbox L-en">${esc(a.en.t)}</div><div class="tbox de L-de">${esc(a.de.t)}</div>`;
+  tafLinks();
+  tafTabs();
+  tafLoad();
+  $("tafsir-modal").classList.remove("hidden");
+}
+function tafTabs() {
+  const badge = { ar: "AR", en: "EN", de: "DE" };
+  $("taf-tabs").innerHTML = TAF_TABS.map(x => `<button class="${x.k === TAF.tab ? "sel" : ""}" onclick="tafTab('${x.k}')">${badge[x.lang]} · ${LANG === "ar" ? x.n[0] : LANG === "de" ? x.n[2] : x.n[1]}</button>`).join("");
+}
+function tafTab(t) { TAF.tab = t; tafTabs(); tafLoad(); }
+function tafLinks() {
+  const sa = TAF.sa;
+  if (!sa || !sa.s) { $("taf-links").innerHTML = ""; return; }
+  const q = `https://quran.com/${sa.s}:${sa.a}/tafsirs/`;
+  const lk = (u, t) => `<a class="link-btn" href="${u}" target="_blank" rel="noopener">${t}</a>`;
+  $("taf-links").innerHTML = `<div class="hint" style="margin:6px 0">${T("Read more online (opens a website)", "للمزيد على الإنترنت (يفتح موقع)", "Mehr online lesen (öffnet eine Webseite)")}</div>`
+    + lk(q + "ar-tafsir-muyassar", "" + T("Arabic: Al-Muyassar on quran.com", "العربية: التفسير الميسّر على quran.com", "Arabisch: Al-Muyassar auf quran.com"))
+    + lk(q + "en-tafisr-ibn-kathir", "" + T("English: Ibn Kathir on quran.com", "الإنكليزية: ابن كثير على quran.com", "Englisch: Ibn Kathir auf quran.com"))
+    + lk(`https://quranenc.com/de/browse/german_bubenheim/${sa.s}`, "" + T("German: translation (Bubenheim) on QuranEnc", "الألمانية: الترجمة (Bubenheim) على QuranEnc", "Deutsch: Übersetzung (Bubenheim) auf QuranEnc"));
+}
+async function fetchTimed(url, ms) {
+  const c = new AbortController(), t = setTimeout(() => c.abort(), ms || 9000);
+  try {
+    const r = await fetch(url, { signal: c.signal });
+    if (!r.ok) throw new Error("http " + r.status);
+    return await r.json();
+  } finally { clearTimeout(t); }
+}
+function cleanTxt(h) {
+  const html = String(h || "").replace(/<\/(p|div|h\d|li)>|<br\s*\/?>/gi, "\n");
+  let t = (new DOMParser().parseFromString(html, "text/html").body.textContent || "").replace(/\n{3,}/g, "\n\n").trim();
+  if (t.length > 5000) t = t.slice(0, 5000) + " …";
+  return t;
+}
+async function tafGet(tab, sa, g) {
+  const ck = `taf_${tab.k}_${sa.s}_${sa.a}`;
+  try { const c = localStorage.getItem(ck); if (c) return c; } catch (e) {}
+  let txt = "", err = null;
+  for (const b of ["https://cdn.jsdelivr.net", "https://fastly.jsdelivr.net", "https://gcore.jsdelivr.net"]) {
+    try { const j = await fetchTimed(`${b}/gh/spa5k/tafsir_api@main/tafsir/${tab.slug}/${sa.s}/${sa.a}.json`, 9000); txt = cleanTxt(j.text); if (txt) break; } catch (e) { err = e; }
+  }
+  if (!txt && (tab.k === "mu" || tab.k === "jl")) {
+    try { const j = await fetchTimed(`https://api.alquran.cloud/v1/ayah/${g}/ar.${tab.k === "mu" ? "muyassar" : "jalalayn"}`, 9000); txt = cleanTxt(j.data && j.data.text); err = null; } catch (e) { err = e; }
+  }
+  if (!txt && tab.k === "ib") {
+    try { const j = await fetchTimed(`https://api.quran.com/api/v4/tafsirs/169/by_ayah/${sa.s}:${sa.a}`, 9000); txt = cleanTxt(j.tafsir && j.tafsir.text); err = null; } catch (e) { err = e; }
+  }
+  if (!txt) { if (err) throw err; return ""; }
+  try {
+    const ks = Object.keys(localStorage).filter(k => k.indexOf("taf_") === 0);
+    if (ks.length > 60) ks.forEach(k => localStorage.removeItem(k));
+    localStorage.setItem(ck, txt);
+  } catch (e) {}
+  return txt;
+}
+async function tafLoad() {
+  const tok = ++TAF.tok, body = $("taf-body"), tab = TAF_TABS.find(x => x.k === TAF.tab) || TAF_TABS[0];
+  body.className = "tbox taf-text" + (tab.lang === "ar" ? " rtl" : "");
+  if (tab.k === "de") {
+    body.className = "tbox taf-text";
+    body.textContent = T("No German tafsir is available in the free sources this app uses.\n\nWhat you can do:\n• Tab “EN · Ibn Kathir” gives a full tafsir in English, inside this app.\n• The German translation of this ayah is shown above.\n• Use the German link below to read the German translation (Bubenheim) on QuranEnc.",
+      "ما في تفسير بالألمانية بالمصادر المجانية يلي بيستخدمها التطبيق.\n\nشو فيك تعمل:\n• تبويب «EN · Ibn Kathir» بيعطيك تفسير كامل بالإنكليزي داخل التطبيق.\n• الترجمة الألمانية للآية ظاهرة فوق.\n• استخدم الرابط الألماني تحت لقراءة الترجمة الألمانية (Bubenheim) على QuranEnc.",
+      "Für Deutsch gibt es in den kostenlosen Quellen dieser App leider keinen Tafsir.\n\nDas kannst du tun:\n• Der Tab „EN · Ibn Kathir“ zeigt einen vollständigen Tafsir auf Englisch, direkt in der App.\n• Die deutsche Übersetzung dieses Verses steht oben.\n• Über den deutschen Link unten liest du die deutsche Übersetzung (Bubenheim) auf QuranEnc.");
+    return;
+  }
+  body.textContent = T("Loading...", "جاري التحميل", "Lädt...");
+  try {
+    const txt = await tafGet(tab, TAF.sa, TAF.a.ar.g);
+    if (tok !== TAF.tok) return;
+    body.textContent = txt || T("This book has no text for this ayah. Try another tab.", "هذا الكتاب ما فيه نص لهذه الآية، جرّب تبويب تاني.", "Dieses Buch hat keinen Text für diesen Vers. Probiere einen anderen Tab.");
+  } catch (e) {
+    if (tok !== TAF.tok) return;
+    body.className = "tbox taf-text";
+    body.innerHTML = `<div style="margin-bottom:8px">${T("Couldn't load the tafsir (internet or the source is down). You can retry or use the links below to read it on a website.", "تعذّر تحميل التفسير (الإنترنت أو المصدر معطّل). جرّب مرة تانية أو استخدم الروابط تحت لقراءته على موقع.", "Tafsir konnte nicht geladen werden (Internet oder Quelle nicht erreichbar). Versuche es erneut oder nutze die Links unten.")}</div><button onclick="tafLoad()">${T("Retry", "إعادة المحاولة", "Erneut versuchen")}</button>`;
+  }
+}
+function closeTafsir() { TAF.tok++; $("tafsir-modal").classList.add("hidden"); }
+function tafListen() { const i = TAF.i; closeTafsir(); qPlay(i); }
 
 function qUi(scroll) {
   document.querySelectorAll(".ay.playing").forEach(e => e.classList.remove("playing"));
   const cur = Q.i >= 0 ? document.querySelector(`.ay[data-i="${Q.i}"]`) : null;
   if (cur) { cur.classList.add("playing"); if (scroll) cur.scrollIntoView({ block: "center", behavior: "smooth" }); }
   $("q-play").textContent = Q.audio.paused ? "▶" : "⏸";
-  $("q-label").textContent = Q.i >= 0 ? `🎧 ${Q.i + 1} / ${Q.urls.length}` : `🎧 ${Q.urls.length} ${T("ayat", "آية")}`;
+  $("q-label").textContent = Q.i >= 0 ? `${Q.i + 1} / ${Q.urls.length}` : `${Q.urls.length} ${T("ayat", "آية")}`;
 }
 function qPlay(i) {
   if (i < 0 || i >= Q.urls.length) return;
   Q.i = i;
   Q.audio.src = Q.urls[i];
   Q.audio.defaultPlaybackRate = Q.audio.playbackRate = +$("q-speed").value;
-  Q.audio.play().catch(() => { showToast("🔇 Couldn't play audio, check your internet | تعذر تشغيل الصوت"); qUi(false); });
+  Q.audio.play().catch(() => { showToast("Couldn't play audio, check your internet | تعذر تشغيل الصوت"); qUi(false); });
   qUi(true);
 }
 function qToggle() {
@@ -1316,7 +1517,7 @@ async function qReciterChange() {
   Q.reciter = $("q-reciter").value;
   try { await qLoadUrls(); }
   catch (e) {
-    showToast("⚠️ Reciter unavailable | هذا القارئ غير متاح حالياً");
+    showToast("Reciter unavailable | هذا القارئ غير متاح حالياً");
     Q.reciter = "ar.alafasy";
     $("q-reciter").value = Q.reciter;
     await qLoadUrls();
@@ -1328,9 +1529,9 @@ Q.audio.preload = "auto";
 Q.audio.onplay = Q.audio.onpause = () => qUi(false);
 Q.audio.onended = () => {
   if (Q.i + 1 < Q.urls.length) qPlay(Q.i + 1);
-  else { Q.i = -1; qUi(false); showToast("✅ Listening finished | انتهى الاستماع"); }
+  else { Q.i = -1; qUi(false); showToast("Listening finished | انتهى الاستماع"); }
 };
-Q.audio.onerror = () => { if (Q.i >= 0) showToast("🔇 Audio error, try another reciter | خطأ في الصوت، جرّب قارئ آخر"); };
+Q.audio.onerror = () => { if (Q.i >= 0) showToast("Audio error, try another reciter | خطأ في الصوت، جرّب قارئ آخر"); };
 
 function openQuran() {
   const n = qpd(currentUser), p1 = qpage(currentUser), pages = [];
@@ -1341,14 +1542,14 @@ function openQuran() {
     Object.keys(localStorage).forEach(k => { if (k.indexOf("qcache") === 0 && keep.indexOf(k) < 0) localStorage.removeItem(k); });
   } catch (e) {}
   openReaderPage(`Quran (Pages ${p1}-${last}) | القرآن (${p1}-${last})`,
-    "<div style='text-align:center;padding:20px;font-weight:700'>Loading Quran Pages... ⏳ | جاري التحميل...</div>",
-    "Done Reading ✅ | تم الإنجاز (+5 Points)",
+    "<div style='text-align:center;padding:20px;font-weight:700'>Loading Quran Pages... | جاري التحميل...</div>",
+    "Done Reading | تم الإنجاز (+5 Points)",
     finishWith("task_9", 5, () => {
       const next = last + 1;
       if (next > 604) {
         store.set("quran_page_" + currentUser, "1");
         store.set("khatmas_" + currentUser, String(num("khatmas_" + currentUser) + 1));
-        setTimeout(() => { showToast("🎉 Khatma completed! | ختمتم القرآن، ماشاء الله 🤍"); burst(); }, 1600);
+        setTimeout(() => { showToast("Khatma completed! | ختمتم القرآن، ماشاء الله"); burst(); }, 1600);
       } else store.set("quran_page_" + currentUser, String(next));
     }));
   const token = readerToken;
@@ -1358,7 +1559,7 @@ function openQuran() {
       Q.pages = pages.map((p, i) => ({ p, d: res[i] }));
       Q.reciter = store.get("quran_reciter") || "ar.alafasy";
       if (!RECITERS.some(r => r[0] === Q.reciter)) Q.reciter = "ar.alafasy";
-      let html = `<p class="hint">🎧 Tap any ayah to listen from it | اضغط على أي آية للاستماع منها</p>`, start = 0;
+      let html = `<p class="hint">Tap an ayah to listen · long-press for tafsir (or the button) | اضغط على آية للاستماع · اضغط مطولاً للتفسير (أو زر) | Tippe zum Anhören · lange drücken für Tafsir (oder)</p>`, start = 0;
       Q.pages.forEach(pg => { html += quranPageHtml(pg.p, pg.d, start); start += pg.d[0].length; });
       setHtml($("reader-content"), html);
       $("q-reciter").innerHTML = RECITERS.map(r => `<option value="${r[0]}">${r[1]}</option>`).join("");
@@ -1371,7 +1572,7 @@ function openQuran() {
     })
     .catch(() => {
       if (token !== readerToken) return;
-      setHtml($("reader-content"), "<div style='text-align:center;padding:20px'><div style='color:var(--bad-text);font-weight:700;margin-bottom:12px'>Failed to load Quran. Check your internet. | فشل تحميل القرآن، تأكد من الإنترنت.</div><button onclick='openQuran()'>Retry 🔄 | إعادة المحاولة</button></div>");
+      setHtml($("reader-content"), "<div style='text-align:center;padding:20px'><div style='color:var(--bad-text);font-weight:700;margin-bottom:12px'>Failed to load Quran. Check your internet. | فشل تحميل القرآن، تأكد من الإنترنت.</div><button onclick='openQuran()'>Retry | إعادة المحاولة</button></div>");
     });
 }
 
@@ -1394,7 +1595,7 @@ function resetTasksState() {
   USERS.forEach(u => {
     for (let i = 1; i <= 10; i++) store.del("task_" + i + "_" + u);
     for (let n = 1; n <= 5; n++) store.del("side_task_" + n + "_" + u);
-    ["gold_opp_", "post_prayer_", "sp_kahf_", "sp_fast_", "sp_white_"].forEach(k => store.del(k + u));
+    ["gold_opp_", "post_prayer_", "sp_kahf_", "sp_fast_", "sp_white_", "sp_event_"].forEach(k => store.del(k + u));
   });
   store.del("game_winner");
 }
@@ -1412,8 +1613,8 @@ function rollover() {
       st++;
       if (st > num("best_" + u)) store.set("best_" + u, String(st));
       if (st % 7 === 0) {
-        addCoins(WEEK_BONUS, "7-day streak 🔥 | سلسلة 7 أيام", u);
-        msgs[u].push(`🔥 ${st}-day streak! +${WEEK_BONUS} points | مكافأة السلسلة`);
+        addCoins(WEEK_BONUS, "7-day streak | سلسلة 7 أيام", u, true);
+        msgs[u].push(`${st}-day streak! +${WEEK_BONUS} points | مكافأة السلسلة`);
       }
     } else st = 0;
     if (gap > 1) st = 0;
@@ -1433,7 +1634,7 @@ function rollover() {
     const who = m > d ? ["Mohamad"] : d > m ? ["Dima"] : (m > 0 ? USERS : []);
     who.forEach(u => {
       store.set("wheel_token_" + u, "true");
-      msgs[u].push("🎡 Your wheel is ready! | عجلتك جاهزة!");
+      msgs[u].push("Your wheel is ready! | عجلتك جاهزة!");
     });
     USERS.forEach(u => store.del("wins_" + u));
     cd = 0;
@@ -1457,14 +1658,14 @@ function addPrize(w, prize) {
 function fulfillPrize(id) {
   store.set("prizes", JSON.stringify(getPrizes().filter(p => p.id !== id)));
   loadState();
-  showToast("Prize Fulfilled ✅ | تم تنفيذ الجائزة!");
+  showToast("Prize Fulfilled | تم تنفيذ الجائزة!");
 }
 function openWheelPage() {
   if (store.get("wheel_token_" + currentUser) !== "true") {
-    showToast(`🔒 The wheel opens every ${CYCLE_DAYS} days for the one ahead. | العجلة بتفتح كل ${CYCLE_DAYS} أيام للمتقدم.`);
+    showToast(`The wheel opens every ${CYCLE_DAYS} days for the one ahead. | العجلة بتفتح كل ${CYCLE_DAYS} أيام للمتقدم.`);
     return;
   }
-  setBi($("wheel-display"), "Tap to spin! | اضغط للف العجلة 🎁");
+  setBi($("wheel-display"), "Tap to spin! | اضغط للف العجلة");
   $("spin-btn").disabled = false;
   show("wheel-page");
 }
@@ -1472,13 +1673,13 @@ function spinWheel() {
   if (store.get("wheel_token_" + currentUser) !== "true") return;
   $("spin-btn").disabled = true;
   store.del("wheel_token_" + currentUser);
-  setBi($("wheel-display"), "🎡 ...");
+  setBi($("wheel-display"), "...");
   const me = currentUser;
   setTimeout(() => {
     const w = rewards[Math.floor(Math.random() * rewards.length)];
     addPrize(me, w);
-    store.set("store_alert_" + partnerOf(me), `👑 ${DISPLAY[me]} spun the wheel! Prize: ${tr(w)} | لف العجلة! ${tr(w)} | ${DISPLAY[me]} hat das Glücksrad gedreht! Preis: ${tr(w)}`);
-    setBi($("wheel-display"), "🎉 You Won | لقد ربحت: " + w);
+    store.set("store_alert_" + partnerOf(me), `${DISPLAY[me]} spun the wheel! Prize: ${tr(w)} | لف العجلة! ${tr(w)} | ${DISPLAY[me]} hat das Glücksrad gedreht! Preis: ${tr(w)}`);
+    setBi($("wheel-display"), "You Won | لقد ربحت: " + w);
     buzz();
     burst();
   }, 1000);
@@ -1598,7 +1799,7 @@ async function loadPrayerTimes(force) {
 }
 function renderPrayerTimes() {
   const t = prayerData && prayerData.timings;
-  document.querySelectorAll("[data-prayer]").forEach(el => { el.textContent = "🕐 " + (t ? fmt12(t[el.dataset.prayer]) : "--:--"); });
+  document.querySelectorAll("[data-prayer]").forEach(el => { el.textContent = "" + (t ? fmt12(t[el.dataset.prayer]) : "--:--"); });
   tickPrayer();
 }
 function locLabel() {
@@ -1610,7 +1811,7 @@ function tickPrayer() {
   document.querySelectorAll(".task-card.now").forEach(c => c.classList.remove("now"));
   const t = prayerData && prayerData.timings;
   if (!t) {
-    info.innerHTML = `<div class="pt-next">🕌 ${T("Prayer times", "مواقيت الصلاة")}</div><div class="pt-hijri">${store.get("pt_loc") ? T("Loading... ⏳", "جاري التحميل ⏳") : T("Set your city from Settings ⚙️", "حدّد مدينتك من الإعدادات ⚙️")}</div>`;
+    info.innerHTML = `<div class="pt-next">${T("Prayer times", "مواقيت الصلاة")}</div><div class="pt-hijri">${store.get("pt_loc") ? T("Loading...", "جاري التحميل") : T("Set your city from Settings", "حدّد مدينتك من الإعدادات")}</div>`;
     return;
   }
   const now = new Date();
@@ -1620,7 +1821,7 @@ function tickPrayer() {
     const key = todayKey() + n;
     if (d && now >= d && now - d < 90000 && !firedPrayers.has(key)) {
       firedPrayers.add(key);
-      showToast(`🕌 حان وقت ${PRAYER_AR[n]} | It's time for ${n} | Zeit für ${n}`);
+      showToast(`حان وقت ${PRAYER_AR[n]} | It's time for ${n} | Zeit für ${n}`);
       buzz();
     }
   });
@@ -1629,7 +1830,7 @@ function tickPrayer() {
   if (!next) next = "Fajr";
   const mins = nextDate ? Math.max(0, Math.round((nextDate - now) / 60000)) : 0;
   const left = mins >= 60 ? `${Math.floor(mins / 60)}${T("h", "س", "Std")} ${mins % 60}${T("m", "د", "Min")}` : `${mins}${T("m", "د", "Min")}`;
-  info.innerHTML = `<div class="pt-next">🕌 ${T("Next: " + next, "القادمة: " + PRAYER_AR[next], "Nächstes: " + next)} · ${fmt12(t[next])}</div><div class="pt-count">⏳ ${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline" : ""}</div><div class="pt-hijri">📍 ${locLabel()}</div>`;
+  info.innerHTML = `<div class="pt-next">${T("Next: " + next, "القادمة: " + PRAYER_AR[next], "Nächstes: " + next)} · ${fmt12(t[next])}</div><div class="pt-count">${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline" : ""}</div><div class="pt-hijri">${locLabel()}</div>`;
   let cur = "Isha";
   names.forEach(n => { const d = toDate(t[n]); if (d && d <= now) cur = n; });
   const idx = Object.keys(PRAYERS).find(k => PRAYERS[k] === cur);
@@ -1666,7 +1867,7 @@ async function onlineMatches(q) {
 }
 function renderResults(list) {
   cityList = list;
-  $("pt-results").innerHTML = list.map((c, i) => `<button onclick="pickCity(${i})">📍 ${esc(c.label)}${c.sub ? `<small>${esc(c.sub)}</small>` : ""}</button>`).join("");
+  $("pt-results").innerHTML = list.map((c, i) => `<button onclick="pickCity(${i})">${esc(c.label)}${c.sub ? `<small>${esc(c.sub)}</small>` : ""}</button>`).join("");
 }
 function citySuggest() {
   clearTimeout(cityTimer);
@@ -1683,7 +1884,7 @@ function citySuggest() {
 function saveLoc(c) {
   store.set("pt_loc", JSON.stringify({ name: c.name, label: c.label || c.name, lat: c.lat, lng: c.lng, method: +$("pt-method").value }));
   closeLoc(false);
-  showToast(`✅ Location saved: ${c.label || c.name} | تم حفظ الموقع: ${c.label || c.name} | Standort gespeichert: ${c.label || c.name}`);
+  showToast(`Location saved: ${c.label || c.name} | تم حفظ الموقع: ${c.label || c.name} | Standort gespeichert: ${c.label || c.name}`);
   loadPrayerTimes(true);
 }
 function pickCity(i) { if (cityList[i]) saveLoc(cityList[i]); }
@@ -1691,13 +1892,13 @@ async function saveCity() {
   const q = $("pt-city").value.trim();
   if (!q) { showToast("Type your city or use your location | اكتب مدينتك أو استخدم موقعك"); return; }
   let list = cityList.length ? cityList : localMatches(q);
-  if (!list.length) { showToast("🔎 Searching... | جاري البحث"); list = await onlineMatches(q); }
+  if (!list.length) { showToast("Searching... | جاري البحث"); list = await onlineMatches(q); }
   if (!list.length) { showToast("City not found, check the spelling or your internet | لم أجد المدينة، تأكد من الاسم أو الإنترنت"); return; }
   saveLoc(list[0]);
 }
 function useGps() {
   if (!navigator.geolocation) { showToast("Location isn't supported here, search for your city | الموقع غير مدعوم، ابحث عن مدينتك"); return; }
-  showToast("📍 Locating... | جاري تحديد الموقع");
+  showToast("Locating... | جاري تحديد الموقع");
   navigator.geolocation.getCurrentPosition(pos => {
     saveLoc({ name: "GPS", label: T("My location", "موقعي"), lat: +pos.coords.latitude.toFixed(3), lng: +pos.coords.longitude.toFixed(3) });
   }, err => {
@@ -1784,7 +1985,7 @@ function tsbTap() {
     if (tsb.t >= 100) {
       tsb.t = 0; tsb.r++;
       vib([100, 60, 100, 60, 220]);
-      showToast("🎉 Tasbih complete! | تم التسبيح، تقبّل الله 🤍");
+      showToast("Tasbih complete! | تم التسبيح، تقبّل الله");
       burst();
     } else if (tsb.t === 33 || tsb.t === 66) vib([70, 40, 70]);
     else vib(18);
@@ -1808,7 +2009,7 @@ function tsbMode() {
 }
 
 /* ---------- Store: rewards, requests, stats, log ---------- */
-const DEFAULT_ITEM = { id: "meal", name: "Delicious Meal 🍔 | وجبة طعام شهية 🍔", cost: 100, by: "*" };
+const DEFAULT_ITEM = { id: "meal", name: "Delicious Meal | وجبة طعام شهية", cost: 100, by: "*" };
 function getItems() { const a = readJson("store_items", null); return Array.isArray(a) ? a.filter(i => i && typeof i === "object" && i.name) : [DEFAULT_ITEM]; }
 function saveItems(a) { store.set("store_items", JSON.stringify(a)); }
 function getReqs() { const a = readJson("store_requests", []); return Array.isArray(a) ? a.filter(r => r && typeof r === "object") : []; }
@@ -1823,9 +2024,9 @@ function addItem() {
   a.push({ id: String(Date.now()), name, cost, by: currentUser });
   saveItems(a);
   $("ri-name").value = ""; $("ri-cost").value = "";
-  store.set("store_alert_" + partnerOf(currentUser), `🎁 ${DISPLAY[currentUser]} added a reward: ${name} | أضاف مكافأة جديدة: ${name} | ${DISPLAY[currentUser]} hat eine Belohnung hinzugefügt: ${name}`);
+  store.set("store_alert_" + partnerOf(currentUser), `${DISPLAY[currentUser]} added a reward: ${name} | أضاف مكافأة جديدة: ${name} | ${DISPLAY[currentUser]} hat eine Belohnung hinzugefügt: ${name}`);
   renderStore();
-  showToast("Reward added ✅ | تمت إضافة المكافأة");
+  showToast("Reward added | تمت إضافة المكافأة");
 }
 function removeItem(id) {
   saveItems(getItems().filter(i => String(i.id) !== String(id)));
@@ -1835,31 +2036,31 @@ function requestItem(id) {
   const it = getItems().find(i => String(i.id) === String(id));
   if (!it || it.by === currentUser) return;
   const coins = getCoins(currentUser);
-  if (coins < it.cost) { showToast("❌ Not enough points! | الرصيد غير كافٍ!"); return; }
+  if (coins < it.cost) { showToast("Not enough points! | الرصيد غير كافٍ!"); return; }
   addCoins(-it.cost, "Store: " + it.name);
   const r = getReqs();
   r.unshift({ id: String(Date.now()), buyer: currentUser, name: it.name, cost: it.cost, status: "pending", t: Date.now() });
   saveReqs(r);
-  store.set("store_alert_" + partnerOf(currentUser), `🛍️ ${DISPLAY[currentUser]} requested: ${tr(it.name)} | طلب جديد في المتجر: ${tr(it.name)} | ${DISPLAY[currentUser]} hat angefragt: ${tr(it.name)}`);
+  store.set("store_alert_" + partnerOf(currentUser), `${DISPLAY[currentUser]} requested: ${tr(it.name)} | طلب جديد في المتجر: ${tr(it.name)} | ${DISPLAY[currentUser]} hat angefragt: ${tr(it.name)}`);
   loadState();
-  showToast(`🎟️ Request sent, waiting for approval | تم إرسال الطلب بانتظار الموافقة`);
+  showToast(`Request sent, waiting for approval | تم إرسال الطلب بانتظار الموافقة`);
 }
 function approveReq(id) {
   const r = getReqs(), q = r.find(x => x.id === id);
   if (!q || q.status !== "pending") return;
   q.status = "approved";
   saveReqs(r);
-  store.set("store_alert_" + q.buyer, `✅ ${DISPLAY[currentUser]} approved: ${tr(q.name)} | تمت الموافقة: ${tr(q.name)} | ${DISPLAY[currentUser]} hat zugestimmt: ${tr(q.name)}`);
+  store.set("store_alert_" + q.buyer, `${DISPLAY[currentUser]} approved: ${tr(q.name)} | تمت الموافقة: ${tr(q.name)} | ${DISPLAY[currentUser]} hat zugestimmt: ${tr(q.name)}`);
   loadState();
-  showToast("Approved ✅ | تمت الموافقة");
+  showToast("Approved | تمت الموافقة");
 }
 function declineReq(id) {
   const r = getReqs(), q = r.find(x => x.id === id);
   if (!q || q.status !== "pending") return;
   q.status = "declined";
   saveReqs(r);
-  addCoins(q.cost, "Refund: " + q.name, q.buyer);
-  store.set("store_alert_" + q.buyer, `❌ ${DISPLAY[currentUser]} declined: ${tr(q.name)} (refunded) | تم الرفض واسترجاع النقاط: ${tr(q.name)} | ${DISPLAY[currentUser]} hat abgelehnt: ${tr(q.name)} (erstattet)`);
+  addCoins(q.cost, "Refund: " + q.name, q.buyer, true);
+  store.set("store_alert_" + q.buyer, `${DISPLAY[currentUser]} declined: ${tr(q.name)} (refunded) | تم الرفض واسترجاع النقاط: ${tr(q.name)} | ${DISPLAY[currentUser]} hat abgelehnt: ${tr(q.name)} (erstattet)`);
   loadState();
   showToast("Declined, points refunded | تم الرفض واسترجاع النقاط");
 }
@@ -1874,10 +2075,10 @@ function renderStats() {
   USERS.forEach(u => { cur[u] = num("streak_" + u) + (userAllDone(u) ? 1 : 0); best[u] = Math.max(num("best_" + u), cur[u]); });
   const row = (label, a, b) => `<div class="st-l">${label}</div><div class="st-v ${a > b ? "lead" : ""}">${a}</div><div class="st-v ${b > a ? "lead" : ""}">${b}</div>`;
   $("week-stats").innerHTML = `<div></div><div class="st-h">Mo</div><div class="st-h">Di 🤍</div>` +
-    row("🪙 " + T("Points earned", "النقاط المكتسبة"), pts.Mohamad, pts.Dima) +
-    row("🏆 " + T("Race wins", "الفوز بالسباق"), wins.Mohamad, wins.Dima) +
-    row("🔥 " + T("Current streak", "السلسلة الحالية"), cur.Mohamad, cur.Dima) +
-    row("⭐ " + T("Longest streak", "أطول سلسلة"), best.Mohamad, best.Dima);
+    row("" + T("Points earned", "النقاط المكتسبة"), pts.Mohamad, pts.Dima) +
+    row("" + T("Race wins", "الفوز بالسباق"), wins.Mohamad, wins.Dima) +
+    row("" + T("Current streak", "السلسلة الحالية"), cur.Mohamad, cur.Dima) +
+    row("" + T("Longest streak", "أطول سلسلة"), best.Mohamad, best.Dima);
 }
 function renderStore() {
   if (!currentUser) return;
@@ -1885,7 +2086,7 @@ function renderStore() {
   const reqs = getReqs();
 
   const waiting = reqs.filter(r => r.status === "pending" && r.buyer !== currentUser);
-  setHtml($("store-requests"), waiting.map(r => `<div class="banner banner-prize" style="text-align:start"><div>🛍️ <b>${DISPLAY[r.buyer]}</b> ${T("requests", "يطلب")}: <b>${esc(tr(r.name))}</b> (${r.cost} ${T("pts", "نقطة")})</div><div class="row2"><button onclick="approveReq('${r.id}')" style="background:var(--ok)">Approve ✅ | موافقة</button><button class="danger" onclick="declineReq('${r.id}')">Decline ❌ | رفض</button></div></div>`).join(""));
+  setHtml($("store-requests"), waiting.map(r => `<div class="banner banner-prize" style="text-align:start"><div><b>${DISPLAY[r.buyer]}</b> ${T("requests", "يطلب")}: <b>${esc(tr(r.name))}</b> (${r.cost} ${T("pts", "نقطة")})</div><div class="row2"><button onclick="approveReq('${r.id}')" style="background:var(--ok)">Approve | موافقة</button><button class="danger" onclick="declineReq('${r.id}')">Decline | رفض</button></div></div>`).join(""));
   const nb = $("nb-store");
   nb.textContent = waiting.length;
   nb.classList.toggle("hidden", !waiting.length);
@@ -1894,12 +2095,12 @@ function renderStore() {
     const mine = it.by === currentUser;
     const from = it.by === "*" ? "" : ` · ${T("from", "من")} ${PILL[it.by]}`;
     const btn = mine
-      ? `<button class="danger sm" onclick="removeItem('${it.id}')">🗑</button>`
-      : `<button class="sm" style="background:var(--gold)" onclick="requestItem('${it.id}')">Redeem 🎟️ | شراء</button>`;
+      ? `<button class="danger sm" onclick="removeItem('${it.id}')"></button>`
+      : `<button class="sm" style="background:var(--gold)" onclick="requestItem('${it.id}')">Redeem | شراء</button>`;
     return `<div class="task-card" style="flex-direction:row;justify-content:space-between;align-items:center"><div><strong style="font-size:13px">${esc(tr(it.name))}</strong><br><span class="sub">${T("Cost", "التكلفة")}: ${it.cost} ${T("pts", "نقطة")}${from}${mine ? " · " + T("yours", "مكافأتك") : ""}</span></div>${btn}</div>`;
   }).join(""));
 
-  const icon = { pending: "⏳", approved: "✅", declined: "❌" };
+  const icon = { pending: "…", approved: "✓", declined: "✕" };
   setHtml($("store-history-list"), reqs.length
     ? reqs.slice(0, 30).map(r => `<div>${icon[r.status] || "•"} <b>${DISPLAY[r.buyer]}</b> → <b>${esc(tr(r.name))}</b> · ${timeStr(r.t)}</div>`).join("")
     : `<div style="color:var(--muted);font-style:italic">${T("No orders yet...", "لا توجد طلبات بعد...")}</div>`);
@@ -1908,19 +2109,139 @@ function renderStore() {
 
   const log = readList("pts_log");
   setHtml($("pts-log"), log.length
-    ? log.slice(0, 30).map(e => `<div>${e.n > 0 ? "🟢 +" : "🔴 "}${e.n} · <b>${PILL[e.u] || e.u}</b> · ${esc(tr(e.r))} <span class="sub">${timeStr(e.t)}</span></div>`).join("")
+    ? log.slice(0, 30).map(e => `<div>${e.n > 0 ? "+" : ""}${e.n} · <b>${PILL[e.u] || e.u}</b> · ${esc(tr(e.r))} <span class="sub">${timeStr(e.t)}</span></div>`).join("")
     : `<div style="color:var(--muted);font-style:italic">${T("No points yet...", "لا توجد نقاط بعد...")}</div>`);
 }
 function loadStoreHistory() { renderStore(); }
 
+
+/* ---------- Sunnah how-to ---------- */
+const SI = {
+  niyya: { ar: "انوِ في قلبك صلاة السنة (النية محلّها القلب ولا تُنطق)، ثم كبّر «الله أكبر» وارفع يديك.",
+    tr: "Inwi b2albak salet el sunne (el niyye bel albe w ma betinte2), ba3den kabbir «Allahu akbar» w erfa3 idayk.",
+    en: "Make the intention in your heart for the sunnah prayer (no need to say it aloud), then say “Allahu Akbar” raising your hands.",
+    de: "Fasse im Herzen die Absicht für das Sunna-Gebet (man spricht sie nicht aus), sprich „Allahu Akbar“ und hebe die Hände." },
+  ruku: { ar: "اركع، ثم قم، ثم اسجد سجدتين كما في أي صلاة.",
+    tr: "Erka3, ba3den 2oum, w usjud sajdatayn mitl ay salet.",
+    en: "Bow (ruku), stand up, then prostrate twice, as in any prayer.",
+    de: "Verbeuge dich (Ruku), richte dich auf und werfe dich zweimal nieder (Sudschud), wie in jedem Gebet." },
+  end2: { ar: "في الركعة الثانية: الفاتحة وسورة قصيرة، ثم اجلس للتشهد والصلاة الإبراهيمية وسلّم عن يمينك ثم عن شمالك.",
+    tr: "Bil rak3a el tanye: el Fatiha w sura 2asira, ba3den ijlis lal tashahhud w el salat el ibrahimiyye w sallem 3an yimeenak w ba3den 3an shmalak.",
+    en: "In the second rak'ah: Al-Fatiha and a short surah, then sit for the tashahhud and the Ibrahimic salawat, and give salam to the right and then the left.",
+    de: "In der zweiten Rak'a: Al-Fatiha und eine kurze Sure, dann setze dich zum Taschahhud mit den Segenswünschen auf Ibrahim und gib den Salam nach rechts und links." },
+  home: { ar: "الأفضل أن تصلّيها في البيت: «أفضل صلاة المرء في بيته إلا المكتوبة» (متفق عليه).",
+    tr: "El afdal tsalliya bil bayt: «Afdal salet el mar2 fi baytih illa el maktoube» (Muttafaq 3alayh).",
+    en: "It is best to pray it at home: “The best prayer of a person is in his house, except the obligatory one.” (Bukhari & Muslim)",
+    de: "Am besten betet man es zu Hause: „Das beste Gebet eines Menschen ist das in seinem Haus, außer dem Pflichtgebet.“ (Bukhari & Muslim)" },
+  twelve: { ar: "«مَن صلّى اثنتي عشرة ركعة في يوم وليلة بُني له بهنّ بيت في الجنة» (مسلم).",
+    tr: "«Man salla ithnata 3ashrata rak3a fi yawm wa layle bouniya lahu bihinna bayt fil jenne» (Muslim).",
+    en: "“Whoever prays twelve rak'ahs in a day and night, a house will be built for him in Paradise.” (Muslim)",
+    de: "„Wer an einem Tag und einer Nacht zwölf Rak'a betet, dem wird dafür ein Haus im Paradies gebaut.“ (Muslim)" }
+};
+const SUNNAH_INFO = [
+  { c: { ar: "ركعتان خفيفتان قبل فرض الفجر", tr: "Rak3atayn khafifatayn abl fard el fajr", en: "Two light rak'ahs before the Fajr obligatory prayer", de: "Zwei kurze Rak'a vor dem Fadschr-Pflichtgebet" },
+    w: { ar: "بين أذان الفجر وإقامة الصلاة", tr: "Bayn adhan el fajr w iqamet el salet", en: "Between the Fajr adhan and the iqamah", de: "Zwischen Fadschr-Adhan und Iqama" },
+    h: { ar: [SI.niyya.ar, "الركعة الأولى: الفاتحة ثم «قل يا أيها الكافرون».", SI.ruku.ar, "الركعة الثانية: الفاتحة ثم «قل هو الله أحد»، ثم التشهد والسلام. وخفّف الصلاة."],
+         tr: [SI.niyya.tr, "Er-rak3a el oula: el Fatiha ba3den «Qul ya ayyuha el kafirun».", SI.ruku.tr, "Er-rak3a el tanye: el Fatiha ba3den «Qul huwa Allahu ahad», ba3den el tashahhud w el salam. W khaffif el salet."],
+         en: [SI.niyya.en, "First rak'ah: Al-Fatiha then Surah Al-Kafirun.", SI.ruku.en, "Second rak'ah: Al-Fatiha then Surah Al-Ikhlas, then tashahhud and salam. Keep it light."],
+         de: [SI.niyya.de, "Erste Rak'a: Al-Fatiha, dann Sure Al-Kafirun.", SI.ruku.de, "Zweite Rak'a: Al-Fatiha, dann Sure Al-Ikhlas, dann Taschahhud und Salam. Halte es kurz."] },
+    v: { ar: "«ركعتا الفجر خير من الدنيا وما فيها» (مسلم).", tr: "«Rak3atay el fajr khayr min el dunya w ma fiha» (Muslim).", en: "“The two rak'ahs of Fajr are better than this world and all that is in it.” (Muslim)", de: "„Die zwei Rak'a des Fadschr sind besser als die Welt und alles, was darin ist.“ (Muslim)" }, tip: SI.home },
+  { c: { ar: "4 ركعات قبل فرض الظهر، وركعتان بعده", tr: "4 rak3at abl fard el dhuhr, w rak3atayn ba3do", en: "4 rak'ahs before the Dhuhr obligatory prayer and 2 after it", de: "4 Rak'a vor dem Dhuhr-Pflichtgebet und 2 danach" },
+    w: { ar: "الأربع بعد دخول وقت الظهر وقبل الفرض، والركعتان بعد الفرض", tr: "El arba3 ba3d ma yidkhol wa2t el dhuhr w abl el fard, w el rak3atayn ba3d el fard", en: "The four after the Dhuhr time enters and before the fard; the two after the fard", de: "Die vier nach Eintritt der Dhuhr-Zeit und vor dem Fard, die zwei nach dem Fard" },
+    h: { ar: [SI.niyya.ar, "صلِّ الأربع ركعتين ركعتين: سلام بعد كل ركعتين (ويجوز أربعاً متصلة بسلام واحد).", "في كل ركعة: الفاتحة وسورة قصيرة، ثم ركوع وسجود كالمعتاد.", "بعد الفرض: صلِّ ركعتين كأي سنة، ثم سلّم."],
+         tr: [SI.niyya.tr, "Salli el arba3 rak3atayn rak3atayn: salam ba3d kil rak3atayn (w yijouz arba3 mittasle b salam wahed).", "Bkil rak3a: el Fatiha w sura 2asira, ba3den ruku3 w sujud mitl el 3ade.", "Ba3d el fard: salli rak3atayn mitl ay sunne, ba3den sallem."],
+         en: [SI.niyya.en, "Pray the four as two + two: give salam after every two rak'ahs (praying all four with a single salam is also permitted).", "In every rak'ah: Al-Fatiha and a short surah, then bowing and prostration as usual.", "After the fard: pray two rak'ahs like any sunnah and give salam."],
+         de: [SI.niyya.de, "Bete die vier als zwei + zwei: Salam nach jeweils zwei Rak'a (alle vier mit einem Salam ist ebenfalls erlaubt).", "In jeder Rak'a: Al-Fatiha und eine kurze Sure, dann Ruku und Sudschud wie gewohnt.", "Nach dem Fard: zwei Rak'a wie jede Sunna, dann Salam."] },
+    v: SI.twelve, tip: SI.home },
+  { c: { ar: "ركعتان بعد فرض المغرب", tr: "Rak3atayn ba3d fard el maghrib", en: "Two rak'ahs after the Maghrib obligatory prayer", de: "Zwei Rak'a nach dem Maghrib-Pflichtgebet" },
+    w: { ar: "مباشرة بعد صلاة المغرب", tr: "Ra2san ba3d salet el maghrib", en: "Right after the Maghrib prayer", de: "Direkt nach dem Maghrib-Gebet" },
+    h: { ar: [SI.niyya.ar, "الركعة الأولى: الفاتحة وسورة قصيرة (يُستحب «الكافرون»).", SI.ruku.ar, "الركعة الثانية: الفاتحة وسورة قصيرة (يُستحب «الإخلاص»)، ثم التشهد والسلام."],
+         tr: [SI.niyya.tr, "Er-rak3a el oula: el Fatiha w sura 2asira (yustahab «el Kafirun»).", SI.ruku.tr, "Er-rak3a el tanye: el Fatiha w sura 2asira (yustahab «el Ikhlas»), ba3den el tashahhud w el salam."],
+         en: [SI.niyya.en, "First rak'ah: Al-Fatiha and a short surah (Al-Kafirun is recommended).", SI.ruku.en, "Second rak'ah: Al-Fatiha and a short surah (Al-Ikhlas is recommended), then tashahhud and salam."],
+         de: [SI.niyya.de, "Erste Rak'a: Al-Fatiha und eine kurze Sure (empfohlen: Al-Kafirun).", SI.ruku.de, "Zweite Rak'a: Al-Fatiha und eine kurze Sure (empfohlen: Al-Ikhlas), dann Taschahhud und Salam."] },
+    v: SI.twelve, tip: SI.home },
+  { c: { ar: "ركعتان بعد فرض العشاء", tr: "Rak3atayn ba3d fard el 3isha", en: "Two rak'ahs after the Isha obligatory prayer", de: "Zwei Rak'a nach dem Isha-Pflichtgebet" },
+    w: { ar: "بعد صلاة العشاء", tr: "Ba3d salet el 3isha", en: "After the Isha prayer", de: "Nach dem Isha-Gebet" },
+    h: { ar: [SI.niyya.ar, "الركعة الأولى: الفاتحة وأي سورة قصيرة.", SI.ruku.ar, SI.end2.ar],
+         tr: [SI.niyya.tr, "Er-rak3a el oula: el Fatiha w ay sura 2asira.", SI.ruku.tr, SI.end2.tr],
+         en: [SI.niyya.en, "First rak'ah: Al-Fatiha and any short surah.", SI.ruku.en, SI.end2.en],
+         de: [SI.niyya.de, "Erste Rak'a: Al-Fatiha und eine beliebige kurze Sure.", SI.ruku.de, SI.end2.de] },
+    v: SI.twelve, tip: SI.home },
+  { c: { ar: "الوتر: ركعة واحدة على الأقل (الأفضل 3)", tr: "El witr: rak3a wahde 3al a2al (el afdal 3)", en: "Witr: at least one rak'ah (3 is common)", de: "Witr: mindestens eine Rak'a (3 sind üblich)" },
+    w: { ar: "بعد العشاء حتى قبيل الفجر؛ والأفضل آخر الليل لمن يقدر", tr: "Ba3d el 3isha la abl el fajr; w el afdal akhir el layl la man yi2dar", en: "After Isha until just before Fajr; best at the end of the night if you can", de: "Nach Isha bis kurz vor Fadschr; am besten am Ende der Nacht, wenn möglich" },
+    h: { ar: [SI.niyya.ar.replace("صلاة السنة", "الوتر"), "الطريقة الشائعة: ركعتان ثم سلام، ثم ركعة واحدة (المجموع 3). ويجوز ركعة واحدة فقط.", "يُستحب: في الأولى «سبّح اسم ربك الأعلى»، وفي الثانية «الكافرون»، وفي الأخيرة «الإخلاص».", "في الركعة الأخيرة يجوز دعاء القنوت قبل الركوع أو بعده: «اللهم اهدني فيمن هديت…»، ثم أكمل الصلاة وسلّم."],
+         tr: [SI.niyya.tr.replace("salet el sunne", "el witr"), "El tari2a el shayi3a: rak3atayn ba3den salam, ba3den rak3a wahde (el majmou3 3). W yijouz rak3a wahde bas.", "Yustahab: bil oula «Sabbih isma rabbika el a3la», bil tanye «el Kafirun», bil akhira «el Ikhlas».", "Bil rak3a el akhira yijouz du3a2 el qunut abl el ruku3 aw ba3do: «Allahumma ihdini fiman hadayt…», ba3den kammel w sallem."],
+         en: [SI.niyya.en.replace("the sunnah prayer", "Witr"), "Common way: two rak'ahs, salam, then one single rak'ah (3 in total). Praying just one rak'ah is also valid.", "Recommended: Al-A'la in the first, Al-Kafirun in the second, Al-Ikhlas in the last.", "In the last rak'ah you may make the Qunut dua before or after the ruku: “Allahumma ihdini fiman hadayt…”, then finish and give salam."],
+         de: [SI.niyya.de.replace("das Sunna-Gebet", "das Witr-Gebet"), "Übliche Art: zwei Rak'a, Salam, dann eine einzelne Rak'a (insgesamt 3). Auch nur eine Rak'a ist gültig.", "Empfohlen: Al-A'la in der ersten, Al-Kafirun in der zweiten, Al-Ikhlas in der letzten.", "In der letzten Rak'a kann man das Qunut-Bittgebet vor oder nach dem Ruku sprechen: „Allahumma ihdini fiman hadayt…“, dann beenden und Salam geben."] },
+    v: { ar: "«اجعلوا آخر صلاتكم بالليل وتراً» (متفق عليه).", tr: "«Ij3alou akhir salatikum bil layl witran» (Muttafaq 3alayh).", en: "“Make Witr the last of your night prayer.” (Bukhari & Muslim)", de: "„Macht das Witr zum Abschluss eures Nachtgebets.“ (Bukhari & Muslim)" }, tip: null }
+];
+const FAST_STEPS = {
+  ar: ["انوِ الصيام من الليل بقلبك، وتسحّر ولو بتمرة أو شربة ماء فالسحور بركة (متفق عليه).", "امتنع عن الأكل والشرب وسائر المفطرات من طلوع الفجر حتى غروب الشمس.", "عند الإفطار قل: «ذهب الظمأ وابتلّت العروق وثبت الأجر إن شاء الله» (أبو داود)."],
+  tr: ["Inwi el siyam mn el layl b2albak, w tsahhar wala b tamre aw shirbet mayy la2inno bil suhour baraka (Muttafaq 3alayh).", "Imtani3 3an el akel w el shurb w baqi el mufattirat mn tlou3 el fajr la ghroub el shams.", "Wa2t el iftar 2oul: «Dhahaba el dhama2 wabtallat el 3irouq wa thabata el ajr in sha2 Allah» (Abu Dawud)."],
+  en: ["Make the intention for the fast at night in your heart, and eat suhoor, even a date or a sip of water, for there is blessing in suhoor (Bukhari & Muslim).", "Refrain from food, drink and everything that breaks the fast from dawn until sunset.", "When breaking the fast say: “Dhahaba adh-dhama' wabtallat al-'uruq wa thabata al-ajr in sha' Allah” (Abu Dawud)."],
+  de: ["Fasse in der Nacht im Herzen die Absicht zu fasten und iss das Suhur, und sei es eine Dattel oder ein Schluck Wasser, denn im Suhur liegt Segen (Bukhari & Muslim).", "Verzichte von der Morgendämmerung bis zum Sonnenuntergang auf Essen, Trinken und alles, was das Fasten bricht.", "Sprich beim Fastenbrechen: „Dhahaba adh-dhama' wabtallat al-'uruq wa thabata al-ajr in scha' Allah“ (Abu Dawud)."]
+};
+const SPECIAL_INFO = {
+  kahf: { c: { ar: "قراءة سورة الكهف كاملة (110 آيات)", tr: "2ira2et sourat el Kahf kamle (110 aye)", en: "Reading all of Surah Al-Kahf (110 ayahs)", de: "Die ganze Sure Al-Kahf lesen (110 Verse)" },
+    w: { ar: "يوم الجمعة، من طلوع الفجر إلى غروب الشمس", tr: "Yawm el jum3a, mn tlou3 el fajr la ghroub el shams", en: "On Friday, from dawn until sunset", de: "Am Freitag, von der Morgendämmerung bis zum Sonnenuntergang" },
+    h: { ar: ["افتح المصحف على سورة الكهف (من صفحة 293 إلى 304 في مصحف المدينة، أي حوالي 12 صفحة).", "اقرأها كاملة في جلسة واحدة أو على دفعات خلال اليوم.", "اقرأ بتدبّر؛ وإن ضاق الوقت قسّمها على اليوم."],
+         tr: ["Ifta7 el mus7af 3ala sourat el Kahf (mn safha 293 la 304 bi mus7af el Medine, ya3ni 7awali 12 safha).", "Ie2raha kamle b jalse wahde aw 3ala daf3at khilel el yom.", "Ie2ra b tadabbur; w iza el wa2t dayyi2 2assimha 3ala el yom."],
+         en: ["Open the Quran at Surah Al-Kahf (pages 293 to 304 in the Madinah mushaf, about 12 pages).", "Read it all in one sitting or in parts through the day.", "Read with reflection; if time is short, split it across the day."],
+         de: ["Öffne den Quran bei der Sure Al-Kahf (Seiten 293 bis 304 im Medina-Mushaf, etwa 12 Seiten).", "Lies sie ganz in einer Sitzung oder in Teilen über den Tag verteilt.", "Lies mit Besinnung; ist die Zeit knapp, teile sie über den Tag auf."] },
+    v: { ar: "«مَن قرأ سورة الكهف يوم الجمعة أضاء له من النور ما بين الجمعتين» (رواه الحاكم والبيهقي وصححه الألباني).", tr: "«Man 2ara2a sourat el Kahf yawm el jum3a ada2a lahu mn el nour ma bayn el jum3atayn» (rawah el Hakim w el Bayhaqi, w sahhaha el Albani).", en: "“Whoever reads Surah Al-Kahf on Friday, a light will shine for him between the two Fridays.” (Al-Hakim and Al-Bayhaqi, graded sahih by Al-Albani)", de: "„Wer am Freitag die Sure Al-Kahf liest, dem leuchtet ein Licht zwischen den beiden Freitagen.“ (Al-Hakim und Al-Bayhaqi, von Al-Albani als sahih eingestuft)" },
+    tip: { ar: "ومَن حفظ عشر آيات من أول الكهف عُصم من فتنة الدجال (مسلم).", tr: "W man hafiza 3ashr ayat mn awwal el Kahf 3ussima mn fitnet el Dajjal (Muslim).", en: "Whoever memorizes the first ten ayahs of Al-Kahf is protected from the trial of the Dajjal (Muslim).", de: "Wer die ersten zehn Verse von Al-Kahf auswendig lernt, wird vor der Prüfung des Dadschdschal bewahrt (Muslim)." } },
+  fast: { c: { ar: "صيام يوم الاثنين أو الخميس (نافلة)", tr: "Siyam yawm el itnayn aw el khamis (nafle)", en: "Voluntary fast on Monday or Thursday", de: "Freiwilliges Fasten am Montag oder Donnerstag" },
+    w: { ar: "من طلوع الفجر إلى غروب الشمس", tr: "Mn tlou3 el fajr la ghroub el shams", en: "From dawn until sunset", de: "Von der Morgendämmerung bis zum Sonnenuntergang" },
+    h: FAST_STEPS,
+    v: { ar: "«تُعرض الأعمال يوم الاثنين والخميس، فأحب أن يُعرض عملي وأنا صائم» (الترمذي). وسُئل ﷺ عن صوم الاثنين فقال: «ذاك يوم وُلدت فيه وأُنزل عليّ فيه» (مسلم).", tr: "«Tu3rad el a3mal yawm el itnayn w el khamis, fa-u7ibb an yu3rad 3amali w ana sa2im» (el Tirmidhi). W su2ila 3an sawm el itnayn fa 2al: «Dhaka yawm wulidtu fihi w unzila 3alayya fihi» (Muslim).", en: "“Deeds are presented on Monday and Thursday, and I love for my deeds to be presented while I am fasting.” (At-Tirmidhi) Asked about fasting Monday he said: “That is the day I was born and the day revelation came to me.” (Muslim)", de: "„Die Taten werden montags und donnerstags vorgelegt, und ich möchte, dass meine Taten vorgelegt werden, während ich faste.“ (At-Tirmidhi) Zum Fasten am Montag sagte er: „Das ist der Tag, an dem ich geboren wurde und an dem mir (die Offenbarung) herabgesandt wurde.“ (Muslim)" },
+    tip: { ar: "صيام النفل غير واجب؛ فإن عرض عذر (مرض أو سفر) فلا حرج في تركه.", tr: "Siyam el nafle mish wajib; iza 3araDa 3udhr (maraD aw safar) fa la 7araj bi tarkih.", en: "A voluntary fast is not obligatory; if an excuse comes up (illness or travel) there is no blame in leaving it.", de: "Ein freiwilliges Fasten ist nicht verpflichtend; bei einem Grund (Krankheit oder Reise) ist es nicht schlimm, es auszulassen." } },
+  white: { c: { ar: "صيام الأيام البيض: 13 و14 و15 من كل شهر هجري", tr: "Siyam el ayyam el beed: 13 w 14 w 15 mn kil shahr hijri", en: "Fasting the White Days: the 13th, 14th and 15th of each Hijri month", de: "Fasten der Weißen Tage: 13., 14. und 15. jedes Hidschri-Monats" },
+    w: { ar: "ثلاثة أيام متتالية في كل شهر هجري", tr: "Talat ayyam mutatalye b kil shahr hijri", en: "Three consecutive days every Hijri month", de: "Drei aufeinanderfolgende Tage in jedem Hidschri-Monat" },
+    h: FAST_STEPS,
+    v: { ar: "«صيام ثلاثة أيام من كل شهر صيام الدهر كله» (متفق عليه). وقال ﷺ لأبي ذر: «إذا صمت من الشهر ثلاثة أيام فصم ثلاث عشرة وأربع عشرة وخمس عشرة» (الترمذي والنسائي).", tr: "«Siyam talat ayyam mn kil shahr siyam el dahr kullih» (Muttafaq 3alayh). W 2al la Abi Dharr: «Iza sumta mn el shahr talat ayyam fa sum talat 3ashra w arba3 3ashra w khams 3ashra» (el Tirmidhi w el Nasa2i).", en: "“Fasting three days of every month is like fasting the whole of time.” (Bukhari & Muslim) He told Abu Dharr: “If you fast three days of the month, fast the 13th, 14th and 15th.” (At-Tirmidhi, An-Nasa'i)", de: "„Drei Tage in jedem Monat zu fasten ist wie das Fasten der ganzen Zeit.“ (Bukhari & Muslim) Zu Abu Dharr sagte er: „Wenn du drei Tage im Monat fastest, dann faste den 13., 14. und 15.“ (At-Tirmidhi, An-Nasa'i)" },
+    tip: { ar: "يُحسب اليوم بالتقويم الهجري (أم القرى) في التطبيق، وقد يختلف يوماً عن رؤية بلدك.", tr: "Byin7siba el yom bil taqwim el hijri (Umm el Qura) bil tatbiq, w mumkin yikhtalif yom 3an ru2yet baladak.", en: "The app counts the day by the Hijri (Umm al-Qura) calendar, which can differ by a day from the moon sighting in your country.", de: "Die App zählt den Tag nach dem Hidschri-Kalender (Umm al-Qura); er kann um einen Tag von der Mondsichtung in deinem Land abweichen." } },
+  arafah: { c: { ar: "صيام يوم عرفة (9 ذو الحجة)", tr: "Siyam yawm 3arafa (9 dhil 7ijje)", en: "Fasting the Day of Arafah (9 Dhul Hijjah)", de: "Fasten am Tag von Arafa (9. Dhul-Hidscha)" },
+    w: { ar: "يوم التاسع من ذي الحجة", tr: "Yawm el tase3 mn dhil 7ijje", en: "The 9th of Dhul Hijjah", de: "Der 9. Dhul-Hidscha" },
+    h: FAST_STEPS,
+    v: { ar: "«صيام يوم عرفة أحتسب على الله أن يكفّر السنة التي قبله والسنة التي بعده» (مسلم).", tr: "«Siyam yawm 3arafa a7tasib 3ala Allah an yukaffir el sane elli abla w el sane elli ba3da» (Muslim).", en: "“Fasting the Day of Arafah, I hope from Allah, expiates the year before it and the year after it.” (Muslim)", de: "„Das Fasten am Tag von Arafa – ich hoffe von Allah, dass es das Jahr davor und das Jahr danach sühnt.“ (Muslim)" },
+    tip: { ar: "يُسنّ لغير الحاج؛ أما الحاج الواقف بعرفة فلا يصوم.", tr: "Mustahab la gheir el hajj; ama el hajj el waqif bi 3arafa fa la yasoum.", en: "It is recommended for those not performing Hajj; a pilgrim standing at Arafah does not fast.", de: "Empfohlen für alle, die nicht auf Hadsch sind; ein Pilger, der in Arafa steht, fastet nicht." } },
+  ashura: { c: { ar: "صيام عاشوراء (10 محرم)، ويُستحب معه التاسع", tr: "Siyam 3ashoura2 (10 muharram), w yustahab ma3o el tase3", en: "Fasting Ashura (10 Muharram), and the 9th is also recommended", de: "Fasten an Aschura (10. Muharram), auch der 9. ist empfohlen" },
+    w: { ar: "اليوم العاشر من محرم (ومعه التاسع إن أمكن)", tr: "El yom el 3ashir mn muharram (w ma3o el tase3 iza amkan)", en: "The 10th of Muharram (with the 9th if possible)", de: "Der 10. Muharram (wenn möglich mit dem 9.)" },
+    h: FAST_STEPS,
+    v: { ar: "«صيام يوم عاشوراء أحتسب على الله أن يكفّر السنة التي قبله» (مسلم).", tr: "«Siyam yawm 3ashoura2 a7tasib 3ala Allah an yukaffir el sane elli abla» (Muslim).", en: "“Fasting the day of Ashura, I hope from Allah, expiates the year before it.” (Muslim)", de: "„Das Fasten am Tag von Aschura – ich hoffe von Allah, dass es das Jahr davor sühnt.“ (Muslim)" },
+    tip: { ar: "قال ﷺ: «لئن بقيتُ إلى قابل لأصومنّ التاسع» (مسلم).", tr: "2al: «La2in baqeetu ila 2abil la asoumanna el tase3» (Muslim).", en: "He said: “If I live to next year, I will fast the 9th as well.” (Muslim)", de: "Er sagte: „Wenn ich nächstes Jahr noch lebe, werde ich auch den 9. fasten.“ (Muslim)" } }
+};
+const SI_LAB = { w: { ar: "الوقت:", tr: "El wa2t:", en: "When:", de: "Wann:" }, v: { ar: "الفضل:", tr: "El fadl:", en: "Virtue:", de: "Vorzug:" }, t: { ar: "ملاحظة:", tr: "Mulahaza:", en: "Note:", de: "Hinweis:" } };
+function infoBlock(lc, lab, cls, it) {
+  const steps = it.h[lc].map(x => `<li>${esc(x)}</li>`).join("");
+  return `<div class="tbox info-blk L-${lc} ${cls}"><span class="lab">${lab}</span><b>${esc(it.c[lc])}</b><div><b>${SI_LAB.w[lc]}</b> ${esc(it.w[lc])}</div><ol>${steps}</ol><div><b>${SI_LAB.v[lc]}</b> ${esc(it.v[lc])}</div>${it.tip ? `<div><b>${SI_LAB.t[lc]}</b> ${esc(it.tip[lc])}</div>` : ""}</div>`;
+}
+function showInfo(title, it) {
+  setBi($("info-title"), "ℹ️ " + title);
+  $("info-body").innerHTML = infoBlock("ar", "العربية", "rtl", it) + infoBlock("tr", "Aa", "tr", it) + infoBlock("en", "EN", "", it) + infoBlock("de", "DE", "de", it);
+  $("info-modal").classList.remove("hidden");
+}
+function openSunnahInfo(n) {
+  const it = SUNNAH_INFO[n - 1];
+  if (!it) return;
+  showInfo(sunnahNames[n - 1], it);
+}
+function openSpecialInfo(k) {
+  const it = SPECIAL_INFO[k];
+  if (!it) return;
+  const sp = specialsToday().find(x => x.info === k);
+  showInfo(sp ? sp.title : k, it);
+}
+function closeInfo() { $("info-modal").classList.add("hidden"); }
+
 /* ---------- Poke with messages ---------- */
 const POKE = {
-  ar: { f: ["⚡ نكزة!", "يلا حبيبتي 💗", "حان وقت الصلاة 🕌", "كمّلي مهامك 💪", "فخور فيكِ ✨", "وحشتيني 🥰"],
-        m: ["⚡ نكزة!", "يلا حبيبي 💗", "حان وقت الصلاة 🕌", "كمّل مهامك 💪", "فخورة فيك ✨", "وحشتني 🥰"] },
-  tr: { f: ["⚡ Nakze!", "Yalla habibti 💗", "Hane wa2t el salet 🕌", "Kammli mhamik 💪", "Fakhir fiki ✨", "Wahashtini 🥰"],
-        m: ["⚡ Nakze!", "Yalla habibi 💗", "Hane wa2t el salet 🕌", "Kammel mhamak 💪", "Fakhra fik ✨", "Wahashtni 🥰"] },
-  en: { f: ["⚡ Poke!", "Come on, love 💗", "Time to pray 🕌", "Finish your tasks 💪", "Proud of you ✨", "I miss you 🥰"] },
-  de: { f: ["⚡ Stups!", "Los, mein Schatz 💗", "Zeit zum Gebet 🕌", "Mach deine Aufgaben fertig 💪", "Ich bin stolz auf dich ✨", "Ich vermisse dich 🥰"] }
+  ar: { f: ["نكزة!", "حان وقت الصلاة", "صلّيتي؟", "يلا كمّلي مهامك", "لا تنسي أذكارك", "قرآن اليوم؟", "سبقتك بالمهام لحقيني!", "تحدّي: مين بيخلّص أول؟", "ادعيلي", "ما شاء الله عليكي، كمّلي", "تقبّل الله طاعتك"],
+        m: ["نكزة!", "حان وقت الصلاة", "صلّيت؟", "يلا كمّل مهامك", "لا تنسى أذكارك", "قرآن اليوم؟", "سبقتك بالمهام لحقني!", "تحدّي: مين بيخلّص أول؟", "ادعيلي", "ما شاء الله عليك، كمّل", "تقبّل الله طاعتك"] },
+  tr: { f: ["Nakze!", "Hane wa2t el salet", "Sallayti?", "Yalla kammli mhamik", "La tensay adhkarik", "Quran el yom?", "Sabaqtik bil mhame la7i2ini!", "Ta7addi: meen bi khallis awwal?", "Id3illi", "Masha2allah 3aliki, kammli", "Taqabbal Allah ta3tik"],
+        m: ["Nakze!", "Hane wa2t el salet", "Sallayt?", "Yalla kammel mhamak", "La tensa adhkarak", "Quran el yom?", "Sabaqtak bil mhame la7i2ni!", "Ta7addi: meen bi khallis awwal?", "Id3illi", "Masha2allah 3alayk, kammel", "Taqabbal Allah ta3tak"] },
+  en: { f: ["Poke!", "Time to pray", "Did you pray?", "Come on, finish your tasks", "Don't forget your adhkar", "Quran today?", "I'm ahead on tasks catch up!", "Challenge: who finishes first?", "Make dua for me", "MashaAllah, keep going", "May Allah accept your worship"] },
+  de: { f: ["Stups!", "Zeit zum Gebet", "Hast du gebetet?", "Los, mach deine Aufgaben fertig", "Vergiss deine Adhkar nicht", "Heute schon Quran?", "Ich bin bei den Aufgaben vorn hol auf!", "Challenge: Wer wird zuerst fertig?", "Bete für mich", "MashaAllah, weiter so", "Möge Allah deine Anbetung annehmen"] }
 };
 let pokeLang = "ar";
 function pokeMessages(target, lang) {
@@ -1942,9 +2263,9 @@ function openPoke() {
 }
 function closePoke() { $("poke-modal").classList.add("hidden"); }
 function deliverPoke(msg) {
-  store.set("poke_alert_" + partnerOf(currentUser), `⚡ ${PILL[currentUser]}: ${msg}`);
+  store.set("poke_alert_" + partnerOf(currentUser), `${PILL[currentUser]}: ${msg}`);
   closePoke();
-  showToast("Poke Sent! ⚡ | تم إرسال النكزة!");
+  showToast("Poke Sent! | تم إرسال النكزة!");
 }
 function sendPoke(i) { deliverPoke(pokeMessages(partnerOf(currentUser))[i]); }
 function sendCustomPoke() {
@@ -2008,7 +2329,7 @@ function setBadge(id, u, done) {
 }
 function setButton(btnId, key) {
   const b = $(btnId);
-  if (b && isDone(key)) { b.disabled = true; setBi(b, "Done ✅ | تم"); }
+  if (b && isDone(key)) { b.disabled = true; setBi(b, "Done | تم"); }
 }
 function loadState() {
   if (!currentUser) return;
@@ -2018,7 +2339,7 @@ function loadState() {
   for (let i = 1; i <= 10; i++) rows.push({ id: "task-" + i, key: "task_" + i, race: true });
   for (let i = 1; i <= 5; i++) rows.push({ id: "side-" + i, key: "side_task_" + i });
   rows.push({ id: "gold", key: "gold_opp" }, { id: "postprayer", key: "post_prayer" },
-    { id: "sp-kahf", key: "sp_kahf" }, { id: "sp-fast", key: "sp_fast" }, { id: "sp-white", key: "sp_white" });
+    { id: "sp-kahf", key: "sp_kahf" }, { id: "sp-fast", key: "sp_fast" }, { id: "sp-white", key: "sp_white" }, { id: "sp-event", key: "sp_event" });
 
   rows.forEach(r => {
     USERS.forEach(u => {
@@ -2047,19 +2368,19 @@ function loadState() {
     const el = $("banner-" + u);
     if (w) {
       el.className = "mini-badge " + (w === u ? "bg-done" : "bg-loser");
-      el.textContent = skin(`${SHORT[u]}: ${w === u ? T("Winner", "فائز") + " 🏆" : T("Loser", "خاسر") + " ❌"}`);
+      el.textContent = skin(`${SHORT[u]}: ${w === u ? T("Winner", "فائز") + "" : T("Loser", "خاسر") + ""}`);
     } else {
       el.className = "mini-badge bg-not";
-      el.textContent = `${SHORT[u]}: ${all[u] ? T("Finished", "أنهى") + " 🏆" : T("Racing", "يتسابق") + " ⏳"}`;
+      el.textContent = `${SHORT[u]}: ${all[u] ? T("Finished", "أنهى") + "" : T("Racing", "يتسابق") + ""}`;
     }
   });
 
   if (w) {
     if (w === currentUser) {
-      banner.textContent = tr("🏆 You won today's race! +1 win toward the wheel | فزت بسباق اليوم! نقطة نحو العجلة");
+      banner.textContent = tr("You won today's race! +1 win toward the wheel | فزت بسباق اليوم! نقطة نحو العجلة");
       banner.className = "banner banner-success";
     } else {
-      banner.textContent = skin(T(`❌ You lost the race today! ${DISPLAY[w]} finished first.`, `❌ خسرت السباق اليوم! ${DISPLAY[w]} أنهى المهام أولاً.`, `❌ Du hast das Rennen heute verloren! ${DISPLAY[w]} war zuerst fertig.`));
+      banner.textContent = skin(T(`You lost the race today! ${DISPLAY[w]} finished first.`, `خسرت السباق اليوم! ${DISPLAY[w]} أنهى المهام أولاً.`, `Du hast das Rennen heute verloren! ${DISPLAY[w]} war zuerst fertig.`));
       banner.className = "banner banner-error";
     }
   } else {
@@ -2070,19 +2391,26 @@ function loadState() {
   const left = Math.max(1, CYCLE_DAYS - num("cycle_days"));
   const wins = { Mohamad: num("wins_Mohamad"), Dima: num("wins_Dima") };
   if (w) wins[w]++;
-  $("wheel-status-text").textContent = "🎡 " + (token ? T("Ready to spin!", "جاهزة للف!") : T(`Opens in ${left}d`, `بعد ${left} أيام`, `Öffnet in ${left} T`));
+  $("wheel-status-text").textContent = "" + (token ? T("Ready to spin!", "جاهزة للف!") : T(`Opens in ${left}d`, `بعد ${left} أيام`, `Öffnet in ${left} T`));
   $("wheel-btn").classList.toggle("ready", token);
   USERS.forEach(u => { $("stk-" + u).textContent = "🔥" + (num("streak_" + u) + (userAllDone(u) ? 1 : 0)); });
-  $("cycle-info").textContent = `🏆 ${T("Race wins this cycle", "الفوز بالسباق")}: Mo ${wins.Mohamad} – Di 🤍 ${wins.Dima}`;
+  $("cycle-info").textContent = `${T("Race wins this cycle", "الفوز بالسباق")}: Mo ${wins.Mohamad} – Di 🤍 ${wins.Dima}`;
+
+  const bb = $("bonus-banner");
+  if (bb) {
+    const on = isBonusDay();
+    bb.classList.toggle("hidden", !on);
+    if (on) bb.textContent = T("Bonus day! Every point you earn today counts DOUBLE ×2", "يوم البونص! كل نقطة بتكسبها اليوم بتتضاعف ×2", "Bonus-Tag! Heute zählt jeder Punkt DOPPELT ×2");
+  }
 
   const pb = $("persistent-prize-banner");
   const prizes = getPrizes();
   if (prizes.length) {
     pb.innerHTML = skin(prizes.map(p => {
       const msg = p.w === currentUser
-        ? `🎁 ${T("Your Prize", "جائزتك")}: <b>${esc(tr(p.prize))}</b>`
-        : `👑 ${DISPLAY[p.w]} ${T("won", "ربح")}: <b>${esc(tr(p.prize))}</b>. ${T("You must fulfill it!", "يجب عليك تنفيذها!")}`;
-      return `<div style="margin-bottom:8px">${msg}<br><button onclick="fulfillPrize(${p.id})">${T("Mark as Done ✅", "تم التنفيذ ✅")}</button></div>`;
+        ? `${T("Your Prize", "جائزتك")}: <b>${esc(tr(p.prize))}</b>`
+        : `${DISPLAY[p.w]} ${T("won", "ربح")}: <b>${esc(tr(p.prize))}</b>. ${T("You must fulfill it!", "يجب عليك تنفيذها!")}`;
+      return `<div style="margin-bottom:8px">${msg}<br><button onclick="fulfillPrize(${p.id})">${T("Mark as Done", "تم التنفيذ")}</button></div>`;
     }).join(""));
     pb.className = "banner banner-prize";
   } else {
