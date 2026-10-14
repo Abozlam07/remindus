@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مشروع الاستقامة</title>
-<meta name="theme-color" content="#4f46e5">
+<meta name="theme-color" content="#170a13">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="الاستقامة">
@@ -218,16 +218,120 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
 #poke-langs button{font-size:13px;padding:6px 4px;min-height:42px}
 .sync{font-size:12px;margin-inline-start:6px;opacity:.85}
 .set-row.two button:last-child:nth-child(odd){grid-column:1/-1}
+
+/* ---------- UI refresh ---------- */
+.ic{display:block;flex:none}
+.icon-btn{width:42px;height:42px;min-height:42px;border-radius:50%}
+.icon-btn .ic{width:20px;height:20px}
+.hdr h1{font-size:21px}
+.pt-card{padding:16px 18px;border-radius:24px}
+.pt-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pt-name{font-size:26px;font-weight:800;line-height:1.2;margin-top:2px}
+.pt-time{font-size:12px;opacity:.85;margin-top:2px;font-variant-numeric:tabular-nums}
+.pt-r{text-align:end;direction:ltr}
+.pt-count{font-size:36px;letter-spacing:.5px;color:#fde68a}
+body.rose-dark .pt-count{color:inherit}
+.pt-unit{font-size:11px;opacity:.8}
+.pt-hijri{margin-top:8px}
+.progress{gap:8px;padding:14px 12px}
+.rings{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.ring-col{display:flex;flex-direction:column;align-items:center;gap:3px;width:92px;flex:none}
+.ring{position:relative;width:72px;height:72px}
+.ring svg{width:72px;height:72px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:7}
+.rg-bg{stroke:var(--border)}
+.rg-fg{stroke:var(--primary);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset .6s}
+.rg-Dima{stroke:var(--gold)}
+.ring .pg-num{position:absolute;inset:0;width:auto;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.ring-name{font-size:13px;font-weight:800}
+.ring-col .stk{width:auto;font-size:11px;color:var(--muted);font-weight:700}
+.ring-mid{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.ring-mid button.wheel{max-width:100%;min-height:30px;font-size:12px;padding:4px 12px;white-space:normal;line-height:1.3}
+.progress .chips{justify-content:center}
+.sec-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin:18px 4px 8px;user-select:none}
+.sec-head .sec-n{font-size:11px;font-weight:700;background:var(--tint);color:var(--primary);border-radius:99px;padding:2px 9px}
+.sec-head .sec-r{display:flex;align-items:center;gap:8px}
+.sec-head .ic{width:14px;height:14px;transition:transform .2s}
+.sec-head.shut .ic{transform:rotate(-90deg)}
+.nav-tab .ni .ic{width:22px;height:22px}
+.nav-tab{font-size:11px;font-weight:700}
+.task-title .ic{display:inline-block;vertical-align:-2px;width:15px;height:15px;margin-inline-end:2px;color:var(--primary)}
+@media(max-width:380px){.ring-col{width:80px}.ring,.ring svg{width:64px;height:64px}.pt-name{font-size:23px}.pt-count{font-size:31px}.task-top{font-size:13.5px}}
+
+/* ---------- Rose-dark glassmorphism ---------- */
+body.rose-dark{background-image:radial-gradient(900px 500px at 85% -10%,rgba(244,114,182,.16),transparent 60%),radial-gradient(700px 500px at -10% 110%,rgba(192,132,252,.14),transparent 60%),linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+body.rose-dark .card,body.rose-dark .task-card,body.rose-dark .sheet,body.rose-dark .progress,body.rose-dark .modal-card{background:rgba(38,17,31,.55);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-color:rgba(244,114,182,.2)}
+body.rose-dark .task-card.now{border-color:rgba(244,114,182,.7);box-shadow:0 0 0 2px rgba(244,114,182,.35),0 0 22px rgba(244,114,182,.4),var(--shadow)}
+body.rose-dark .nav-tab.active{box-shadow:0 0 16px rgba(244,114,182,.6),0 0 4px rgba(244,114,182,.7)}
+body.rose-dark .ring{border-radius:50%;box-shadow:0 0 18px rgba(244,114,182,.3)}
+body.rose-dark .ring svg{filter:drop-shadow(0 0 5px rgba(244,114,182,.6))}
+
+/* ---------- Kahf button pair ---------- */
+.btn-col{display:flex;flex-direction:column;gap:6px;flex:none}
+.btn-col>button{flex:none;min-height:34px;padding:6px 14px;border-radius:999px;font-size:12px}
+body.rose-dark .btn-col>button:not(:disabled){color:#2b0a1d}
+
+/* ---------- Wheel ---------- */
+.wheel-wrap{position:relative;width:min(78vw,320px);margin:22px auto 16px}
+.wheel-ptr{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid var(--gold);z-index:2;filter:drop-shadow(0 2px 4px rgba(0,0,0,.45))}
+#wheel-svg{display:block;width:100%;height:auto;border-radius:50%;filter:drop-shadow(0 6px 18px rgba(236,72,153,.45));will-change:transform}
+
+/* ---------- Daily note ---------- */
+.note-card{padding:12px 14px;margin-bottom:12px;border-radius:20px}
+.note-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.note-title{font-size:13px;font-weight:800;color:var(--primary)}
+.note-btn{min-height:30px;padding:4px 12px;font-size:11px;border-radius:99px;background:var(--tint);color:var(--text);border:1px solid var(--border)}
+.note-text{font-size:15px;font-weight:700;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.note-meta,.note-mine{font-size:11px;color:var(--muted);margin-top:4px;word-break:break-word}
+.note-empty{font-size:13px;color:var(--muted);font-style:italic}
+.note-card textarea{width:100%;margin:4px 0;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font:inherit;font-size:15px;background:var(--card);color:var(--text);resize:vertical}
+
+/* ---------- Last poke ---------- */
+.icon-btn{position:relative}
+.icon-btn.has-dot::after{content:"";position:absolute;top:4px;inset-inline-end:4px;width:10px;height:10px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary);border:2px solid var(--card)}
+.lp-card{margin-bottom:10px;padding:10px 12px;border:1px solid var(--border);border-radius:14px;background:var(--tint);text-align:start}
+.lp-h{font-size:11px;font-weight:800;color:var(--muted)}
+.lp-m{font-size:15px;font-weight:800;margin:4px 0;word-break:break-word}
+.lp-t{font-size:11px;color:var(--muted)}
+.lp-btn{margin-top:8px;min-height:36px;padding:6px 14px;font-size:13px;background:var(--primary);color:#fff}
+body.rose-dark .lp-btn{color:#2b0a1d}
+
+/* ---------- Store emoji picker ---------- */
+.emoji-row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 2px}
+.emoji-row button{width:44px;height:44px;min-height:44px;padding:0;font-size:22px;background:var(--tint);border:1px solid var(--border);border-radius:14px}
+.emoji-row button.sel{outline:3px solid var(--primary2);outline-offset:0}
+
+/* ---------- Auto-next page option ---------- */
+.q-auto{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;cursor:pointer}
+.q-auto input{width:20px;height:20px;min-height:0;margin:0;flex:none}
+
+/* ---------- Declutter + qibla ---------- */
+#special-container{margin-bottom:2px}
+#special-container .sec-title{margin:6px 6px 6px}
+.ch-row{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:9px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
+.ch-t{font-size:12px;line-height:1.5;color:var(--muted)}
+.ch-t b{color:var(--text)}
+.ch-b{display:flex;align-items:center;gap:10px;margin-top:6px}
+.ch-b .pg-num{width:auto;font-size:12px;font-weight:700}
+.note-card{padding:9px 14px;margin-bottom:10px;border-radius:16px}
+.note-head{margin-bottom:0}
+.note-text{margin-top:6px}
+.note-empty{display:none}
+.qb-dial{position:relative;width:230px;height:230px;margin:14px auto;border-radius:50%;border:3px solid var(--border);background:var(--tint);transition:transform .15s linear}
+.qb-n{position:absolute;top:6px;left:50%;transform:translateX(-50%);font-weight:800;color:var(--bad);font-size:15px}
+.qb-needle{position:absolute;inset:0;transition:transform .15s linear}
+.qb-needle::before{content:"";position:absolute;top:22px;left:50%;margin-left:-11px;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:78px solid var(--primary)}
+.qb-needle::after{content:"";position:absolute;top:98px;left:50%;margin-left:-4px;width:8px;height:56px;background:var(--primary);opacity:.45;border-radius:4px}
 </style>
 </head>
-<body>
+<body class="rose-dark">
 
 <div id="toast" class="toast hidden"></div>
 
 <div class="container">
   <!-- Login -->
   <div id="login-screen" class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:36px">🕌</span><button class="icon-btn" onclick="toggleSettings(true)" aria-label="Settings">⚙️</button></div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:36px">🕌</span><button class="icon-btn" onclick="toggleSettings(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button></div>
     <h2>System Login | تسجيل الدخول</h2>
     <p style="font-size:13px;opacity:.8;text-align:center">Select your name | اختر اسمك</p>
     <select id="username-select"><option value="Mohamad">Mohamad</option><option value="Dima">Dima 🤍👸🏻</option></select>
@@ -241,9 +345,9 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
     <header class="hdr">
       <div><h1 id="welcome-user"></h1><p><span id="today-date"></span> <span id="sync-state" class="sync" aria-label="sync"></span></p></div>
       <div class="hdr-a">
-        <button class="icon-btn" onclick="openPoke()" aria-label="Poke">👉</button>
-        <button id="wheel-btn" class="icon-btn" onclick="openWheelPage()" aria-label="Wheel">🎡</button>
-        <button class="icon-btn" onclick="toggleSettings(true)" aria-label="Settings">⚙️</button>
+        <button id="poke-btn" class="icon-btn" onclick="openPoke()" aria-label="Poke"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+        <button id="wheel-btn" class="icon-btn" onclick="openWheelPage()" aria-label="Wheel"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 010-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 010 5"/></svg></button>
+        <button class="icon-btn" onclick="toggleSettings(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button>
       </div>
     </header>
 
@@ -252,26 +356,30 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
       <div class="pt-card">
         <div class="pt-main"><div id="pt-info"></div></div>
       </div>
+      <div id="special-container"></div>
       <div class="progress">
-        <div class="pg-row"><span>Mo</span><div class="pg-bar"><div id="pg-Mohamad" class="pg-fill"></div></div><span id="pgn-Mohamad" class="pg-num">0/10</span><span id="stk-Mohamad" class="stk">🔥0</span></div>
-        <div class="pg-row"><span>Di 🤍</span><div class="pg-bar"><div id="pg-Dima" class="pg-fill"></div></div><span id="pgn-Dima" class="pg-num">0/10</span><span id="stk-Dima" class="stk">🔥0</span></div>
+        <div class="rings">
+          <div class="ring-col"><div class="ring"><svg viewBox="0 0 68 68" aria-hidden="true"><circle class="rg-bg" cx="34" cy="34" r="29" pathLength="100"/><circle id="rg-Mohamad" class="rg-fg rg-Mohamad" cx="34" cy="34" r="29" pathLength="100"/></svg><span id="pgn-Mohamad" class="pg-num">0/10</span></div><div class="ring-name">Mo</div><span id="stk-Mohamad" class="stk">0</span></div>
+          <div class="ring-mid"><button id="wheel-status-text" class="wheel" onclick="openWheelPage()"></button><div id="cycle-info" class="pg-info"></div></div>
+          <div class="ring-col"><div class="ring"><svg viewBox="0 0 68 68" aria-hidden="true"><circle class="rg-bg" cx="34" cy="34" r="29" pathLength="100"/><circle id="rg-Dima" class="rg-fg rg-Dima" cx="34" cy="34" r="29" pathLength="100"/></svg><span id="pgn-Dima" class="pg-num">0/10</span></div><div class="ring-name">Di 🤍</div><span id="stk-Dima" class="stk">0</span></div>
+        </div>
         <div class="chips">
           <span id="banner-Mohamad" class="mini-badge bg-not">Mo</span>
           <span id="banner-Dima" class="mini-badge bg-not">Di 🤍</span>
-          <button id="wheel-status-text" class="wheel" onclick="openWheelPage()"></button>
         </div>
-        <div id="cycle-info" class="pg-info"></div>
+        <div style="display:none"><div id="pg-Mohamad" class="pg-fill"></div><div id="pg-Dima" class="pg-fill"></div></div>
       </div>
       <div id="bonus-banner" class="banner banner-prize hidden"></div>
       <div id="challenge-box"></div>
+      <div id="note-card" class="card note-card"></div>
       <div id="persistent-banner" class="banner hidden"></div>
       <div id="persistent-prize-banner" class="banner banner-prize hidden"></div>
-      <div id="special-container"></div>
       <div id="tasks-container"></div>
     </div>
 
     <!-- Tab 2: Sunnah & Furas -->
     <div class="tab hidden" id="tab-2">
+      <button class="full" onclick="openQibla()" style="background:var(--tint);color:var(--text);border:1px solid var(--border);margin-bottom:6px">Qibla compass | بوصلة القبلة | Qibla-Kompass</button>
       <div class="sec-title" style="margin-top:4px">Quran | القرآن</div>
       <div id="khatma-box"></div>
       <div class="sec-title">Sunnah | السنن</div>
@@ -295,6 +403,10 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
         <select id="tsb-mode" onchange="tsbMode()" aria-label="Mode">
           <option value="f">Tasbih Fatimah 33/33/34 | تسبيح فاطمة ٣٣/٣٣/٣٤</option>
           <option value="free">Free counter | عدّاد حر</option>
+          <option value="d1">Subhanallahi wa bihamdihi (100) | سبحان الله وبحمده (100)</option>
+          <option value="d2">La ilaha illa Allah wahdahu la sharika lah... (100) | لا إله إلا الله وحده لا شريك له... (100)</option>
+          <option value="d3">Allahumma salli wa sallim 'ala nabiyyina Muhammad (100) | اللهم صلِّ وسلم على نبينا محمد (100)</option>
+          <option value="d4">Astaghfirullah wa atubu ilayh (100) | أستغفر الله وأتوب إليه (100)</option>
         </select>
         <div id="tsb-phrase" class="tsb-phrase"></div>
         <div id="tsb-dots" class="tsb-dots"></div>
@@ -317,6 +429,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
       <div id="store-items"></div>
 
       <h4 style="margin:12px 0 0;font-size:12px">Add a reward for your partner | أضف مكافأة لشريكك:</h4>
+      <div id="ri-emojis" class="emoji-row"></div>
       <div class="add-form">
         <input id="ri-name" maxlength="40" placeholder="Reward name | اسم المكافأة">
         <input id="ri-cost" type="number" min="1" max="9999" inputmode="numeric" placeholder="Points | نقاط">
@@ -337,10 +450,10 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
     </div>
 
     <nav id="bottom-nav" class="bottom-nav">
-      <button class="nav-tab active" onclick="switchTab(1)"><span class="ni">✅</span><span>Tasks | المهام</span></button>
-      <button class="nav-tab" onclick="switchTab(2)"><span class="ni">🌟</span><span>Sunnah | السنن</span></button>
-      <button class="nav-tab" onclick="switchTab(3)"><span class="ni">📿</span><span>Tasbih | المسبحة</span></button>
-      <button class="nav-tab" onclick="switchTab(4)"><span class="ni">🛒</span><span>Store | المتجر</span><span id="nb-store" class="nav-badge hidden">0</span></button>
+      <button class="nav-tab active" onclick="switchTab(1)"><span class="ni"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></span><span>Tasks | المهام</span></button>
+      <button class="nav-tab" onclick="switchTab(2)"><span class="ni"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.5 5.5 6 .7-4.4 4.1 1.2 6L12 16.4 6.7 19.3l1.2-6L3.5 9.2l6-.7z"/></svg></span><span>Sunnah | السنن</span></button>
+      <button class="nav-tab" onclick="switchTab(3)"><span class="ni"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="17" cy="7" r="1.2"/><circle cx="17" cy="17" r="1.2"/><circle cx="7" cy="17" r="1.2"/><circle cx="7" cy="7" r="1.2"/></svg></span><span>Tasbih | المسبحة</span></button>
+      <button class="nav-tab" onclick="switchTab(4)"><span class="ni"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.5 11h-11z"/><path d="M9 8a3 3 0 016 0"/></svg></span><span>Store | المتجر</span><span id="nb-store" class="nav-badge hidden">0</span></button>
     </nav>
   </div>
 
@@ -360,6 +473,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
         <select id="q-reciter" onchange="qReciterChange()" aria-label="Reciter"></select>
         <select id="q-speed" onchange="qSpeedChange()" aria-label="Speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select>
       </div>
+      <label class="q-auto"><input type="checkbox" id="q-auto" onchange="qAutoChange()"><span>Auto-play next page | تشغيل الصفحة التالية تلقائياً</span></label>
     </div>
     <button id="reader-finish-btn" class="full" style="background:var(--ok);padding:13px;margin-top:10px"></button>
   </div>
@@ -367,7 +481,8 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
   <!-- Wheel -->
   <div id="wheel-page" class="hidden">
     <div class="sub-top"><button class="back-btn" onclick="closeReader()">Back | رجوع</button><h2>Wheel of Fortune | عجلة الحظ</h2></div>
-    <div id="wheel-display" class="sheet" style="text-align:center;font-size:15px;font-weight:700;padding:24px">Tap to spin! | اضغط للف العجلة</div>
+    <div class="wheel-wrap"><div class="wheel-ptr"></div><svg id="wheel-svg" viewBox="-100 -100 200 200" role="img" aria-label="Wheel"></svg></div>
+    <div id="wheel-display" class="sheet" style="text-align:center;font-size:15px;font-weight:700;padding:18px">Tap to spin! | اضغط للف العجلة</div>
     <button id="spin-btn" class="full" style="background:var(--gold)" onclick="spinWheel()">Spin | دوران</button>
   </div>
 
@@ -392,12 +507,19 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
       <div id="rl-row" class="set-row two"></div>
       <div class="set-title">Prayer times | مواقيت الصلاة</div>
       <button onclick="toggleSettings(false);openLoc()" style="background:var(--tint);color:var(--text);border:1px solid var(--border)">Change location | تغيير الموقع</button>
-      <div class="set-title">App | التطبيق | App</div>
+      <div class="set-title">Shared goal (task 10) | الهدف المشترك (المهمة 10)</div>
+      <input id="t10-name" maxlength="40" placeholder="Studying | الدراسة">
+      <button onclick="saveTask10Name()" style="background:var(--blue)">Save goal name | حفظ اسم الهدف</button>
+      <p class="hint" style="margin:6px 0 0">Leave empty to restore the default | اتركه فارغاً للعودة للاسم الأصلي</p>
+      <div id="app-title" class="set-title hidden">App | التطبيق | App</div>
       <button id="install-btn" class="hidden" onclick="installApp()">Install app | تثبيت التطبيق | App installieren</button>
       <div id="ios-hint" class="hint hidden"></div>
       <div class="set-title">Notifications | الإشعارات | Benachrichtigungen</div>
+      <input id="push-url" type="url" placeholder="https://istiqama-push.xxx.workers.dev" dir="ltr" style="width:100%;margin-bottom:6px" onchange="savePushUrl(this.value)">
       <button id="push-btn" onclick="togglePush()">Enable notifications | تفعيل الإشعارات | Benachrichtigungen aktivieren</button>
       <div class="set-row two" id="push-pre-row" style="margin-top:6px"><button id="pre-0" onclick="setPushPre(0)">At adhan | عند الأذان | Zum Adhan</button><button id="pre-10" onclick="setPushPre(10)">10 min before | قبل 10 دقائق | 10 Min. vorher</button></div>
+      <button id="push-adhkar" class="hidden" onclick="togglePushAdhkar()" style="margin-top:6px"></button>
+      <button id="push-test" class="hidden" onclick="testPush()" style="margin-top:6px">Send test notification | إرسال إشعار تجريبي | Testbenachrichtigung senden</button>
       <div id="push-status" class="hint"></div>
       <div class="set-title">Backup | النسخ الاحتياطي | Sicherung</div>
       <div class="set-row two"><button onclick="exportBackup()">Export | تصدير | Export</button><button onclick="$('backup-file').click()">Import | استيراد | Import</button></div>
@@ -439,6 +561,17 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
   </div>
 
   <!-- Sunnah info -->
+  <div id="qibla-modal" class="modal hidden" onclick="if(event.target===this)closeQibla()">
+    <div class="modal-card" style="text-align:center">
+      <h3 style="margin-top:0">Qibla | القبلة | Qibla</h3>
+      <div class="qb-dial" id="qb-dial"><span class="qb-n">N</span><div class="qb-needle" id="qb-needle"></div></div>
+      <div id="qb-info" class="hint"></div>
+      <div id="qb-msg" class="hint" style="min-height:18px"></div>
+      <button id="qb-start" onclick="startQibla()">Start compass | تشغيل البوصلة | Kompass starten</button>
+      <button onclick="closeQibla()" style="background:#64748b;margin-top:6px">Close | إغلاق | Schließen</button>
+    </div>
+  </div>
+
   <div id="info-modal" class="modal hidden" onclick="if(event.target===this)closeInfo()">
     <div class="modal-card" style="text-align:start;max-width:520px">
       <h3 id="info-title" style="margin:0 0 10px"></h3>
@@ -464,6 +597,7 @@ body.no-ar .L-ar,body.no-tr .L-tr,body.no-en .L-en,body.no-de .L-de{display:none
   <div id="poke-modal" class="modal hidden" onclick="if(event.target===this)closePoke()">
     <div class="modal-card">
       <h3 style="margin-top:0">Poke | نكزة</h3>
+      <div id="last-poke"></div>
       <div id="poke-langs" class="set-row" style="margin-bottom:10px"></div>
       <div id="poke-list"></div>
       <input id="poke-custom" maxlength="60" placeholder="Write your own... | اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendCustomPoke()">
@@ -486,8 +620,10 @@ const FIREBASE_CONFIG = {
   appId: "1:110581896670:web:199e7f69b10c439e30b94f"
 };
 const ROOM_ID = "rm-5783d64d0aa68bc909b3";
+/* stable CDN versions, tried in order (fallback if one fails to load) */
+const FB_BASES = ["https://www.gstatic.com/firebasejs/12.19.0/", "https://www.gstatic.com/firebasejs/11.10.0/", "https://www.gstatic.com/firebasejs/10.14.1/"];
 /* only our own shared keys travel to the cloud (the github.io origin is shared with other sites) */
-const SHARED_RE = /^((coins|streak|best|wins|wheel_token|quran_page|qpd|khatmas|gold_opp|post_prayer|sp_kahf|sp_fast|sp_white|sp_event|store_alert|poke_alert)_|(task|side_task)_\d+_)(Mohamad|Dima)$|^wk_[0-9]{4}-[0-9]{2}-[0-9]{2}_[a-z]+_(Mohamad|Dima)$|^(day_log|pts_log|race_log|prizes|store_items|store_requests|cycle_days|last_day|game_winner)$/;
+const SHARED_RE = /^((coins|streak|best|wins|wheel_token|quran_page|qpd|khatmas|gold_opp|post_prayer|sp_kahf|sp_jumua|sp_fast|sp_white|sp_event|store_alert|poke_alert|daily_note|last_poke)_|(task|side_task)_\d+_)(Mohamad|Dima)$|^wk_[0-9]{4}-[0-9]{2}-[0-9]{2}_[a-z]+_(Mohamad|Dima)$|^(day_log|pts_log|race_log|prizes|store_items|store_requests|cycle_days|last_day|game_winner|race_win_time|task10_name|last_roll_ts|shared_loc)$/;
 const cloud = {
   status: "off", started: false, synced: false, timedOut: false, pending: {}, timer: null,
   ref: null, fs: null, readyP: null, onFirst: null, warned: false,
@@ -529,17 +665,26 @@ const cloud = {
       const fin = () => { if (!done) { done = true; resolve(); } };
       this.onFirst = fin;
       setTimeout(() => { if (!this.synced) { this.timedOut = true; fin(); } }, 5000);
-      this.load().catch(e => { this.setStatus("off", e); fin(); });
+      this.load().catch(e => { this.setStatus("off", e); fin(); afterSync(); });
     });
     return this.readyP;
   },
   async load() {
-    const base = "https://www.gstatic.com/firebasejs/12.19.0/";
-    const mods = await Promise.all([import(base + "firebase-app.js"), import(base + "firebase-firestore.js")]);
+    let mods = null, lastErr = null;
+    for (const base of FB_BASES) {
+      try {
+        mods = await Promise.race([
+          Promise.all([import(base + "firebase-app.js"), import(base + "firebase-firestore.js")]),
+          new Promise((_, rej) => setTimeout(() => rej(new Error("firebase load timeout")), 9000))
+        ]);
+        break;
+      } catch (e) { lastErr = e; mods = null; }
+    }
+    if (!mods) throw lastErr || new Error("firebase load failed");
     this.fs = mods[1];
     const db = this.fs.getFirestore(mods[0].initializeApp(FIREBASE_CONFIG));
     this.ref = this.fs.doc(db, "rooms", ROOM_ID);
-    this.fs.onSnapshot(this.ref, { includeMetadataChanges: true }, snap => this.apply(snap), err => { this.setStatus("err", err); if (this.onFirst) this.onFirst(); });
+    this.fs.onSnapshot(this.ref, { includeMetadataChanges: true }, snap => this.apply(snap), err => { this.setStatus("err", err); if (this.onFirst) this.onFirst(); if (!this.synced) afterSync(); });
   },
   localKeys() {
     const out = [];
@@ -571,7 +716,7 @@ const cloud = {
   onRemote(changed) {
     if (!currentUser) return;
     try {
-      if (changed.some(c => c.v === null && /^(task_|side_task_|gold_opp_|post_prayer_|sp_)/.test(c.k))) renderTasks();
+      if (changed.some(c => (c.v === null && /^(task_|side_task_|gold_opp_|post_prayer_|sp_)/.test(c.k)) || c.k === "task10_name")) renderTasks();
       loadState();
       checkAlerts();
     } catch (e) { showFatal("sync: " + (e && e.message)); }
@@ -782,6 +927,20 @@ const DE = {
 "Quran": "Koran",
 "Reading texts": "Lesetexte",
 "Delete": "Löschen",
+"Daily Note": "Tagesnotiz",
+"Write / update": "Schreiben / ändern",
+"No note yet...": "Noch keine Notiz...",
+"Subhanallahi wa bihamdihi (100)": "Subhanallahi wa bihamdihi (100)",
+"La ilaha illa Allah wahdahu la sharika lah... (100)": "La ilaha illa Allah wahdahu la scharika lah... (100)",
+"Allahumma salli wa sallim 'ala nabiyyina Muhammad (100)": "Allahumma salli wa sallim 'ala nabiyyina Muhammad (100)",
+"Astaghfirullah wa atubu ilayh (100)": "Astaghfirullah wa atubu ilayh (100)",
+"Auto-play next page": "Nächste Seite automatisch abspielen",
+"Shared goal (task 10)": "Gemeinsames Ziel (Aufgabe 10)",
+"Save goal name": "Zielnamen speichern",
+"Leave empty to restore the default": "Leer lassen, um den Standard wiederherzustellen",
+"Write": "Schreiben",
+"Full Adhkar": "Vollständige Adhkar",
+"Short Adhkar": "Kurze Adhkar",
 "Reset Quran Pages": "Koranseiten zurücksetzen",
 "Sunnah Prayers Hadith": "Hadith zu den Sunna-Gebeten",
 "Surah Al-Kahf (Friday)": "Sure Al-Kahf (Freitag)",
@@ -929,6 +1088,8 @@ const ADHKAR_COMMON = [
 ];
 const morningAdhkar = [KURSI, IKHLAS, ...MORNING_START, ...ADHKAR_COMMON];
 const eveningAdhkar = [KURSI, IKHLAS, ...EVENING_START, ...ADHKAR_COMMON];
+const morningShort = [KURSI, IKHLAS, MORNING_START[0], ADHKAR_COMMON[0], ADHKAR_COMMON[5], ADHKAR_COMMON[6], ADHKAR_COMMON[10]];
+const eveningShort = [KURSI, IKHLAS, EVENING_START[0], ADHKAR_COMMON[0], ADHKAR_COMMON[5], ADHKAR_COMMON[6], ADHKAR_COMMON[10]];
 
 const postPrayer1 = [
   ["الاستغفار 3 مرات (Astaghfirullah)", "أَسْتَغْفِرُ اللَّهَ، أَسْتَغْفِرُ اللَّهَ، أَسْتَغْفِرُ اللَّهَ.", "Astaghfirullah, astaghfirullah, astaghfirullah.", "I seek forgiveness from Allah (3 times).", "Ich suche Vergebung bei Allah (3 Mal)."],
@@ -989,7 +1150,7 @@ function hashStr(x) { let h = 2166136261; for (let i = 0; i < x.length; i++) { h
 function weekStart(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return dayKey(x); }
 /* one random (but identical on both phones) bonus day per week; all points x2 */
 function isBonusDay(d) {
-  d = d || new Date();
+  d = d || logicalNow();
   return (d.getDay() + 6) % 7 === hashStr(ROOM_ID + weekStart(d)) % 7;
 }
 function mulPts(n) { return isBonusDay() ? n * 2 : n; }
@@ -1009,7 +1170,7 @@ function vib(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e)
 const THEME_CLASS = { dark: "dark-mode", pink: "pink-mode", "rose-dark": "rose-dark" };
 const THEME_COLOR = { light: "#4f46e5", dark: "#0b0f19", pink: "#db2777", "rose-dark": "#170a13" };
 function setTheme(mode) {
-  if (!THEME_COLOR[mode]) mode = "light";
+  if (!THEME_COLOR[mode]) mode = "rose-dark";
   store.set("site_theme", mode);
   document.body.classList.remove("dark-mode", "pink-mode", "rose-dark");
   if (THEME_CLASS[mode]) document.body.classList.add(THEME_CLASS[mode]);
@@ -1048,11 +1209,19 @@ function renderReadButtons() {
 }
 function markSettings() {
   renderReadButtons();
-  const th = store.get("site_theme") || "light";
+  const th = store.get("site_theme") || "rose-dark";
   document.querySelectorAll("[data-theme]").forEach(b => b.classList.toggle("sel", b.dataset.theme === th));
   document.querySelectorAll("[data-lang]").forEach(b => b.classList.toggle("sel", b.dataset.lang === LANG));
 }
+function saveTask10Name() {
+  const v = $("t10-name").value.trim().replace(/\|/g, "/").slice(0, 40);
+  if (v) store.set("task10_name", v); else store.del("task10_name");
+  renderTasks();
+  loadState();
+  showToast("Saved | تم الحفظ");
+}
 function toggleSettings(open) {
+  if (open && $("t10-name")) $("t10-name").value = store.get("task10_name") || "";
   $("admin-section").classList.toggle("hidden", currentUser !== "Mohamad");
   $("settings-modal").classList.toggle("hidden", !open);
   markSettings();
@@ -1088,6 +1257,7 @@ function initAppInner() {
   setBi($("welcome-user"), currentUser === "Dima" ? "Assalamu alaykum, Dima 🤍 | السلام عليكم، ديما" : "Assalamu alaykum, Mohamad | السلام عليكم، محمد");
   renderDate();
   fillCities();
+  renderEmojiPicker();
   renderTasks();
   renderPrayerTimes();
   loadPrayerTimes();
@@ -1100,7 +1270,7 @@ function renderDate() {
   const el = $("today-date");
   if (!el) return;
   let t = "";
-  try { t = new Date().toLocaleDateString(LANG === "ar" ? "ar-u-nu-latn" : LANG === "de" ? "de-DE" : "en-GB", { weekday: "long", day: "numeric", month: "long" }); } catch (e) {}
+  try { t = logicalNow().toLocaleDateString(LANG === "ar" ? "ar-u-nu-latn" : LANG === "de" ? "de-DE" : "en-GB", { weekday: "long", day: "numeric", month: "long" }); } catch (e) {}
   el.textContent = t;
 }
 function switchTab(id) {
@@ -1115,6 +1285,7 @@ function qpd(u) { const v = num("qpd_" + u); return QPD_OPTIONS.indexOf(v) >= 0 
 function qpage(u) { const p = num("quran_page_" + u); return p >= 1 && p <= 604 ? p : 1; }
 function taskName(n) {
   if (n === 9) { const q = qpd(currentUser); return `Quran Daily (${q} Pages) | ورد القرآن اليومي (${q} صفحات)`; }
+  if (n === 10) { const c = (store.get("task10_name") || "").trim(); if (c) return c; }
   return taskNames[n - 1];
 }
 
@@ -1135,27 +1306,28 @@ function cardHtml(id, title, extra, btn, style) {
   return `<div class="task-card" id="card-${id}" ${style || ""}><div class="tm"><div class="task-top">${title}</div><div class="meta">${extra || ""}${pillsHtml(id)}</div></div>${btn}</div>`;
 }
 function taskBtn(n) {
-  if (n === 1) return `<button id="btn-task-1" onclick="openAdhkar('Morning Adhkar | أذكار الصباح',morningAdhkar,'task_1')">Read | قراءة (+2)</button>`;
-  if (n === 7) return `<button id="btn-task-7" onclick="openAdhkar('Evening Adhkar | أذكار المساء',eveningAdhkar,'task_7')">Read | قراءة (+2)</button>`;
+  if (n === 1) return `<button id="btn-task-1" onclick="openAdhkarSplit('morning','task_1')">Read | قراءة (+2)</button>`;
+  if (n === 7) return `<button id="btn-task-7" onclick="openAdhkarSplit('evening','task_7')">Read | قراءة (+2)</button>`;
   if (n >= 2 && n <= 6) return `<button id="btn-task-${n}" style="background:var(--blue)" onclick="openPostPrayer('task_${n}',3)">Adhkar | الأذكار (+3)</button>`;
   if (n === 8) return `<button id="btn-task-8" onclick="completeTask(8,3)">Done | تم (+3)</button>`;
   if (n === 9) return `<button id="btn-task-9" style="background:var(--gold)" onclick="openQuran()">Open | فتح (+5)</button>`;
   return `<button id="btn-task-${n}" onclick="completeTask(${n},0)">Done | تم</button>`;
 }
 function hijriDay() {
-  try { return parseInt(new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric" }).format(new Date()), 10) || 0; } catch (e) { return 0; }
+  try { return parseInt(new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric" }).format(logicalNow()), 10) || 0; } catch (e) { return 0; }
 }
 const FAST_PTS = 20;
 function hijriMD() {
   try {
-    const p = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric", month: "numeric" }).formatToParts(new Date());
+    const p = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric", month: "numeric" }).formatToParts(logicalNow());
     const g = t => parseInt((p.find(x => x.type === t) || {}).value, 10) || 0;
     return [g("month"), g("day")];
   } catch (e) { return [0, 0]; }
 }
 function specialsToday() {
-  const d = new Date().getDay(), out = [];
+  const d = logicalNow().getDay(), out = [];
   if (d === 5) out.push({ id: "sp-kahf", key: "sp_kahf", info: "kahf", pts: 10, title: "Surah Al-Kahf (Friday) | سورة الكهف (الجمعة) | Sure Al-Kahf (Freitag)" });
+  if (d === 5) out.push({ id: "sp-jumua", key: "sp_jumua", info: "jumua", pts: 10, title: "Friday Sunnahs | سنن الجمعة | Freitags-Sunnas" });
   if (d === 1 || d === 4) out.push({ id: "sp-fast", key: "sp_fast", info: "fast", pts: FAST_PTS, title: `Voluntary fast (${d === 1 ? "Monday" : "Thursday"}) | صيام ${d === 1 ? "الاثنين" : "الخميس"} (نافلة) | Freiwilliges Fasten (${d === 1 ? "Montag" : "Donnerstag"})` });
   const hm = hijriMD(), hd = hm[1];
   if (hd >= 13 && hd <= 15) out.push({ id: "sp-white", key: "sp_white", info: "white", pts: FAST_PTS, title: `White days (${hd}) fast | صيام الأيام البيض (${hd}) | Weiße Tage (${hd}) fasten` });
@@ -1163,20 +1335,52 @@ function specialsToday() {
   if (hm[0] === 1 && (hd === 9 || hd === 10)) out.push({ id: "sp-event", key: "sp_event", info: "ashura", pts: FAST_PTS, title: `Ashura fast (${hd} Muharram) | صيام عاشوراء (${hd} محرم) | Aschura-Fasten (${hd}. Muharram)` });
   return out;
 }
+const JUMUA_ITEMS = [
+  ["الغسل والسواك والتطيب (Ghusl, Siwak & Perfume)",
+   "«غُسْلُ يَوْمِ الْجُمُعَةِ وَاجِبٌ عَلَى كُلِّ مُحْتَلِمٍ، وَأَنْ يَسْتَنَّ، وَأَنْ يَمَسَّ طِيبًا إِنْ وَجَدَ» (رواه مسلم). وجمهور العلماء على أن الغسل سنة مؤكدة. ويُستحب لبس أحسن الثياب والتنظف قبل الذهاب إلى المسجد.",
+   "Ghusl yawm el jum3a wajib 3ala kil mu7talim, w an yastanna, w an yamassa tiban in wajad (Muslim). W jumhour el 3ulama2 3ala enno sunne mu2akkade. W el mustaHab lubs a7sen el thiyab w el tanaZZuf 2abl el dhahab la el masjid.",
+   "\"Washing on Friday is required of every adult, as well as using the siwak and applying perfume if one has it\" (Muslim). Most scholars regard the ghusl as a strongly recommended sunnah. It is also recommended to wear your best clothes and be clean before going to the mosque.",
+   "„Die Waschung am Freitag ist für jeden Erwachsenen vorgeschrieben, ebenso die Siwak und Parfüm, wenn man welches hat“ (Muslim). Die meisten Gelehrten sehen die Ganzkörperwaschung als stark empfohlene Sunna. Empfohlen sind auch die besten Kleider und Sauberkeit vor dem Gang zur Moschee."],
+  ["التبكير إلى الجمعة (Going early)",
+   "«مَنِ اغْتَسَلَ يَوْمَ الْجُمُعَةِ غُسْلَ الْجَنَابَةِ ثُمَّ رَاحَ فِي السَّاعَةِ الْأُولَى فَكَأَنَّمَا قَرَّبَ بَدَنَةً، وَمَنْ رَاحَ فِي السَّاعَةِ الثَّانِيَةِ فَكَأَنَّمَا قَرَّبَ بَقَرَةً…» (متفق عليه). فكلما بكّرت زاد الأجر، وأنصت للخطبة ولا تتخطَّ الرقاب.",
+   "Man ightasala yawm el jum3a ghusl el janabe thumma raha fi el sa3a el oula fa ka2annama qarraba badane… (Muttafaq 3alayh). Kullma bakkart zad el ajr, w anSit lal khuTbe w la tatakhaTTa el riqab.",
+   "\"Whoever washes on Friday as one washes for janabah, then goes in the first hour, it is as if he offered a camel, and whoever goes in the second hour, it is as if he offered a cow…\" (Bukhari and Muslim). The earlier you go, the greater the reward; listen quietly to the sermon and do not step over people.",
+   "„Wer am Freitag die Waschung vornimmt und in der ersten Stunde aufbricht, dem ist es, als hätte er ein Kamel geopfert, und wer in der zweiten Stunde aufbricht, als hätte er eine Kuh geopfert…“ (Buchari und Muslim). Je früher, desto größer der Lohn; höre der Predigt still zu und steige nicht über andere hinweg."],
+  ["الإكثار من الصلاة على النبي ﷺ (Salawat)",
+   "«أَكْثِرُوا الصَّلَاةَ عَلَيَّ يَوْمَ الْجُمُعَةِ وَلَيْلَةَ الْجُمُعَةِ» (رواه البيهقي وحسّنه الألباني). قل: اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.",
+   "Akthiru el salat 3alayya yawm el jum3a w laylat el jum3a (el Bayhaqi). Qul: Allahumma salli wa sallim 3ala nabiyyina Muhammad.",
+   "\"Send many blessings upon me on the day of Friday and the night of Friday\" (Al-Bayhaqi, graded hasan by Al-Albani). Say: Allahumma salli wa sallim 'ala nabiyyina Muhammad.",
+   "„Sprecht am Freitag und in der Freitagnacht viele Segenswünsche auf mich“ (Al-Baihaqi, von Al-Albani als hasan eingestuft). Sage: Allahumma salli wa sallim 'ala nabiyyina Muhammad."],
+  ["ساعة الإجابة (The hour of answered dua)",
+   "«فِيهِ سَاعَةٌ لَا يُوَافِقُهَا عَبْدٌ مُسْلِمٌ وَهُوَ قَائِمٌ يُصَلِّي يَسْأَلُ اللَّهَ شَيْئًا إِلَّا أَعْطَاهُ إِيَّاهُ» (متفق عليه). وقيل: هي آخر ساعة بعد العصر إلى المغرب، فأكثر من الدعاء فيها.",
+   "Fihi sa3a la yuwafiquha 3abd muslim wa huwa qa2im yuSalli yas2alu Allah shay2an illa a3Tahu iyyah (Muttafaq 3alayh). W qil: hiye akher sa3a ba3d el 3aSr la el maghrib, fa akthir min el du3a2 fiha.",
+   "\"On Friday there is an hour in which no Muslim servant stands praying and asks Allah for something except that He gives it to him\" (Bukhari and Muslim). It is said to be the last hour after Asr until Maghrib, so make plenty of dua then.",
+   "„Am Freitag gibt es eine Stunde, in der kein muslimischer Diener betet und Allah um etwas bittet, ohne dass Er es ihm gibt“ (Buchari und Muslim). Man sagt, es sei die letzte Stunde nach Asr bis Maghrib, bitte also viel in dieser Zeit."]
+];
+function openJumua() {
+  openReaderPage("Friday Sunnahs | سنن الجمعة | Freitags-Sunnas", `<div class="sheet">${buildItems(JUMUA_ITEMS)}</div>`,
+    isDone("sp_jumua") ? "Close | إغلاق" : `Done | تم الإنجاز (+${mulPts(10)} Points)`, finishWith("sp_jumua", 10));
+}
+function specialBtn(s) {
+  const done = `<button id="btn-${s.id}" style="background:var(--gold)" onclick="completeSpecial('${s.key}')">Done | تم (+${mulPts(s.pts)})</button>`;
+  if (s.key === "sp_jumua") return `<button id="btn-sp-jumua" style="background:var(--blue)" onclick="openJumua()">Open | فتح (+${mulPts(s.pts)})</button>`;
+  if (s.key !== "sp_kahf") return done;
+  return `<div class="btn-col"><button id="btn-sp-kahf-read" style="background:var(--blue)" onclick="openKahf()">Read | قراءة</button>${done}</div>`;
+}
 function renderTasks() {
   placedSig = null;
 
   const sp = specialsToday();
   setHtml($("special-container"), sp.length
-    ? `<div class="sec-title">Today's special | مميز اليوم</div>` + sp.map(s => cardHtml(s.id, `<span class="task-title">${s.title}</span>`, `<span class="pts">+${mulPts(s.pts)} ${T("pts", "نقطة")}</span>`, `<button id="btn-${s.id}" style="background:var(--gold)" onclick="completeSpecial('${s.key}')">Done | تم (+${mulPts(s.pts)})</button>`, 'style="border-color:var(--gold)"').replace('<div class="tm">', `<div class="tm" style="cursor:pointer" onclick="openSpecialInfo('${s.info}')">`).replace('<span class="task-title">', '<span class="task-title">ℹ️ ')).join("")
+    ? `<div class="sec-title">Today's special | مميز اليوم</div>` + sp.map(s => cardHtml(s.id, `<span class="task-title"><span>${s.title}</span></span>`, `<span class="pts">+${mulPts(s.pts)} ${T("pts", "نقطة")}</span>`, specialBtn(s), 'style="border-color:var(--gold)"').replace('<div class="tm">', `<div class="tm" style="cursor:pointer" onclick="openSpecialInfo('${s.info}')">`).replace('<span class="task-title">', '<span class="task-title"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>')).join("")
     : "");
 
   const secHtml = SECTIONS.map(s => {
     const cards = s[2].map(n => {
       const chip = PRAYERS[n] ? `<span class="pt-chip" data-prayer="${PRAYERS[n]}">--:--</span>` : "";
-      return cardHtml("task-" + n, `<span class="task-title"><b class="num">${n}.</b> <span>${taskName(n)}</span></span>`, chip, taskBtn(n));
+      return cardHtml("task-" + n, `<span class="task-title"><b class="num">${n}.</b> <span>${esc(taskName(n))}</span></span>`, chip, taskBtn(n));
     }).join("");
-    return `<div id="wrap-${s[0]}"><div class="sec-title">${s[1]}</div><div id="${s[0]}">${cards}</div></div>`;
+    return `<div id="wrap-${s[0]}"><div class="sec-head" onclick="toggleSec('${s[0]}',this)"><span class="sec-title" style="margin:0">${s[1]}</span><span class="sec-r"><span class="sec-n" id="secn-${s[0]}"></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></div><div id="${s[0]}">${cards}</div></div>`;
   }).join("");
   const doneSheet = `<div id="done-sheet" class="sheet hidden" style="padding-bottom:5px;border-top-color:#ec4899"><div class="acc-head" onclick="toggleAcc(this)"><span id="done-title"></span><span class="arr">▼</span></div><div class="acc-body" id="done-list"></div></div>`;
   setHtml($("tasks-container"), secHtml + doneSheet);
@@ -1187,7 +1391,7 @@ function renderTasks() {
       `<span class="pt-chip" data-prayer="${SUNNAH_PRAYER[n]}">--:--</span><span class="pts">+${mulPts(5)} ${T("pts", "نقطة")}</span>`,
       `<button id="btn-side-${n}" onclick="completeSide(${n},5)">Done | تم (+${mulPts(5)})</button>`)
       .replace('<div class="tm">', `<div class="tm" style="cursor:pointer" onclick="openSunnahInfo(${n})">`)
-      .replace('<span class="task-title">', '<span class="task-title">ℹ️ ');
+      .replace('<span class="task-title">', '<span class="task-title"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>');
   }).join(""));
 
   setHtml($("extra-container"),
@@ -1199,6 +1403,7 @@ function renderTasks() {
   renderKhatma();
   placeCards();
 }
+function toggleSec(id, head) { const b = $(id); if (!b) return; const shut = !b.classList.contains("hidden"); b.classList.toggle("hidden", shut); head.classList.toggle("shut", shut); }
 function placeCards() {
   if (!currentUser || !$("done-list")) return;
   const sig = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => isDone("task_" + n) ? 1 : 0).join("");
@@ -1211,6 +1416,7 @@ function placeCards() {
   }
   SECTIONS.forEach(s => $("wrap-" + s[0]).classList.toggle("hidden", !$(s[0]).children.length));
   const cnt = sig.split("").filter(x => x === "1").length;
+  SECTIONS.forEach(s => { const left = s[2].filter(n => sig[n - 1] !== "1").length; const el = $("secn-" + s[0]); if (el) el.textContent = left + "/" + s[2].length; });
   $("done-sheet").classList.toggle("hidden", !cnt);
   setBi($("done-title"), `Completed (${cnt}) | المنجزة (${cnt})`);
 }
@@ -1253,6 +1459,8 @@ function reasonFor(key) {
   if (m) return taskName(+m[1]);
   if (key === "gold_opp") return "Golden Opportunities | الفرص الذهبية";
   if (key === "post_prayer") return "Post-Prayer Adhkar | أذكار بعد الصلاة";
+  if (key === "sp_jumua") return "Friday Sunnahs | سنن الجمعة | Freitags-Sunnas";
+  if (key === "sp_kahf") return "Surah Al-Kahf (Friday) | سورة الكهف (الجمعة) | Sure Al-Kahf (Freitag)";
   return key;
 }
 function completeTask(n, pts) {
@@ -1306,6 +1514,15 @@ function finishWith(key, pts, extra) {
     closeReader();
   };
 }
+function accHtml(title, data) {
+  return `<div class="sheet" style="padding-bottom:5px"><div class="acc-head" onclick="toggleAcc(this)"><span>${title}</span><span class="arr">▼</span></div><div class="acc-body">${buildItems(data)}</div></div>`;
+}
+function openAdhkarSplit(kind, key) {
+  const m = kind === "morning";
+  openReaderPage(m ? "Morning Adhkar | أذكار الصباح" : "Evening Adhkar | أذكار المساء",
+    accHtml("Full Adhkar | الأذكار الكاملة", m ? morningAdhkar : eveningAdhkar) + accHtml("Short Adhkar | الأذكار المختصرة", m ? morningShort : eveningShort),
+    "Done | تم الإنجاز (+2 Points)", finishWith(key, 2));
+}
 function openAdhkar(title, data, key) {
   openReaderPage(title, `<div class="sheet">${buildItems(data)}</div>`, "Done | تم الإنجاز (+2 Points)", finishWith(key, 2));
 }
@@ -1315,7 +1532,7 @@ function openFuras() {
 function openPostPrayer(key, pts) {
   const acc = (title, data) => `<div class="sheet" style="padding-bottom:5px"><div class="acc-head" onclick="toggleAcc(this)"><span>${title}</span><span class="arr">▼</span></div><div class="acc-body">${buildItems(data)}</div></div>`;
   openReaderPage("Post-Prayer Adhkar | أذكار ما بعد الصلاة",
-    acc("1️⃣ Full Adhkar | القسم الأول: الأذكار الشاملة", postPrayer1) + acc("2️⃣ Short Adhkar | القسم الثاني: التسبيح وآية الكرسي", postPrayer2),
+    acc("Full Adhkar | الأذكار الشاملة", postPrayer1) + acc("Short Adhkar | التسبيح وآية الكرسي", postPrayer2),
     `Done | تم الإنجاز (+${pts} Points)`, finishWith(key, pts));
 }
 function closeReader() {
@@ -1331,7 +1548,7 @@ const RECITERS = [
   ["ar.abdulbasitmurattal", "عبد الباسط عبد الصمد"], ["ar.abdurrahmaansudais", "عبد الرحمن السديس"],
   ["ar.mahermuaiqly", "ماهر المعيقلي"], ["ar.shaatree", "أبو بكر الشاطري"]
 ];
-const Q = { audio: new Audio(), urls: [], i: -1, pages: [], reciter: "ar.alafasy" };
+const Q = { audio: new Audio(), urls: [], i: -1, pages: [], reciter: "ar.alafasy", max: 604, busy: false };
 const audioMemo = {};
 
 async function fetchQuranPage(p) {
@@ -1552,9 +1769,13 @@ async function qReciterChange() {
 }
 Q.audio.preload = "auto";
 Q.audio.onplay = Q.audio.onpause = () => qUi(false);
-Q.audio.onended = () => {
-  if (Q.i + 1 < Q.urls.length) qPlay(Q.i + 1);
-  else { Q.i = -1; qUi(false); showToast("Listening finished | انتهى الاستماع"); }
+Q.audio.onended = async () => {
+  const cur = Q.i;
+  if (cur < 0) return;
+  if (cur + 1 < Q.urls.length) { qPlay(cur + 1); return; }
+  if (store.get("quran_autonext") === "true" && await qAppendNext()) { if (Q.i === cur) qPlay(cur + 1); return; }
+  if (Q.i !== cur) return;
+  Q.i = -1; qUi(false); showToast("Listening finished | انتهى الاستماع");
 };
 Q.audio.onerror = () => { if (Q.i >= 0) showToast("Audio error, try another reciter | خطأ في الصوت، جرّب قارئ آخر"); };
 
@@ -1562,10 +1783,6 @@ function openQuran() {
   const n = qpd(currentUser), p1 = qpage(currentUser), pages = [];
   for (let i = 0; i < n && p1 + i <= 604; i++) pages.push(p1 + i);
   const last = pages[pages.length - 1];
-  const keep = pages.map(p => "qcache2_" + p);
-  try {
-    Object.keys(localStorage).forEach(k => { if (k.indexOf("qcache") === 0 && keep.indexOf(k) < 0) localStorage.removeItem(k); });
-  } catch (e) {}
   openReaderPage(`Quran (Pages ${p1}-${last}) | القرآن (${p1}-${last})`,
     "<div style='text-align:center;padding:20px;font-weight:700'>Loading Quran Pages... | جاري التحميل...</div>",
     "Done Reading | تم الإنجاز (+5 Points)",
@@ -1577,6 +1794,26 @@ function openQuran() {
         setTimeout(() => { showToast("Khatma completed! | ختمتم القرآن، ماشاء الله"); burst(); }, 1600);
       } else store.set("quran_page_" + currentUser, String(next));
     }));
+  loadQuranPages(pages, "openQuran", 604);
+}
+/* Surah Al-Kahf (Friday): pages 293-304. Reads inside the built-in reader but NEVER touches the saved khatma page (quran_page_). */
+const KAHF_FIRST = 293, KAHF_LAST = 304;
+function openKahf() {
+  const pages = [];
+  for (let p = KAHF_FIRST; p <= KAHF_LAST; p++) pages.push(p);
+  const done = isDone("sp_kahf");
+  openReaderPage("Surah Al-Kahf | سورة الكهف | Sure Al-Kahf",
+    "<div style='text-align:center;padding:20px;font-weight:700'>Loading Quran Pages... | جاري التحميل...</div>",
+    done ? "Close | إغلاق" : `Done Reading | تم الإنجاز (+${mulPts(10)} Points)`,
+    finishWith("sp_kahf", 10));
+  loadQuranPages(pages, "openKahf", KAHF_LAST);
+}
+function loadQuranPages(pages, retryFn, maxPage) {
+  const keep = pages.map(p => "qcache2_" + p);
+  try {
+    Object.keys(localStorage).forEach(k => { if (k.indexOf("qcache") === 0 && keep.indexOf(k) < 0) localStorage.removeItem(k); });
+  } catch (e) {}
+  Q.max = maxPage; Q.busy = false;
   const token = readerToken;
   Promise.all(pages.map(p => fetchQuranPage(p)))
     .then(async res => {
@@ -1592,13 +1829,38 @@ function openQuran() {
       catch (e) { Q.reciter = "ar.alafasy"; await qLoadUrls(); }
       if (token !== readerToken) return;
       $("q-reciter").value = Q.reciter;
+      $("q-auto").checked = store.get("quran_autonext") === "true";
       $("qplayer").classList.remove("hidden");
       qUi(false);
     })
     .catch(() => {
       if (token !== readerToken) return;
-      setHtml($("reader-content"), "<div style='text-align:center;padding:20px'><div style='color:var(--bad-text);font-weight:700;margin-bottom:12px'>Failed to load Quran. Check your internet. | فشل تحميل القرآن، تأكد من الإنترنت.</div><button onclick='openQuran()'>Retry | إعادة المحاولة</button></div>");
+      setHtml($("reader-content"), `<div style='text-align:center;padding:20px'><div style='color:var(--bad-text);font-weight:700;margin-bottom:12px'>Failed to load Quran. Check your internet. | فشل تحميل القرآن، تأكد من الإنترنت.</div><button onclick='${retryFn}()'>Retry | إعادة المحاولة</button></div>`);
     });
+}
+/* auto-play next page: when the last ayah of the last loaded page ends, load the next page and keep playing */
+function qAutoChange() { store.set("quran_autonext", $("q-auto").checked ? "true" : "false"); }
+async function qAppendNext() {
+  if (Q.busy || !Q.pages.length) return false;
+  const next = Q.pages[Q.pages.length - 1].p + 1;
+  if (next > (Q.max || 604)) return false;
+  Q.busy = true;
+  const token = readerToken;
+  try {
+    const d = await fetchQuranPage(next);
+    if (token !== readerToken) return false;
+    const urls = await reciterUrls(Q.reciter, next, d[0]);
+    if (token !== readerToken) return false;
+    const start = Q.urls.length;
+    Q.pages.push({ p: next, d });
+    Q.urls = Q.urls.concat(urls);
+    const div = document.createElement("div");
+    div.innerHTML = quranPageHtml(next, d, start);
+    applyLang(div);
+    while (div.firstChild) $("reader-content").appendChild(div.firstChild);
+    return true;
+  } catch (e) { return false; }
+  finally { Q.busy = false; }
 }
 
 /* ---------- Weekly challenge (together) ---------- */
@@ -1611,13 +1873,13 @@ const WK_TEXT = {
   pages: ["Read 20 Quran pages between you two", "اقرءا 20 صفحة من القرآن بينكما", "Lest zusammen 20 Quran-Seiten"]
 };
 function wkKey(week, m, u) { return `wk_${week}_${m}_${u}`; }
-function wkAdd(m, n, u, d) { const k = wkKey(weekStart(d || new Date()), m, u || currentUser); store.set(k, String(num(k) + n)); }
+function wkAdd(m, n, u, d) { const k = wkKey(weekStart(d || logicalNow()), m, u || currentUser); store.set(k, String(num(k) + n)); }
 function wkTotal(week, m) { return USERS.reduce((a, u) => a + num(wkKey(week, m, u)), 0); }
-function wkMetric(d) { return WK_METRICS[hashStr("ch" + weekStart(d || new Date())) % WK_METRICS.length]; }
+function wkMetric(d) { return WK_METRICS[hashStr("ch" + weekStart(d || logicalNow())) % WK_METRICS.length]; }
 function renderChallenge() {
   const box = $("challenge-box");
   if (!box || !currentUser) return;
-  const wk = weekStart(new Date()), m = wkMetric(), target = WK_TARGET[m];
+  const wk = weekStart(logicalNow()), m = wkMetric(), target = WK_TARGET[m];
   const tot = wkTotal(wk, m) + (m === "perfect" ? USERS.filter(u => userAllDone(u)).length : 0);
   const done = tot >= target, pk = wkKey(wk, "paid", currentUser);
   if (done && store.get(pk) !== "true") {
@@ -1628,14 +1890,38 @@ function renderChallenge() {
   }
   const pct = Math.min(100, Math.round(tot / target * 100));
   const txt = WK_TEXT[m];
-  box.innerHTML = `<div class="sheet" style="padding:12px 14px;margin:10px 0"><div style="font-size:12px;font-weight:800;color:var(--muted)">${T("Weekly challenge together", "تحدي الأسبوع معاً", "Wochenchallenge zusammen")}</div><div style="font-size:14px;font-weight:700;margin:4px 0 8px">${LANG === "ar" ? txt[1] : LANG === "de" ? txt[2] : txt[0]}</div><div style="display:flex;align-items:center;gap:8px"><div class="pg-bar" style="flex:1"><div class="pg-fill" style="width:${pct}%"></div></div><span class="pg-num">${Math.min(tot, target)}/${target}</span></div><div class="hint" style="margin:6px 0 0">${done ? T("Done! Both of you got the reward.", "تم! نال كل واحد المكافأة.", "Geschafft! Ihr habt beide die Belohnung bekommen.") : T(`Reward for each: +${WK_REWARD} points`, `المكافأة لكل واحد: +${WK_REWARD} نقطة`, `Belohnung für jeden: +${WK_REWARD} Punkte`)}</div></div>`;
+  const ttl = LANG === "ar" ? txt[1] : LANG === "de" ? txt[2] : txt[0];
+  box.innerHTML = `<div class="ch-row"><div class="ch-t"><b>${T("Weekly challenge", "تحدي الأسبوع", "Wochenchallenge")}</b> · ${ttl}</div><div class="ch-b"><div class="pg-bar"><div class="pg-fill" style="width:${pct}%"></div></div><span class="pg-num">${Math.min(tot, target)}/${target}</span></div></div>`;
 }
 
 /* ---------- Daily reset, streaks & 5-day wheel ---------- */
 const WEEK_BONUS = 30;
 const CYCLE_DAYS = 5;
+let _cut = { k: "", v: 0 };
+function sharedLoc() {
+  let l = null;
+  try { l = JSON.parse(store.get("shared_loc") || "null"); } catch (e) {}
+  if (l && l.lat != null && l.lng != null) return l;
+  try { l = JSON.parse(store.get("pt_loc") || "null"); } catch (e) { l = null; }
+  return l && l.lat != null && l.lng != null ? l : null;
+}
+/* the app day starts 1 hour before Fajr (same on both phones: computed from the one shared city) */
+function dayCutMin() {
+  const l = sharedLoc();
+  if (!l) return 0;
+  const ck = new Date().toDateString() + "|" + l.lat + "|" + l.lng + "|" + l.method;
+  if (_cut.k === ck) return _cut.v;
+  try {
+    const t = calcLocal(+l.lat, +l.lng, +l.method || 3), m = /(\d{1,2}):(\d{2})/.exec(t.Fajr || "");
+    if (!m) return 0;
+    const v = Math.max(0, Math.min(360, +m[1] * 60 + +m[2] - 60));
+    _cut = { k: ck, v };
+    return v;
+  } catch (e) { return 0; }
+}
+function logicalNow() { return new Date(Date.now() - dayCutMin() * 60000); }
 function dayKey(d) {
-  d = d || new Date();
+  d = d || logicalNow();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 function daysBetween(a, b) {
@@ -1650,16 +1936,28 @@ function resetTasksState() {
   USERS.forEach(u => {
     for (let i = 1; i <= 10; i++) store.del("task_" + i + "_" + u);
     for (let n = 1; n <= 7; n++) store.del("side_task_" + n + "_" + u);
-    ["gold_opp_", "post_prayer_", "sp_kahf_", "sp_fast_", "sp_white_", "sp_event_"].forEach(k => store.del(k + u));
+    ["gold_opp_", "post_prayer_", "sp_kahf_", "sp_jumua_", "sp_fast_", "sp_white_", "sp_event_"].forEach(k => store.del(k + u));
   });
   store.del("game_winner");
+  store.del("race_win_time");
+}
+function dayAhead() {
+  /* true only when the shared last_day is strictly BEHIND this device's today */
+  const last = store.get("last_day");
+  return !!last && daysBetween(last, dayKey()) > 0;
 }
 function rollover() {
+  /* never roll over from stale local data while the first cloud sync is still pending */
+  if (cloud.started && !cloud.synced && cloud.status === "connecting") return;
   const today = dayKey();
   const last = store.get("last_day");
-  if (!last) { store.set("last_day", today); return; }
-  if (last === today) return;
-  const gap = Math.max(1, daysBetween(last, today));
+  if (!last) { store.set("last_day", today); store.set("last_roll_ts", String(Date.now())); return; }
+  /* partner's phone is a few minutes/hours ahead (clock or timezone difference): last_day is today or in the future -> do nothing */
+  const gap = daysBetween(last, today);
+  if (gap <= 0) return;
+  /* a rollover already happened less than 3 hours ago (absolute time): only sync the date, keep everyone's tasks */
+  const lastTs = num("last_roll_ts");
+  if (lastTs && lastTs <= Date.now() && Date.now() - lastTs < 3 * 3600 * 1000) { store.set("last_day", today); return; }
   const msgs = { Mohamad: [], Dima: [] };
 
   USERS.forEach(u => {
@@ -1687,7 +1985,7 @@ function rollover() {
   if (winner) {
     store.set("wins_" + winner, String(num("wins_" + winner) + 1));
     const rl = readList("race_log");
-    rl.push({ d: last, w: winner });
+    rl.push({ d: last, w: winner, t: num("race_win_time") || undefined });
     store.set("race_log", JSON.stringify(rl.slice(-60)));
   }
   let cd = num("cycle_days") + gap;
@@ -1705,6 +2003,7 @@ function rollover() {
 
   resetTasksState();
   store.set("last_day", today);
+  store.set("last_roll_ts", String(Date.now()));
   USERS.forEach(u => { if (msgs[u].length) store.set("store_alert_" + u, msgs[u].join("  •  ")); });
 }
 
@@ -1722,6 +2021,28 @@ function fulfillPrize(id) {
   loadState();
   showToast("Prize Fulfilled | تم تنفيذ الجائزة!");
 }
+const WHEEL_COLORS = ["#ec4899", "#a855f7", "#f43f5e", "#8b5cf6"];
+let wheelRot = 0, wheelBusy = false;
+function wheelPt(a, r) { const t = a * Math.PI / 180; return [(r * Math.sin(t)).toFixed(2), (-r * Math.cos(t)).toFixed(2)]; }
+/* 4 coloured sectors, one per reward; angle 0 = top, clockwise. The pointer is fixed at the top. */
+function buildWheel() {
+  const svg = $("wheel-svg");
+  if (!svg) return;
+  const n = rewards.length, step = 360 / n;
+  let g = `<circle r="98" fill="var(--card)" stroke="var(--gold)" stroke-width="3"/>`;
+  rewards.forEach((w, i) => {
+    const a0 = i * step, a1 = a0 + step, mid = a0 + step / 2, p0 = wheelPt(a0, 94), p1 = wheelPt(a1, 94);
+    g += `<path d="M0 0 L${p0[0]} ${p0[1]} A94 94 0 0 1 ${p1[0]} ${p1[1]} Z" fill="${WHEEL_COLORS[i % WHEEL_COLORS.length]}" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>`;
+    const words = tr(w).split(" "), cut = words.length > 1 ? Math.ceil(words.length / 2) : words.length;
+    const lines = [words.slice(0, cut).join(" "), words.slice(cut).join(" ")].filter(Boolean);
+    const flip = mid > 90 && mid < 270, rot = mid - 90 + (flip ? 180 : 0), off = flip ? -58 : 58;
+    const tsp = lines.map((l, k) => `<tspan x="0" dy="${k === 0 ? (lines.length > 1 ? "-0.6em" : "0") : "1.2em"}">${esc(l)}</tspan>`).join("");
+    g += `<text transform="rotate(${rot}) translate(${off} 0)" text-anchor="middle" dominant-baseline="central" fill="#fff" stroke="rgba(0,0,0,.35)" stroke-width=".5" paint-order="stroke" font-size="9.5" font-weight="800" font-family="Tajawal,sans-serif">${tsp}</text>`;
+  });
+  g += `<circle r="12" fill="var(--card)" stroke="var(--gold)" stroke-width="3"/><circle r="4" fill="var(--gold)"/>`;
+  svg.innerHTML = g;
+  svg.style.transform = `rotate(${wheelRot}deg)`;
+}
 function openWheelPage() {
   if (store.get("wheel_token_" + currentUser) !== "true") {
     showToast(`The wheel opens every ${CYCLE_DAYS} days for the one ahead. | العجلة بتفتح كل ${CYCLE_DAYS} أيام للمتقدم.`);
@@ -1729,22 +2050,39 @@ function openWheelPage() {
   }
   setBi($("wheel-display"), "Tap to spin! | اضغط للف العجلة");
   $("spin-btn").disabled = false;
+  wheelBusy = false;
+  buildWheel();
   show("wheel-page");
 }
 function spinWheel() {
-  if (store.get("wheel_token_" + currentUser) !== "true") return;
+  if (wheelBusy || store.get("wheel_token_" + currentUser) !== "true") return;
+  wheelBusy = true;
   $("spin-btn").disabled = true;
   store.del("wheel_token_" + currentUser);
+  const me = currentUser, n = rewards.length, step = 360 / n;
+  const k = Math.floor(Math.random() * n), w = rewards[k];
+  addPrize(me, w);
   setBi($("wheel-display"), "...");
-  const me = currentUser;
+  /* random stop inside the winning sector, at least 5 full turns (1800deg+) */
+  const jitter = (Math.random() * 2 - 1) * (step / 2 - 8);
+  const targetMod = (((-(k * step + step / 2 + jitter)) % 360) + 360) % 360;
+  const curMod = ((wheelRot % 360) + 360) % 360;
+  wheelRot += ((targetMod - curMod) + 360) % 360 + 360 * (5 + Math.floor(Math.random() * 3));
+  const DUR = 3800, svg = $("wheel-svg");
+  svg.style.transition = "transform 3.8s cubic-bezier(0.15, 0.85, 0.25, 1)";
+  void svg.getBoundingClientRect();
+  svg.style.transform = `rotate(${wheelRot}deg)`;
+  /* graduated vibration: dense short ticks while fast, sparser and longer as it slows down */
+  const N = 24;
+  for (let i = 0; i < N; i++) setTimeout(() => vib(6 + Math.round(i * 0.9)), Math.round(DUR * Math.pow(i / N, 1.8)));
   setTimeout(() => {
-    const w = rewards[Math.floor(Math.random() * rewards.length)];
-    addPrize(me, w);
+    vib([140, 70, 140, 70, 320]);
+    setBi($("wheel-display"), `${T("You Won", "لقد ربحت", "Du hast gewonnen")}: ${tr(w)}`);
     store.set("store_alert_" + partnerOf(me), `${DISPLAY[me]} spun the wheel! Prize: ${tr(w)} | لف العجلة! ${tr(w)} | ${DISPLAY[me]} hat das Glücksrad gedreht! Preis: ${tr(w)}`);
-    setBi($("wheel-display"), "You Won | لقد ربحت: " + w);
-    buzz();
-    burst();
-  }, 1000);
+    burst(); setTimeout(burst, 600);
+    wheelBusy = false;
+    loadState();
+  }, DUR + 150);
 }
 
 /* ---------- Prayer times ---------- */
@@ -1830,6 +2168,7 @@ function localHijri() {
 
 async function loadPrayerTimes(force) {
   const locRaw = store.get("pt_loc");
+  if (locRaw && !store.get("shared_loc")) store.set("shared_loc", locRaw);
   let loc = null;
   try { loc = JSON.parse(locRaw || "null"); } catch (e) {}
   if (!loc || loc.lat == null || loc.lng == null) { prayerData = null; renderPrayerTimes(); return; }
@@ -1899,7 +2238,10 @@ function tickPrayer() {
   if (!next) next = "Fajr";
   const mins = nextDate ? Math.max(0, Math.round((nextDate - now) / 60000)) : 0;
   const left = mins >= 60 ? `${Math.floor(mins / 60)}${T("h", "س", "Std")} ${mins % 60}${T("m", "د", "Min")}` : `${mins}${T("m", "د", "Min")}`;
-  info.innerHTML = `<div class="pt-next">${T("Next: " + next, "القادمة: " + PRAYER_AR[next], "Nächstes: " + next)} · ${fmt12(t[next])}</div><div class="pt-count">${left}</div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline" : ""}</div><div class="pt-hijri">${locLabel()}</div>`;
+  const pad2 = x => String(x).padStart(2, "0");
+  const hhmm = pad2(Math.floor(mins / 60)) + ":" + pad2(mins % 60);
+  const pname = LANG === "ar" ? PRAYER_AR[next] : next;
+  info.innerHTML = `<div class="pt-row"><div class="pt-l"><div class="pt-next">${T("Next prayer", "الصلاة القادمة", "Nächstes Gebet")}</div><div class="pt-name">${pname}</div><div class="pt-time">${fmt12(t[next])}</div></div><div class="pt-r"><div class="pt-count">${hhmm}</div><div class="pt-unit">${T("hr : min", "ساعة : دقيقة", "Std : Min")}</div></div></div><div class="pt-hijri">${prayerData.hijri || ""}${prayerData.source === "local" ? " · ≈ offline" : ""}${locLabel() ? " · " + locLabel() : ""}</div>`;
   let cur = "Isha";
   names.forEach(n => { const d = toDate(t[n]); if (d && d <= now) cur = n; });
   const idx = Object.keys(PRAYERS).find(k => PRAYERS[k] === cur);
@@ -1951,7 +2293,9 @@ function citySuggest() {
   }, 350);
 }
 function saveLoc(c) {
-  store.set("pt_loc", JSON.stringify({ name: c.name, label: c.label || c.name, lat: c.lat, lng: c.lng, method: +$("pt-method").value }));
+  const locJson = JSON.stringify({ name: c.name, label: c.label || c.name, lat: c.lat, lng: c.lng, method: +$("pt-method").value });
+  store.set("pt_loc", locJson);
+  store.set("shared_loc", locJson);
   closeLoc(false);
   showToast(`Location saved: ${c.label || c.name} | تم حفظ الموقع: ${c.label || c.name} | Standort gespeichert: ${c.label || c.name}`);
   loadPrayerTimes(true);
@@ -1979,7 +2323,7 @@ function useGps() {
 }
 setInterval(() => {
   if (!currentUser) return;
-  if (store.get("last_day") !== dayKey()) { rollover(); renderTasks(); loadState(); }
+  if (dayAhead()) { rollover(); renderTasks(); loadState(); }
   if (prayerData && prayerData.date !== todayKey()) loadPrayerTimes(); else tickPrayer();
 }, 30000);
 
@@ -2004,7 +2348,14 @@ function burst() {
 function afterComplete(key) {
   buzz();
   if (key === "task_9") wkAdd("pages", qpd(currentUser));
-  if (key.indexOf("task_") === 0 && allTasksDone()) burst();
+  if (key.indexOf("task_") === 0 && allTasksDone()) { claimRace(); burst(); }
+}
+/* the race is decided at the exact moment someone finishes task 10 (never inside loadState) */
+function claimRace() {
+  if (!currentUser || store.get("game_winner")) return;
+  store.set("game_winner", currentUser);
+  store.set("race_win_time", String(Date.now()));
+  loadState();
 }
 
 /* ---------- Tasbih ---------- */
@@ -2014,6 +2365,13 @@ const TSB_PH = [
   [["اللَّهُ أَكْبَرُ", "Allahu Akbar", "Allah is the Greatest", "Allah ist am größten"], 34]
 ];
 const TSB_FREE = ["ذِكْرٌ حُرّ", "Free dhikr", "Free dhikr", "Freier Dhikr"];
+/* fixed-count adhkar (goal 100 each): [ar, translit, en, de] */
+const TSB_D = {
+  d1: [["سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", "Subhanallahi wa bihamdihi", "Glory is to Allah and praise is to Him", "Preis sei Allah und Lob gebührt Ihm"], 100],
+  d2: [["لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", "La ilaha illa Allah wahdahu la sharika lah, lahul-mulku wa lahul-hamd, wa huwa 'ala kulli shay'in qadir", "There is no deity except Allah alone, without partner. To Him belongs sovereignty and praise, and He has power over all things", "Es gibt keinen Gott außer Allah, den Einen ohne Teilhaber. Ihm gehört die Herrschaft und das Lob, und Er hat Macht über alles"], 100],
+  d3: [["اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", "Allahumma salli wa sallim 'ala nabiyyina Muhammad", "O Allah, send prayers and peace upon our Prophet Muhammad", "O Allah, sende Segen und Frieden auf unseren Propheten Muhammad"], 100],
+  d4: [["أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", "Astaghfirullah wa atubu ilayh", "I seek forgiveness from Allah and repent to Him", "Ich bitte Allah um Vergebung und kehre reumütig zu Ihm zurück"], 100]
+};
 function tsbPhraseHtml(arr) {
   const keys = ["ar", "tr", "en", "de"], on = readLayers();
   let first = true;
@@ -2024,9 +2382,10 @@ function tsbPhraseHtml(arr) {
     return `<div class="${c}">${arr[i]}</div>`;
   }).join("");
 }
-let tsb = { mode: "f", t: 0, f: 0, r: 0, d: "" };
+let tsb = { mode: "f", t: 0, f: 0, r: 0, d: "", p: {} };
 function tsbLoad() {
-  tsb = Object.assign({ mode: "f", t: 0, f: 0, r: 0, d: dayKey() }, readJson("tsb_" + currentUser, {}));
+  tsb = Object.assign({ mode: "f", t: 0, f: 0, r: 0, d: dayKey(), p: {} }, readJson("tsb_" + currentUser, {}));
+  if (!tsb.p || typeof tsb.p !== "object") tsb.p = {};
   if (tsb.d !== dayKey()) { tsb.r = 0; tsb.d = dayKey(); }
   $("tsb-mode").value = tsb.mode;
   tsbRender();
@@ -2039,6 +2398,10 @@ function tsbRender() {
     cnt = tsb.t - (ph === 0 ? 0 : ph === 1 ? 33 : 66);
     of = "/ " + TSB_PH[ph][1];
     phrase = TSB_PH[ph][0];
+  } else if (TSB_D[tsb.mode]) {
+    cnt = tsb.p[tsb.mode] || 0;
+    phrase = TSB_D[tsb.mode][0];
+    of = "/ " + TSB_D[tsb.mode][1];
   } else {
     cnt = tsb.f;
     phrase = TSB_FREE;
@@ -2060,6 +2423,14 @@ function tsbTap() {
       burst();
     } else if (tsb.t === 33 || tsb.t === 66) vib([70, 40, 70]);
     else vib(18);
+  } else if (TSB_D[tsb.mode]) {
+    const goal = TSB_D[tsb.mode][1], c = (tsb.p[tsb.mode] || 0) + 1;
+    if (c >= goal) {
+      tsb.p[tsb.mode] = 0; tsb.r++;
+      vib([100, 60, 100, 60, 220]);
+      showToast(`${goal} reached! May Allah accept it | اكتمل العدد ${goal}، تقبّل الله | ${goal} erreicht! Möge Allah es annehmen`);
+      burst();
+    } else { tsb.p[tsb.mode] = c; if (c % 25 === 0) vib([70, 40, 70]); else vib(18); }
   } else {
     tsb.f++;
     if (tsb.f % 33 === 0) vib([70, 40, 70]); else vib(18);
@@ -2067,11 +2438,13 @@ function tsbTap() {
   tsbSave(); tsbRender();
 }
 function tsbUndo() {
-  if (tsb.mode === "f") tsb.t = Math.max(0, tsb.t - 1); else tsb.f = Math.max(0, tsb.f - 1);
+  if (tsb.mode === "f") tsb.t = Math.max(0, tsb.t - 1);
+  else if (TSB_D[tsb.mode]) tsb.p[tsb.mode] = Math.max(0, (tsb.p[tsb.mode] || 0) - 1);
+  else tsb.f = Math.max(0, tsb.f - 1);
   tsbSave(); tsbRender();
 }
 function tsbReset() {
-  tsb.t = 0; tsb.f = 0;
+  if (TSB_D[tsb.mode]) tsb.p[tsb.mode] = 0; else { tsb.t = 0; tsb.f = 0; }
   tsbSave(); tsbRender();
 }
 function tsbMode() {
@@ -2087,15 +2460,24 @@ function getReqs() { const a = readJson("store_requests", []); return Array.isAr
 function saveReqs(a) { store.set("store_requests", JSON.stringify(a.slice(0, 80))); }
 function timeStr(t) { return new Date(t).toLocaleString([], { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); }
 
+const STORE_EMOJIS = ["🍔", "🎁", "☕", "🍰", "🎬", "💐"];
+let selEmoji = "🎁";
+function renderEmojiPicker() {
+  const box = $("ri-emojis");
+  if (!box) return;
+  box.innerHTML = STORE_EMOJIS.map(e => `<button type="button" class="${e === selEmoji ? "sel" : ""}" onclick="pickEmoji('${e}')" aria-label="${e}">${e}</button>`).join("");
+}
+function pickEmoji(e) { selEmoji = selEmoji === e ? "" : e; renderEmojiPicker(); }
 function addItem() {
   const name = $("ri-name").value.trim().replace(/\|/g, "/");
   const cost = parseInt($("ri-cost").value, 10);
   if (!name || !(cost >= 1)) { showToast("Enter a name and points | اكتب اسم المكافأة والنقاط"); return; }
   const a = getItems();
-  a.push({ id: String(Date.now()), name, cost, by: currentUser });
+  a.push({ id: String(Date.now()), name, cost, by: currentUser, emoji: selEmoji });
   saveItems(a);
   $("ri-name").value = ""; $("ri-cost").value = "";
-  store.set("store_alert_" + partnerOf(currentUser), `${DISPLAY[currentUser]} added a reward: ${name} | أضاف مكافأة جديدة: ${name} | ${DISPLAY[currentUser]} hat eine Belohnung hinzugefügt: ${name}`);
+  selEmoji = "🎁"; renderEmojiPicker();
+  store.set("store_alert_" + partnerOf(currentUser), `${DISPLAY[currentUser]} added a reward: ${selEmoji} ${name} | أضاف مكافأة جديدة: ${selEmoji} ${name} | ${DISPLAY[currentUser]} hat eine Belohnung hinzugefügt: ${selEmoji} ${name}`);
   renderStore();
   showToast("Reward added | تمت إضافة المكافأة");
 }
@@ -2110,7 +2492,7 @@ function requestItem(id) {
   if (coins < it.cost) { showToast("Not enough points! | الرصيد غير كافٍ!"); return; }
   addCoins(-it.cost, "Store: " + it.name);
   const r = getReqs();
-  r.unshift({ id: String(Date.now()), buyer: currentUser, name: it.name, cost: it.cost, status: "pending", t: Date.now() });
+  r.unshift({ id: String(Date.now()), buyer: currentUser, name: it.name, cost: it.cost, status: "pending", t: Date.now(), e: it.emoji || "" });
   saveReqs(r);
   store.set("store_alert_" + partnerOf(currentUser), `${DISPLAY[currentUser]} requested: ${tr(it.name)} | طلب جديد في المتجر: ${tr(it.name)} | ${DISPLAY[currentUser]} hat angefragt: ${tr(it.name)}`);
   loadState();
@@ -2144,7 +2526,7 @@ function chartDays(n) {
   readList("day_log").forEach(e => { if (e && e.d) dl[e.d] = e; });
   const out = [];
   for (let i = n - 1; i >= 0; i--) {
-    const d = new Date(Date.now() - i * 864e5), k = dayKey(d);
+    const d = new Date(logicalNow().getTime() - i * 864e5), k = dayKey(d);
     let a = 0, b = 0;
     if (i === 0) { a = cntDone("Mohamad"); b = cntDone("Dima"); } else if (dl[k]) { a = +dl[k].a || 0; b = +dl[k].b || 0; }
     out.push({ k, d, a, b });
@@ -2172,7 +2554,7 @@ function renderChart() {
 function renderStats() {
   const since = Date.now() - 7 * 864e5, pts = { Mohamad: 0, Dima: 0 };
   readList("pts_log").forEach(e => { if (e.t >= since && e.n > 0 && pts[e.u] != null) pts[e.u] += e.n; });
-  const minDay = dayKey(new Date(Date.now() - 6 * 864e5)), wins = { Mohamad: 0, Dima: 0 };
+  const minDay = dayKey(new Date(logicalNow().getTime() - 6 * 864e5)), wins = { Mohamad: 0, Dima: 0 };
   readList("race_log").forEach(e => { if (e.d >= minDay && wins[e.w] != null) wins[e.w]++; });
   const w = store.get("game_winner");
   if (w) wins[w]++;
@@ -2192,7 +2574,7 @@ function renderStore() {
   const reqs = getReqs();
 
   const waiting = reqs.filter(r => r.status === "pending" && r.buyer !== currentUser);
-  setHtml($("store-requests"), waiting.map(r => `<div class="banner banner-prize" style="text-align:start"><div><b>${DISPLAY[r.buyer]}</b> ${T("requests", "يطلب")}: <b>${esc(tr(r.name))}</b> (${r.cost} ${T("pts", "نقطة")})</div><div class="row2"><button onclick="approveReq('${r.id}')" style="background:var(--ok)">Approve | موافقة</button><button class="danger" onclick="declineReq('${r.id}')">Decline | رفض</button></div></div>`).join(""));
+  setHtml($("store-requests"), waiting.map(r => `<div class="banner banner-prize" style="text-align:start"><div><b>${DISPLAY[r.buyer]}</b> ${T("requests", "يطلب")}: <b>${r.e ? esc(r.e) + " " : ""}${esc(tr(r.name))}</b> (${r.cost} ${T("pts", "نقطة")})</div><div class="row2"><button onclick="approveReq('${r.id}')" style="background:var(--ok)">Approve | موافقة</button><button class="danger" onclick="declineReq('${r.id}')">Decline | رفض</button></div></div>`).join(""));
   const nb = $("nb-store");
   nb.textContent = waiting.length;
   nb.classList.toggle("hidden", !waiting.length);
@@ -2203,12 +2585,12 @@ function renderStore() {
     const btn = mine
       ? `<button class="danger sm" onclick="removeItem('${it.id}')">Delete | حذف</button>`
       : `<button class="sm" style="background:var(--gold)" onclick="requestItem('${it.id}')">Redeem | شراء</button>`;
-    return `<div class="task-card" style="flex-direction:row;justify-content:space-between;align-items:center"><div><strong style="font-size:13px">${esc(tr(it.name))}</strong><br><span class="sub">${T("Cost", "التكلفة")}: ${it.cost} ${T("pts", "نقطة")}${from}${mine ? " · " + T("yours", "مكافأتك") : ""}</span></div>${btn}</div>`;
+    return `<div class="task-card" style="flex-direction:row;justify-content:space-between;align-items:center"><div><strong style="font-size:13px">${it.emoji ? esc(it.emoji) + " " : ""}${esc(tr(it.name))}</strong><br><span class="sub">${T("Cost", "التكلفة")}: ${it.cost} ${T("pts", "نقطة")}${from}${mine ? " · " + T("yours", "مكافأتك") : ""}</span></div>${btn}</div>`;
   }).join(""));
 
   const icon = { pending: "…", approved: "✓", declined: "✕" };
   setHtml($("store-history-list"), reqs.length
-    ? reqs.slice(0, 30).map(r => `<div>${icon[r.status] || "•"} <b>${DISPLAY[r.buyer]}</b> → <b>${esc(tr(r.name))}</b> · ${timeStr(r.t)}</div>`).join("")
+    ? reqs.slice(0, 30).map(r => `<div>${icon[r.status] || "•"} <b>${DISPLAY[r.buyer]}</b> → <b>${r.e ? esc(r.e) + " " : ""}${esc(tr(r.name))}</b> · ${timeStr(r.t)}</div>`).join("")
     : `<div style="color:var(--muted);font-style:italic">${T("No orders yet...", "لا توجد طلبات بعد...")}</div>`);
 
   renderStats();
@@ -2339,7 +2721,7 @@ function infoBlock(lc, lab, cls, it) {
   return `<div class="tbox info-blk L-${lc} ${cls}"><span class="lab">${lab}</span><b>${esc(it.c[lc])}</b><div><b>${SI_LAB.w[lc]}</b> ${esc(it.w[lc])}</div><ol>${steps}</ol><div><b>${SI_LAB.v[lc]}</b> ${esc(it.v[lc])}</div>${it.tip ? `<div><b>${SI_LAB.t[lc]}</b> ${esc(it.tip[lc])}</div>` : ""}</div>`;
 }
 function showInfo(title, it) {
-  setBi($("info-title"), "ℹ️ " + title);
+  setBi($("info-title"), title);
   $("info-body").innerHTML = infoBlock("ar", "العربية", "rtl", it) + infoBlock("tr", "Aa", "tr", it) + infoBlock("en", "EN", "", it) + infoBlock("de", "DE", "de", it);
   $("info-modal").classList.remove("hidden");
 }
@@ -2349,12 +2731,45 @@ function openSunnahInfo(n) {
   showInfo(sunnahNames[n - 1], it);
 }
 function openSpecialInfo(k) {
+  if (k === "jumua") { openJumua(); return; }
   const it = SPECIAL_INFO[k];
   if (!it) return;
   const sp = specialsToday().find(x => x.info === k);
   showInfo(sp ? sp.title : k, it);
 }
 function closeInfo() { $("info-modal").classList.add("hidden"); }
+
+/* ---------- Daily note / dua between the partners ---------- */
+let noteEditing = false;
+function readNote(u) { const v = readJson("daily_note_" + u, null); return v && typeof v.t === "string" && v.t ? v : null; }
+function renderNote() {
+  const box = $("note-card");
+  if (!box || !currentUser || noteEditing) return;
+  const p = partnerOf(currentUser), n = readNote(p), mine = readNote(currentUser);
+  const body = n
+    ? `<div class="note-text">${esc(n.t)}</div><div class="note-meta">${esc(PILL[p])} · ${timeStr(n.ts)}</div>`
+    : "";
+  const mineLine = mine ? `<div class="note-mine"><span>Your note | رسالتك:</span> ${esc(mine.t)}</div>` : "";
+  setHtml(box, `<div class="note-head"><span class="note-title">Daily Note | رسالة / دعاء اليوم</span><button class="note-btn" onclick="editNote()">Write | اكتب</button></div>${body}${mineLine}`);
+}
+function editNote() {
+  noteEditing = true;
+  const mine = readNote(currentUser);
+  setHtml($("note-card"), `<div class="note-head"><span class="note-title">Daily Note | رسالة / دعاء اليوم</span></div><textarea id="note-input" maxlength="240" rows="3" placeholder="Write a message or a dua for your partner... | اكتب رسالة أو دعاء لشريكك..."></textarea><div class="row2"><button onclick="saveNote()" style="background:var(--ok)">Save | حفظ</button><button onclick="cancelNote()" style="background:#64748b">Cancel | إلغاء</button></div>`);
+  $("note-input").value = mine ? mine.t : "";
+  $("note-input").focus();
+}
+function cancelNote() { noteEditing = false; renderNote(); }
+function saveNote() {
+  const t = $("note-input").value.trim().replace(/\|/g, "/");
+  noteEditing = false;
+  if (t) {
+    store.set("daily_note_" + currentUser, JSON.stringify({ t, ts: Date.now() }));
+    store.set("store_alert_" + partnerOf(currentUser), `${DISPLAY[currentUser]} wrote you a note 💌 | ${DISPLAY[currentUser]} كتب لك رسالة 💌 | ${DISPLAY[currentUser]} hat dir eine Nachricht geschrieben 💌`);
+    showToast("Saved | تم الحفظ");
+  } else store.del("daily_note_" + currentUser);
+  renderNote();
+}
 
 /* ---------- Poke with messages ---------- */
 const POKE = {
@@ -2382,9 +2797,31 @@ function openPoke() {
   renderPoke();
   $("poke-custom").value = "";
   $("poke-modal").classList.remove("hidden");
+  const lp = lastPoke();
+  if (lp) store.set("poke_seen_" + currentUser, String(lp.t));
+  renderLastPoke();
+  updatePokeBadge();
 }
 function closePoke() { $("poke-modal").classList.add("hidden"); }
+function lastPoke() { const v = readJson("last_poke_" + currentUser, null); return v && typeof v.m === "string" ? v : null; }
+function updatePokeBadge() {
+  const b = $("poke-btn"), p = currentUser ? lastPoke() : null;
+  if (b) b.classList.toggle("has-dot", !!(p && p.t > num("poke_seen_" + currentUser)));
+}
+function renderLastPoke() {
+  const box = $("last-poke");
+  if (!box || !currentUser) return;
+  const p = lastPoke();
+  if (!p) { box.innerHTML = ""; return; }
+  setHtml(box, `<div class="lp-card"><div class="lp-h">Last poke you received | آخر نكزة وصلتك</div><div class="lp-m">${esc(PILL[p.f] || p.f)}: ${esc(p.m)}</div><div class="lp-t">${timeStr(p.t)}</div><button class="lp-btn" onclick="replyPoke()">Reply ❤️ | رد النكزة ❤️</button></div>`);
+  if (!$("poke-modal").classList.contains("hidden")) { store.set("poke_seen_" + currentUser, String(p.t)); updatePokeBadge(); }
+}
+function replyPoke() {
+  const m = { ar: "وصلتني نكزتك ❤️", en: "Got your poke ❤️", de: "Stups angekommen ❤️" };
+  deliverPoke(m[LANG] || m.ar);
+}
 function deliverPoke(msg) {
+  store.set("last_poke_" + partnerOf(currentUser), JSON.stringify({ f: currentUser, m: msg, t: Date.now() }));
   store.set("poke_alert_" + partnerOf(currentUser), `${PILL[currentUser]}: ${msg}`);
   pushPoke(msg);
   closePoke();
@@ -2407,7 +2844,7 @@ setInterval(checkAlerts, 2000);
 window.addEventListener("storage", () => { if (currentUser) loadState(); });
 
 /* ---------- Backup ---------- */
-const BACKUP_SETTINGS_RE = /^(site_theme|site_lang|read_lang_[A-Za-z]+|pt_loc|quran_reciter|tsb_[A-Za-z]+)$/;
+const BACKUP_SETTINGS_RE = /^(site_theme|site_lang|read_lang_[A-Za-z]+|pt_loc|quran_reciter|quran_autonext|tsb_[A-Za-z]+)$/;
 function exportBackup() {
   const data = {};
   try {
@@ -2500,7 +2937,7 @@ function loadState() {
   for (let i = 1; i <= 10; i++) rows.push({ id: "task-" + i, key: "task_" + i, race: true });
   for (let i = 1; i <= 7; i++) rows.push({ id: "side-" + i, key: "side_task_" + i });
   rows.push({ id: "gold", key: "gold_opp" }, { id: "postprayer", key: "post_prayer" },
-    { id: "sp-kahf", key: "sp_kahf" }, { id: "sp-fast", key: "sp_fast" }, { id: "sp-white", key: "sp_white" }, { id: "sp-event", key: "sp_event" });
+    { id: "sp-kahf", key: "sp_kahf" }, { id: "sp-jumua", key: "sp_jumua" }, { id: "sp-fast", key: "sp_fast" }, { id: "sp-white", key: "sp_white" }, { id: "sp-event", key: "sp_event" });
 
   rows.forEach(r => {
     USERS.forEach(u => {
@@ -2514,15 +2951,12 @@ function loadState() {
   });
   placeCards();
 
-  USERS.forEach(u => { $("pg-" + u).style.width = count[u] * 10 + "%"; $("pgn-" + u).textContent = count[u] + "/10"; });
+  USERS.forEach(u => { $("pg-" + u).style.width = count[u] * 10 + "%"; $("pgn-" + u).textContent = count[u] + "/10"; const rg = $("rg-" + u); if (rg) rg.style.strokeDashoffset = String(100 - count[u] * 10); });
   updateKhatma();
   renderStore();
 
-  let w = store.get("game_winner");
-  if (!w && all.Mohamad !== all.Dima) {
-    w = all.Mohamad ? "Mohamad" : "Dima";
-    store.set("game_winner", w);
-  }
+  const w = store.get("game_winner");
+  const wt = w && num("race_win_time") ? " · " + timeStr(num("race_win_time")) : "";
 
   const banner = $("persistent-banner");
   USERS.forEach(u => {
@@ -2538,10 +2972,10 @@ function loadState() {
 
   if (w) {
     if (w === currentUser) {
-      banner.textContent = tr("You won today's race! +1 win toward the wheel | فزت بسباق اليوم! نقطة نحو العجلة");
+      banner.textContent = tr("You won today's race! +1 win toward the wheel | فزت بسباق اليوم! نقطة نحو العجلة") + wt;
       banner.className = "banner banner-success";
     } else {
-      banner.textContent = skin(T(`You lost the race today! ${DISPLAY[w]} finished first.`, `خسرت السباق اليوم! ${DISPLAY[w]} أنهى المهام أولاً.`, `Du hast das Rennen heute verloren! ${DISPLAY[w]} war zuerst fertig.`));
+      banner.textContent = skin(T(`You lost the race today! ${DISPLAY[w]} finished first.`, `خسرت السباق اليوم! ${DISPLAY[w]} أنهى المهام أولاً.`, `Du hast das Rennen heute verloren! ${DISPLAY[w]} war zuerst fertig.`)) + wt;
       banner.className = "banner banner-error";
     }
   } else {
@@ -2554,10 +2988,13 @@ function loadState() {
   if (w) wins[w]++;
   $("wheel-status-text").textContent = "" + (token ? T("Ready to spin!", "جاهزة للف!") : T(`Opens in ${left}d`, `بعد ${left} أيام`, `Öffnet in ${left} T`));
   $("wheel-btn").classList.toggle("ready", token);
-  USERS.forEach(u => { $("stk-" + u).textContent = "🔥" + (num("streak_" + u) + (userAllDone(u) ? 1 : 0)); });
+  USERS.forEach(u => { $("stk-" + u).textContent = T("Streak ", "سلسلة ", "Serie ") + (num("streak_" + u) + (userAllDone(u) ? 1 : 0)); });
   $("cycle-info").textContent = `${T("Race wins this cycle", "الفوز بالسباق")}: Mo ${wins.Mohamad} – Di 🤍 ${wins.Dima}`;
 
   renderChallenge();
+  renderNote();
+  updatePokeBadge();
+  renderLastPoke();
   const bb = $("bonus-banner");
   if (bb) {
     const on = isBonusDay();
@@ -2583,7 +3020,7 @@ function loadState() {
 /* ---------- Start ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   try {
-    setTheme(store.get("site_theme") || "light");
+    setTheme(store.get("site_theme") || "rose-dark");
     applyReadLang();
     document.documentElement.lang = LANG;
     document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
@@ -2593,8 +3030,72 @@ document.addEventListener("DOMContentLoaded", () => {
   try { applyLang(document.body); markSettings(); } catch (e) { showFatal("lang: " + (e && e.message)); }
 });
 
+
+/* ---------- Qibla compass ---------- */
+const KAABA = { lat: 21.422487, lng: 39.826206 };
+let qbBearing = 0, qbHeading = null, qbOn = false;
+function qiblaBearing(lat, lng) {
+  const R = Math.PI / 180, f1 = lat * R, f2 = KAABA.lat * R, dl = (KAABA.lng - lng) * R;
+  const y = Math.sin(dl) * Math.cos(f2), x = Math.cos(f1) * Math.sin(f2) - Math.sin(f1) * Math.cos(f2) * Math.cos(dl);
+  return (Math.atan2(y, x) / R + 360) % 360;
+}
+function qiblaDist(lat, lng) {
+  const R = Math.PI / 180, dp = (KAABA.lat - lat) * R, dl = (KAABA.lng - lng) * R;
+  const a = Math.sin(dp / 2) ** 2 + Math.cos(lat * R) * Math.cos(KAABA.lat * R) * Math.sin(dl / 2) ** 2;
+  return Math.round(6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+function qbRender() {
+  $("qb-dial").style.transform = `rotate(${qbHeading == null ? 0 : -qbHeading}deg)`;
+  $("qb-needle").style.transform = `rotate(${qbBearing}deg)`;
+  if (qbHeading != null) {
+    const diff = Math.abs(((qbBearing - qbHeading + 540) % 360) - 180);
+    $("qb-msg").textContent = diff < 6 ? T("You are facing the Qibla", "أنت باتجاه القبلة", "Du blickst Richtung Qibla") : "";
+    if (diff < 6) vib(20);
+  }
+}
+function qbOrient(e) {
+  let h = null;
+  if (typeof e.webkitCompassHeading === "number") h = e.webkitCompassHeading;
+  else if (e.absolute && typeof e.alpha === "number") h = (360 - e.alpha) % 360;
+  if (h == null) return;
+  qbHeading = h;
+  qbRender();
+}
+function openQibla() {
+  const l = sharedLoc();
+  if (!l) { showToast("Set your city first | حدّد مدينتك أولاً | Lege zuerst deine Stadt fest"); return; }
+  qbBearing = qiblaBearing(+l.lat, +l.lng); qbHeading = null;
+  $("qb-info").textContent = `${Math.round(qbBearing)}° ${T("from North", "من الشمال", "von Norden")} · ${qiblaDist(+l.lat, +l.lng)} km`;
+  $("qb-msg").textContent = "";
+  qbRender();
+  $("qibla-modal").classList.remove("hidden");
+}
+async function startQibla() {
+  try {
+    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+      const r = await DeviceOrientationEvent.requestPermission();
+      if (r !== "granted") { $("qb-msg").textContent = T("Sensor permission denied. Use the degrees above.", "تم رفض إذن الحساسات. استخدم الدرجات أعلاه.", "Sensor-Zugriff abgelehnt. Nutze die Gradzahl oben."); return; }
+    }
+    if (!qbOn) {
+      window.addEventListener("deviceorientationabsolute", qbOrient, true);
+      window.addEventListener("deviceorientation", qbOrient, true);
+      qbOn = true;
+    }
+    $("qb-msg").textContent = T("Hold the phone flat and turn slowly.", "امسك الجوال أفقياً وأدِر ببطء.", "Halte das Handy flach und drehe es langsam.");
+    setTimeout(() => { if (qbHeading == null && qbOn) $("qb-msg").textContent = T("No compass sensor found. Use the degrees above.", "لم أجد حساس بوصلة. استخدم الدرجات أعلاه.", "Kein Kompass-Sensor gefunden. Nutze die Gradzahl oben."); }, 2500);
+  } catch (e) { $("qb-msg").textContent = T("Compass is not available here.", "البوصلة غير متاحة هنا.", "Kompass hier nicht verfügbar."); }
+}
+function closeQibla() {
+  window.removeEventListener("deviceorientationabsolute", qbOrient, true);
+  window.removeEventListener("deviceorientation", qbOrient, true);
+  qbOn = false;
+  $("qibla-modal").classList.add("hidden");
+}
+
 /* ---------- PWA, install & push ---------- */
-const PUSH_WORKER_URL = "https://istiqama.mohamadgamir125.workers.dev";
+const PUSH_WORKER_URL = "https://istiqama.mohamadgamir125.workers.dev"; const pushUrl = () => (PUSH_WORKER_URL || store.get("push_url") || "").trim();
+let pushErr = "";
+function savePushUrl(v) { v = (v || "").trim(); if (v && !/^https:\/\//.test(v)) v = "https://" + v; store.set("push_url", v); $("push-url").value = v; pushErr = ""; refreshPushUI(); } /* paste your Cloudflare Worker URL here, e.g. https://istiqama-push.NAME.workers.dev */
 const VAPID_PUBLIC = "BGysQxtrNRioanaB9ZWeq1kR2O0yZWW0wkFAlKhjkZHbu4f7kXUZY78MI3Y2HsfFvd-MZypCc9OY3qsUXuoR7Ts";
 let deferredInstall = null;
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -2605,38 +3106,48 @@ window.addEventListener("appinstalled", () => { deferredInstall = null; refreshP
 async function installApp() { if (!deferredInstall) return; deferredInstall.prompt(); try { await deferredInstall.userChoice; } catch (_) {} deferredInstall = null; refreshPushUI(); }
 const pushSupported = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window && /^https?:/.test(location.protocol);
 const pushOn = () => store.get("push_on") === "true";
+const pushAdhkar = () => store.get("push_adhkar") !== "false";
 const pushPre = () => store.get("push_pre") === "10" ? 10 : 0;
 function refreshPushUI() {
   const ib = $("install-btn"); if (!ib) return;
   ib.classList.toggle("hidden", !deferredInstall || isStandalone());
   const ih = $("ios-hint"); ih.classList.toggle("hidden", !(isIOS && !isStandalone()));
+  $("app-title").classList.toggle("hidden", ib.classList.contains("hidden") && ih.classList.contains("hidden"));
   ih.textContent = T("On iPhone: tap Share, then Add to Home Screen, and open the app from there to get notifications (iOS 16.4+).", "على الآيفون: اضغط مشاركة ثم إضافة إلى الشاشة الرئيسية وافتح التطبيق منها حتى تشتغل الإشعارات (iOS 16.4 وما فوق).", "Auf dem iPhone: Teilen, dann Zum Home-Bildschirm, und die App von dort öffnen, damit Benachrichtigungen funktionieren (iOS 16.4+).");
   const on = pushOn();
   setBi($("push-btn"), on ? "Disable notifications | إيقاف الإشعارات | Benachrichtigungen ausschalten" : "Enable notifications | تفعيل الإشعارات | Benachrichtigungen aktivieren");
   $("pre-0").classList.toggle("active", pushPre() === 0); $("pre-10").classList.toggle("active", pushPre() === 10);
   $("push-pre-row").classList.toggle("hidden", !on);
+  $("push-adhkar").classList.toggle("hidden", !on);
+  setBi($("push-adhkar"), pushAdhkar() ? "Adhkar reminders: on | تذكير الأذكار: مفعّل | Adhkar-Erinnerung: an" : "Adhkar reminders: off | تذكير الأذكار: متوقف | Adhkar-Erinnerung: aus");
   let st = "";
-  if (!PUSH_WORKER_URL) st = T("Notification server is not set up yet.", "خادم الإشعارات غير مفعّل بعد.", "Der Benachrichtigungsserver ist noch nicht eingerichtet.");
+  if (!pushUrl()) st = T("Notification server is not set up yet.", "خادم الإشعارات غير مفعّل بعد.", "Der Benachrichtigungsserver ist noch nicht eingerichtet.");
   else if (!pushSupported()) st = T("This browser does not support notifications. On iPhone, add the app to the Home Screen first.", "هذا المتصفح لا يدعم الإشعارات. على الآيفون أضف التطبيق للشاشة الرئيسية أولاً.", "Dieser Browser unterstützt keine Benachrichtigungen. Auf dem iPhone zuerst zum Home-Bildschirm hinzufügen.");
   else if (typeof Notification !== "undefined" && Notification.permission === "denied") st = T("Notifications are blocked in your browser settings.", "الإشعارات محظورة من إعدادات المتصفح.", "Benachrichtigungen sind in den Browsereinstellungen blockiert.");
   else if (on) st = T("Prayer times and pokes will reach you even when the app is closed.", "ستصلك مواقيت الصلاة والنكزات حتى لو كان التطبيق مغلقاً.", "Gebetszeiten und Stupser erreichen dich auch bei geschlossener App.");
+  if (pushErr && on) st = pushErr.indexOf("|") > 0 ? T(pushErr.split("|")[0], pushErr.split("|")[1], pushErr.split("|")[0]) : pushErr;
   $("push-status").textContent = st;
+  $("push-url").value = pushUrl(); $("push-url").classList.toggle("hidden", !!PUSH_WORKER_URL);
+  $("push-test").classList.toggle("hidden", !on);
 }
 function b64uToBytes(s) { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
 async function pushPost(path, body) {
-  const r = await fetch(PUSH_WORKER_URL.replace(/\/$/, "") + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ room: ROOM_ID }, body)) });
-  return r.ok;
+  let r;
+  try { r = await fetch(pushUrl().replace(/\/$/, "") + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ room: ROOM_ID }, body)) }); }
+  catch (e) { pushErr = "Cannot reach server (check the URL) | تعذر الوصول للخادم (تأكد من الرابط)"; throw e; }
+  if (!r.ok) { pushErr = "Server error " + r.status + (r.status === 403 ? " (ROOM_ID mismatch) | رقم الغرفة غير مطابق" : r.status === 500 || r.status === 1101 ? " | تحقق من المتغيرات وKV" : ""); throw new Error(pushErr); }
+  pushErr = ""; return r.json().catch(() => ({}));
 }
 async function pushSync() {
-  if (!PUSH_WORKER_URL || !pushOn() || !currentUser || !pushSupported()) return;
+  if (!pushUrl() || !pushOn() || !currentUser || !pushSupported()) return;
   try {
     const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (!sub) return;
     let loc = null; try { const l = JSON.parse(store.get("pt_loc") || "null"); if (l && l.lat != null) loc = { lat: l.lat, lng: l.lng, method: l.method }; } catch (_) {}
-    await pushPost("/subscribe", { user: currentUser, sub: sub.toJSON(), loc, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, lang: LANG, pre: pushPre() });
-  } catch (_) {}
+    await pushPost("/subscribe", { user: currentUser, sub: sub.toJSON(), loc, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, lang: LANG, pre: pushPre(), adhkar: pushAdhkar() });
+  } catch (_) { refreshPushUI(); }
 }
 async function togglePush() {
-  if (!PUSH_WORKER_URL) { showToast("Notification server is not set up yet | خادم الإشعارات غير مفعّل بعد | Server noch nicht eingerichtet"); return; }
+  if (!pushUrl()) { showToast("Notification server is not set up yet | خادم الإشعارات غير مفعّل بعد | Server noch nicht eingerichtet"); return; }
   if (!pushSupported()) { refreshPushUI(); return; }
   try {
     const reg = await navigator.serviceWorker.ready;
@@ -2652,12 +3163,18 @@ async function togglePush() {
     store.set("push_on", "true");
     await pushSync();
     showToast("Notifications enabled | تم تفعيل الإشعارات | Benachrichtigungen aktiviert");
-  } catch (e) { showToast("Could not enable notifications | تعذر تفعيل الإشعارات | Aktivierung fehlgeschlagen"); }
+  } catch (e) { showToast("Could not enable notifications | تعذر تفعيل الإشعارات | Aktivierung fehlgeschlagen"); if (!pushErr) pushErr = String(e && e.message || e); }
   refreshPushUI();
 }
+async function testPush() {
+  try { await pushSync(); const r = await pushPost("/test", { user: currentUser }); showToast(r.sent ? "Test sent | تم الإرسال، انتظر ثواني | Gesendet" : "No device registered | لا يوجد جهاز مسجّل | Kein Gerät registriert"); }
+  catch (_) {}
+  refreshPushUI();
+}
+function togglePushAdhkar() { store.set("push_adhkar", pushAdhkar() ? "false" : "true"); refreshPushUI(); pushSync(); }
 function setPushPre(m) { store.set("push_pre", String(m)); refreshPushUI(); pushSync(); }
 function pushPoke(msg) {
-  if (!PUSH_WORKER_URL || !currentUser) return;
+  if (!pushUrl() || !currentUser) return;
   pushPost("/poke", { to: partnerOf(currentUser), from: currentUser, msg }).catch(() => {});
 }
 setTimeout(() => { refreshPushUI(); pushSync(); }, 3500);
