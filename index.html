@@ -572,6 +572,8 @@ body.rose-dark .seg button.sel{color:#2b0a1d}
       <div class="set-row two"><button onclick="exportBackup()">Export | تصدير | Export</button><button onclick="$('backup-file').click()">Import | استيراد | Import</button></div>
       <input type="file" id="backup-file" accept=".json,application/json" class="hidden" onchange="importBackup(this)">
       <div id="admin-section" class="hidden">
+        <div class="set-title">Last visit | آخر زيارة | Letzter Besuch</div>
+        <div id="last-seen-box" class="history" style="text-align:start"></div>
         <div class="set-title" style="color:var(--bad-text)">Admin | لوحة التحكم</div>
         <button onclick="adminResetQuran()" style="background:var(--gold)">Reset Quran Pages | تصفير القرآن</button>
         <button onclick="adminResetPoints()" style="background:#f59e0b">Reset All Points | تصفير النقاط</button>
@@ -751,7 +753,7 @@ const ROOM_ID = "rm-5783d64d0aa68bc909b3";
 /* stable CDN versions, tried in order (fallback if one fails to load) */
 const FB_BASES = ["https://www.gstatic.com/firebasejs/12.19.0/", "https://www.gstatic.com/firebasejs/11.10.0/", "https://www.gstatic.com/firebasejs/10.14.1/"];
 /* only our own shared keys travel to the cloud (the github.io origin is shared with other sites) */
-const SHARED_RE = /^((coins|streak|best|wins|wheel_token|quran_page|qpd|khatmas|qbm|hd_day|nm_day|gold_opp|post_prayer|sp_kahf|sp_jumua|sp_fast|sp_white|sp_event|store_alert|poke_alert|daily_note|last_poke|poke_history)_|(task|side_task|hd_u|hd_m|hd_p|du_m|nm_u|nm_m|nm_p|pr_p)_\d+_)(Mohamad|Dima)$|^wk_[0-9]{4}-[0-9]{2}-[0-9]{2}_[a-z]+_(Mohamad|Dima)$|^(day_log|pts_log|race_log|prizes|store_items|store_requests|cycle_days|last_day|game_winner|race_win_time|task10_name|last_roll_ts|shared_loc)$/;
+const SHARED_RE = /^((coins|streak|best|wins|wheel_token|quran_page|qpd|khatmas|qbm|hd_day|nm_day|gold_opp|post_prayer|sp_kahf|sp_jumua|sp_fast|sp_white|sp_event|store_alert|poke_alert|daily_note|last_poke|poke_history|last_seen)_|(task|side_task|hd_u|hd_m|hd_p|du_m|nm_u|nm_m|nm_p|pr_p)_\d+_)(Mohamad|Dima)$|^wk_[0-9]{4}-[0-9]{2}-[0-9]{2}_[a-z]+_(Mohamad|Dima)$|^(day_log|pts_log|race_log|prizes|store_items|store_requests|cycle_days|last_day|game_winner|race_win_time|task10_name|last_roll_ts|shared_loc)$/;
 const cloud = {
   status: "off", started: false, synced: false, timedOut: false, pending: {}, timer: null,
   ref: null, fs: null, readyP: null, onFirst: null, warned: false,
@@ -862,7 +864,7 @@ const store = {
 };
 function afterSync() {
   if (!currentUser) return;
-  try { rollover(); renderTasks(); renderPrayerTimes(); loadState(); checkAlerts(); } catch (e) { showFatal("afterSync: " + (e && e.message)); }
+  try { touchSeen(); renderLastSeen(); rollover(); renderTasks(); renderPrayerTimes(); loadState(); checkAlerts(); } catch (e) { showFatal("afterSync: " + (e && e.message)); }
 }
 function readJson(k, d) {
   try {
@@ -1355,6 +1357,7 @@ function toggleSettings(open) {
   if (open && $("t10-name")) $("t10-name").value = store.get("task10_name") || "";
   $("admin-section").classList.toggle("hidden", currentUser !== "Mohamad");
   $("settings-modal").classList.toggle("hidden", !open);
+  if (open) renderLastSeen();
   markSettings();
   if (open && typeof refreshPushUI === "function") refreshPushUI();
 }
@@ -4817,8 +4820,16 @@ function setButton(btnId, key) {
   const b = $(btnId);
   if (b && isDone(key)) { b.disabled = true; setBi(b, "Done | تم"); }
 }
+function touchSeen() { if (!currentUser) return; store.set("last_seen_" + currentUser, String(Date.now())); }
+function renderLastSeen() {
+  const box = $("last-seen-box"); if (!box || currentUser !== "Mohamad") return;
+  box.innerHTML = USERS.map(u => { const t = num("last_seen_" + u); return `<div><b>${PILL[u]}</b> · ${t ? timeStr(t) : "—"}</div>`; }).join("");
+}
+setInterval(() => { if (currentUser) { touchSeen(); renderLastSeen(); } }, 60000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && currentUser) { touchSeen(); renderLastSeen(); } });
 function loadState() {
   if (!currentUser) return;
+  renderLastSeen();
   const all = { Mohamad: true, Dima: true };
   const count = { Mohamad: 0, Dima: 0 };
   renderHday(false);
